@@ -29,15 +29,17 @@ public class logger1 extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		File file1 = new File("C:/Users/Sergio M/Desktop/log.txt");
-		PrintWriter pw2 = new PrintWriter(new FileOutputStream(new File("C:/Users/Sergio M/Desktop/log.txt"),true));
+		File file1 = new File("/var/log/log-NOL-dew.log");
+		/*los logs normalmente se guardan en el directorio /var/log de linux! para esto
+		 * ejecuta el startup con sudo sudo ./startup
+		 * */
 		try {
 			file1.createNewFile();
 		}catch(Exception e) {
 			System.out.println("No se pudo crear el fichero");
 		}
-	    
-		pw2.println(LocalDateTime.now().toString() + " " + request.getQueryString() + " " + request.getRemoteAddr() + " " + getServletName() + " " + request.getRequestURI() + " " + request.getMethod() +" \n");
+		PrintWriter pw2 = new PrintWriter(new FileOutputStream(new File("/var/log/log-NOL-dew.log"),true));
+		pw2.println(LocalDateTime.now().toString() + " " + request.getQueryString() + " " + request.getRemoteAddr() + " " + getServletName() + " " + request.getRequestURI() + " " + request.getMethod());
 		pw2.close();
 	}
 

@@ -37,7 +37,7 @@ public class logger2 extends HttpServlet {
 			System.out.println("No se pudo crear el fichero");
 		}
 	    
-		pw2.println(LocalDateTime.now().toString() + " " + request.getQueryString() + " " + request.getRemoteAddr() + " " + getServletName() + " " + request.getRequestURI() + " " + request.getMethod() +" \n");
+		pw2.println(LocalDateTime.now().toString() + " " + request.getQueryString() + " " + request.getRemoteAddr() + " " + getServletName() + " " + request.getRequestURI() + " " + request.getMethod());
 		pw2.close();
 	}
 
