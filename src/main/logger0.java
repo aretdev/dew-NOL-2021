@@ -38,7 +38,7 @@ public class logger0 extends HttpServlet {
 		 + "<meta http-equiv=\"Content-type\" content=\"text/html; charset=utf-8\" />";
 		 response.setContentType("text/html");
 		pw.println(preTituloHTML5);
-		pw.println(LocalDateTime.now().toString() + " " + request.getRequestURI() + " " + request.getRemoteAddr() + " " + request.getServerName() + " " + request.getMethod() +" \n");
+		pw.println(LocalDateTime.now().toString() + " " + request.getQueryString() + " " + request.getRemoteAddr() + " " + getServletName() + " " + request.getRequestURI() + " " + request.getMethod() +" \n");
 	}
 
 	/**
