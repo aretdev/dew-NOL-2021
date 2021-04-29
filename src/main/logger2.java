@@ -29,8 +29,8 @@ public class logger2 extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		File file1 = new File("C:/Users/Sergio M/Desktop/log.txt");
-		PrintWriter pw2 = new PrintWriter(new FileOutputStream(new File("C:/Users/Sergio M/Desktop/log.txt"),true));
+		File file1 = new File(getServletContext().getInitParameter("logPath"));
+		PrintWriter pw2 = new PrintWriter(new FileOutputStream(new File(getServletContext().getInitParameter("logPath")),true));
 		try {
 			file1.createNewFile();
 		}catch(Exception e) {

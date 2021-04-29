@@ -49,4 +49,10 @@
     <servlet-name>logger2</servlet-name>
     <url-pattern>/logger2</url-pattern>
   </servlet-mapping>
+  
+  <context-param>
+        <param-name>logPath</param-name>
+        <param-value>C:/Users/aret1/Desktop/log.txt</param-value>
+    </context-param>
+  
 </web-app>
