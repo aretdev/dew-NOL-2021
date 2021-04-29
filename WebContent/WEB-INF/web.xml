@@ -19,4 +19,14 @@
     <servlet-name>HolaMundo</servlet-name>
     <url-pattern>/HolaMundo</url-pattern>
   </servlet-mapping>
+  <servlet>
+    <description></description>
+    <display-name>logger0</display-name>
+    <servlet-name>logger0</servlet-name>
+    <servlet-class>main.logger0</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>logger0</servlet-name>
+    <url-pattern>/logger0</url-pattern>
+  </servlet-mapping>
 </web-app>
