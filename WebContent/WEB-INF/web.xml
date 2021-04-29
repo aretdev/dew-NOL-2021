@@ -29,4 +29,24 @@
     <servlet-name>logger0</servlet-name>
     <url-pattern>/logger0</url-pattern>
   </servlet-mapping>
+  <servlet>
+    <description></description>
+    <display-name>logger1</display-name>
+    <servlet-name>logger1</servlet-name>
+    <servlet-class>main.logger1</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>logger1</servlet-name>
+    <url-pattern>/logger1</url-pattern>
+  </servlet-mapping>
+  <servlet>
+    <description></description>
+    <display-name>logger2</display-name>
+    <servlet-name>logger2</servlet-name>
+    <servlet-class>main.logger2</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>logger2</servlet-name>
+    <url-pattern>/logger2</url-pattern>
+  </servlet-mapping>
 </web-app>
