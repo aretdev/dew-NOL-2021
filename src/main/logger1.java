@@ -39,7 +39,9 @@ public class logger1 extends HttpServlet {
 			System.out.println("No se pudo crear el fichero");
 		}
 		PrintWriter pw2 = new PrintWriter(new FileOutputStream(new File("/var/log/log-NOL-dew.log"),true));
-		pw2.println(LocalDateTime.now().toString() + " " + request.getQueryString() + " " + request.getRemoteAddr() + " " + getServletName() + " " + request.getRequestURI() + " " + request.getMethod());
+		String usuario = request.getParameter("user");
+		
+		pw2.println(LocalDateTime.now().toString() + " " + request.getQueryString() + " " + usuario + " "  + request.getRemoteAddr() + " " + getServletName() + " " + request.getRequestURI() + " " + request.getMethod());
 		pw2.close();
 	}
 

@@ -52,7 +52,7 @@
   
   <context-param>
         <param-name>logPath</param-name>
-        <param-value>C:/Users/aret1/Desktop/log.txt</param-value>
+        <param-value>/var/log/log-NOL-dew.log</param-value>
     </context-param>
   
 </web-app>

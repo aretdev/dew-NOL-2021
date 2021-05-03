@@ -34,19 +34,19 @@ public class logger0 extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		PrintWriter pw = response.getWriter();
+		String usuario = request.getParameter("user");
+
 		String preTituloHTML5 = "<!DOCTYPE html>\n<html>\n<head>\n"
 		 + "<meta http-equiv=\"Content-type\" content=\"text/html; charset=utf-8\" />";
 		 response.setContentType("text/html");
 		pw.println(preTituloHTML5);
-		pw.println(LocalDateTime.now().toString() + " " + request.getQueryString() + " " + request.getRemoteAddr() + " " + getServletName() + " " + request.getRequestURI() + " " + request.getMethod() +" \n");
+				pw.println(LocalDateTime.now().toString() + " " + request.getQueryString() + " " + usuario + " " + request.getRemoteAddr() + " " + getServletName() + " " + request.getRequestURI() + " " + request.getMethod() +" \n");
 	}
 
 	/**
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
-		Date date = new Date(System.currentTimeMillis());
 		doGet(request, response);
 	}
 
