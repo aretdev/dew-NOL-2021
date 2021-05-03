@@ -1,3 +1,54 @@
+###Utilizacion de Formularios.
+El siguiente fragmento de codigo html nos permite dirigirnos a cada version de los formularios que interactuan con los servlets.
+```html
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="ISO-8859-1">
+<title>Insert title here</title>
+</head>
+<body>
+<h1>Indice de Loggers</h1>
+<a href="login.html">Enlace al Logger version 0</a>
+<a href="login1.html">Enlace al Logger version 1</a>
+<a href="login2.html">Enlace al Logger version 2</a>
+</body>
+</html>
+```
+A continuación procedemos a explicar el funcionamiento de los formularios html utilizados.
+
+El siguiente formulario corresponde  al formulario base con el que interactuaremos. En este formulario en su campo action especifica la ejecución del servlet *logger0*,  y el campo method el uso del metodo ** GET**.
+Veremos tres tipos de inputs, el primero del tipo *text* de nombre user en el que se introducirá el nombre de usuario. El siguiente de tipo *password* con nombre pass en el que se introducira la contraseña. Y finalmente un boton submit para el envio del formulario.
+Para el metodo **POST** utilizaremos el mismo formato que se ha descrito previamente en el metodo **GET**
+```html
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Login</title>
+</head>
+<body>
+<h1>Prueba de logger</h1>
+
+<h2>Envio por get</h2>
+<form action="logger0" method="get">
+	<input type="text" name="user" placeholder="Nombre de Usuario"><br>
+	<input type="password" name="pass" placeholder="Contraseña"><br>
+	<input type="submit">
+</form>
+
+<h2>Envio por post</h2>
+<form action="logger0" method="post">
+	<input type="text" name="user" placeholder="Nombre de Usuario"><br>
+	<input type="password" name="pass" placeholder="Contraseña"><br>
+	<input type="submit">
+</form>
+</body>
+</html>
+```
+>Nota: Los formularios utilizados para el logger 1 y el logger 2 es cambiar el campo action de los formularios por logger 1 y logger 2 respectivamente.
+
+
 ### Explicación ordenes utilizadas con curl:
 Para probar el funcionamiento de la orden curl, hemos definido un script llamado tarea1.sh en el cual se incluyen numerosas ordenes de obtencion, modificacion y borrado de elementos de CentroEducativo.
 En primer lugar, definimos dos variables de entorno en nuestro fichero de pruebas.
