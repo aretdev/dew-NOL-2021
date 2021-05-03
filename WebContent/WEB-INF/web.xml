@@ -52,7 +52,7 @@
   
   <context-param>
         <param-name>logPath</param-name>
-        <param-value>/var/log/log-NOL-dew.log</param-value>
+        <param-value>/home/user/Escritorio/log-NOL-dew.log</param-value>
     </context-param>
   
 </web-app>
