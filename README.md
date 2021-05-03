@@ -48,6 +48,35 @@ Para el metodo **POST** utilizaremos el mismo formato que se ha descrito previam
 ```
 >Nota: Los formularios utilizados para el logger 1 y el logger 2 es cambiar el campo action de los formularios por logger 1 y logger 2 respectivamente.
 
+### Otra información relevante
+
+Por último, vamos a detallar brevemente los servlets.
+
+El servlet que corresponde al logger1 tiene dos metodos que son el doGet y el doPost. Si nos centramos en el doGet vemos claramente que en la primera línea se especifica una ubicación. Esta será la ruta de los logs que se generen para nuestro login1. Al utilizar la clase File debemos tratar las futuras excepciones que se puedan generar de forma dinámica.
+
+```java
+File file1 = new File("/home/user/Escritorio/log-NOL-dew.log");
+```
+
+Por otra parte, en el servlet logger2 la ruta se especifica desde el fichero web.xml y el código cambiaria significativamente.
+
+```java
+File file1 = new File(getServletContext().getInitParameter("logPath"));
+PrintWriter pw2 = new PrintWriter(new FileOutputStream(new File(getServletContext().getInitParameter("logPath")),true));
+```
+Una vez especificamos el parametro xml, al cual hemos denotado logPath, nos dirigimos al archivo web.xml y añadimos las siguientes lineas. Con esto especificamos cual será la ruta para el log. 
+```xml
+<context-param>
+        <param-name>logPath</param-name>
+        <param-value>/home/user/Escritorio/log-NOL-dew.log</param-value>
+    </context-param>
+```
+
+Y la salida de ambos servlets la mostramos con la siguiente línea. Está linea se compone de la fecha de la solicitud, el usuario y contraseña que hace la solicitud, la IP desde que se hace la solicitud, el nombre del servlet, el URI de respuesta y el método GET.
+
+```java
+pw2.println(LocalDateTime.now().toString() + " " + request.getQueryString() + " " + usuario + " "  + request.getRemoteAddr() + " " + getServletName() + " " + request.getRequestURI() + " " + request.getMethod());
+```
 
 ### Explicación ordenes utilizadas con curl:
 Para probar el funcionamiento de la orden curl, hemos definido un script llamado tarea1.sh en el cual se incluyen numerosas ordenes de obtencion, modificacion y borrado de elementos de CentroEducativo.
