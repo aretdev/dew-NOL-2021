@@ -1,3 +1,55 @@
+# Acta de las reuniones 1 y 2 del grupo de DEW 3TI11
+Asistentes: Mario, Joel, Josep, Vicente y Sergio
+
+------------
+###### Este acta contiene las dos primeras reuniones: la del 26 de abril y la del 29 de abril
+
+####  1.	Dinámica de trabajo
+Hemos inicializado un GitHub (git) como herramienta colaborativa para el código, un Discord como herramienta para la comunicación dentro de reuniones y un grupo de Whatsapp para las comunicaciones fuera de las reuniones. Los archivos externos al proyecto se guardarán en un OneDrive colaborativo en el que todos podremos acceder y editar como iguales. 
+El horario tentativo para las reuniones será de 12:30 a 14:00 los jueves y de 10:00 a 12:00 los lunes. Todos podemos cumplir este horario excepto Krasimir, porqué trabaja. Estamos buscando huecos para que todos podamos reunirnos a la vez, pero Krasimir tiene muy poco tiempo libre por lo que parece, aunque ha dicho que podría después de las 19:30.
+
+#### 2.	Trabajo realizado
+En la primera reunión, todos los asistentes hemos expuesto los temas que habían sido asignados con antelación. Antes de la reunión se había asignado a Josep como secretario que realizara las actas correspondientes a cada una de las reuniones a partir de esta. Hemos hecho un proyecto de prueba y lo hemos publicado para comprobar si todo funcionaba correctamente. También hemos configurado el git todos juntos en la máquina de cada uno de los asistentes.
+En la segunda sesión, nos hemos dedicado a crear un proyecto de prueba para familiarizarnos con el proyecto. Hemos usado la versión de Tomcat 2.5 y la versión de Eclipse 2019-03. Nos hemos familiarizado con la conexión del servidor mediante un logger básico y un hola mundo.
+#### Resumen de la actividad "Requerimientos Básicos":
+Se trataron los principales conflictos en los equipos, como juzgar a los demas, superioridad, ignorar o ser deshonesto con el grupo y se remarcó la importancia de la pronta resolución de problemas.
+
+Ademas se recalcó la importancia que tiene la libertad de expresión y el respeto mutuo por parte de todos los miembros. Por otro lado, los objetivos se establecieron claramente, de manera precisa y atendiendo a las capacidades de cada uno. En cuanto a la resolucion de problemas se eligió como favorito el método SWOT.
+
+Por ultimo tratamos el brainstorming, que sera utilizado cuando sea necesario afrontar un problema que tenga diferentes soluciones y todas sean válidas.
+
+En general, los comentarios al respecto fueron de aprobación y no hubo disconformidades en general. Se advirtió la importancia de la puntualidad y se acordó un horario flexible para poder trabajar entre todos.
+
+Mario : Agrupación 1. 
+Vicente : Agrupación 1.
+Joel: Agrupación 2.
+Krasimir: Agrupación 2.
+Sergio : Agrupación 3.
+Josep: Agrupación 3.
+
+#### 3.	Problemas acontecidos y soluciones propuestas
+Esta reunión ha concluido sin problemas. Hay buen ambiente entre todos los asistentes, todos nos comprometemos a un horario estable. El único problema ha sido la falta de asistencia de Krasimir, pero intentaremos reunirnos con él lo más pronto posible y reajustar el horario.
+
+# Acta de la reunión 3 del grupo de DEW 3TI11
+Asistentes: Mario, Joel, Krasimir, Vicente y Sergio
+
+------------
+###### Este acta contiene la tercera reunión: 3 de mayo.
+
+####  1.	Dinámica de trabajo
+Se repartieron las tareas en 2 grupos de trabajo claramente diferenciados para agilizar el trabajo.
+
+Mario, Krasimir y Joel trabajaron los aspectos relacionados con la orden curl así como la redaccion de la explicacion del funcionamiento de las ordenes y su posterior salida en el bash.
+
+Sergio y Vicente se encargaron de la parte de código referida especialmente en modificaciones en formularios y pruebas del proyecto.
+
+#### 2.	Trabajo realizado
+Se hizo un breve comentario sobre el funcionamiento de la orden curl a todos los miembros del grupo y se trabajó con el script tarea1.sh mencionado en la actividad de tratamiento de dicha orden.
+
+Asimismo se modificaron algunos aspectos de los formularios, como la introduccion de campos de texto para usuario y contraseña, además, se comprobo el correcto funcionamiento del proyecto en las maquinas de portal-ng.
+#### 3.	Problemas acontecidos y soluciones propuestas
+No sucedió ningún problema y la sesión se llevó a cabo de manera satisfactoria.
+
 ### Utilizacion de Formularios.
 
 El siguiente fragmento de codigo html nos permite dirigirnos a cada version de los formularios que interactuan con los servlets.
