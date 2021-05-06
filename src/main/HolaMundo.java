@@ -30,7 +30,6 @@ public class HolaMundo extends HttpServlet {
     public void doGet(HttpServletRequest request, HttpServletResponse response)
    		 throws IOException, ServletException
    		 {
-    	HttpGet httpGet = new HttpGet("http://httpbin.org/get");
    		 String preTituloHTML5 = "<!DOCTYPE html>\n<html>\n<head>\n"
    		 + "<meta http-equiv=\"Content-type\" content=\"text/html; charset=utf-8\" />";
    		 response.setContentType("text/html");
@@ -43,6 +42,7 @@ public class HolaMundo extends HttpServlet {
    		 out.println("</body>");
    		 out.println("</html>");
    		 //cambio hola
+   		 // comentario
    		 }
 
 }
