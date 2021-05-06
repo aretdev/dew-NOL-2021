@@ -31,8 +31,8 @@ public class HolaMundo extends HttpServlet {
     public void doGet(HttpServletRequest request, HttpServletResponse response)
    		 throws IOException, ServletException
    		 {
-    	HttpGet httpGet = new HttpGet("http://httpbin.org/get");
-    	JSONArray jArr = new JSONArray();
+        HttpGet httpGet = new HttpGet("http://httpbin.org/get");
+        JSONArray jArr = new JSONArray();
    		 String preTituloHTML5 = "<!DOCTYPE html>\n<html>\n<head>\n"
    		 + "<meta http-equiv=\"Content-type\" content=\"text/html; charset=utf-8\" />";
    		 response.setContentType("text/html");
