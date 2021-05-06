@@ -9,6 +9,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.hc.client5.http.classic.methods.HttpGet;
+import org.json.JSONArray;
 
 /**
  * Servlet implementation class HolaMundo
@@ -30,6 +31,8 @@ public class HolaMundo extends HttpServlet {
     public void doGet(HttpServletRequest request, HttpServletResponse response)
    		 throws IOException, ServletException
    		 {
+    	HttpGet httpGet = new HttpGet("http://httpbin.org/get");
+    	JSONArray jArr = new JSONArray();
    		 String preTituloHTML5 = "<!DOCTYPE html>\n<html>\n<head>\n"
    		 + "<meta http-equiv=\"Content-type\" content=\"text/html; charset=utf-8\" />";
    		 response.setContentType("text/html");
@@ -43,6 +46,7 @@ public class HolaMundo extends HttpServlet {
    		 out.println("</html>");
    		 //cambio hola
    		 // comentario
+   		 // jnsadononjkdsa
    		 }
 
 }
