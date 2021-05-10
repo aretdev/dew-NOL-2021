@@ -49,10 +49,32 @@
     <servlet-name>logger2</servlet-name>
     <url-pattern>/logger2</url-pattern>
   </servlet-mapping>
-  
   <context-param>
-        <param-name>logPath</param-name>
-        <param-value>/home/user/Escritorio/log-NOL-dew.log</param-value>
-    </context-param>
+    <param-name>logPath</param-name>
+    <param-value>/home/user/Escritorio/log-NOL-dew.log</param-value>
+  </context-param>
+  <servlet>
+    <description></description>
+    <display-name>TheCat</display-name>
+    <servlet-name>TheCat</servlet-name>
+    <servlet-class>main.TheCat</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>TheCat</servlet-name>
+    <url-pattern>/TheCat</url-pattern>
+  </servlet-mapping>
   
+  
+  
+ <security-constraint>
+ 	<auth-constraint>
+            <role-name>tomcat</role-name>
+        </auth-constraint>
+</security-constraint>
+
+<login-config>
+ <auth-method>BASIC</auth-method>
+ <realm-name>Protegido</realm-name>
+</login-config>
+
 </web-app>
