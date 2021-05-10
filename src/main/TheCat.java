@@ -13,7 +13,6 @@ import org.apache.hc.core5.http.io.entity.StringEntity;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import netscape.javascript.JSObject;
 
 /**
  * Servlet implementation class TheCat
