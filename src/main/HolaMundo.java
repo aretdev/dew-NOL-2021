@@ -7,6 +7,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.apache.hc.client5.http.classic.methods.HttpGet;
 import org.json.JSONArray;
@@ -33,6 +34,7 @@ public class HolaMundo extends HttpServlet {
    		 {
         HttpGet httpGet = new HttpGet("http://httpbin.org/get");
         JSONArray jArr = new JSONArray();
+        HttpSession ses = request.getSession(false);
    		 String preTituloHTML5 = "<!DOCTYPE html>\n<html>\n<head>\n"
    		 + "<meta http-equiv=\"Content-type\" content=\"text/html; charset=utf-8\" />";
    		 response.setContentType("text/html");
@@ -41,6 +43,10 @@ public class HolaMundo extends HttpServlet {
    		 out.println("<title>Hola Mundo</title>");
    		 out.println("</head>");
    		 out.println("<body>");
+   		 out.println("<h1>"+ses.getAttribute("dni")+"</h1>");
+   		 out.println("<h1>"+ses.getAttribute("pass")+"</h1>");
+   		 out.println("<h1>"+ses.getAttribute("key")+"</h1>");
+   		 out.println("<h1>Hola Mundo!</h1>");
    		 out.println("<h1>Hola Mundo!</h1>");
    		 out.println("</body>");
    		 out.println("</html>");
