@@ -2,6 +2,7 @@ package main;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.HashMap;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -10,6 +11,9 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.apache.hc.client5.http.classic.methods.HttpGet;
+import org.apache.hc.client5.http.fluent.Request;
+import org.apache.hc.client5.http.fluent.Response;
+import org.apache.hc.core5.http.HttpHeaders;
 import org.json.JSONArray;
 
 /**
@@ -17,7 +21,6 @@ import org.json.JSONArray;
  */
 public class HolaMundo extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-       
     /**
      * @see HttpSer vlet#HttpServlet()
      */
@@ -32,9 +35,11 @@ public class HolaMundo extends HttpServlet {
     public void doGet(HttpServletRequest request, HttpServletResponse response)
    		 throws IOException, ServletException
    		 {
-        HttpGet httpGet = new HttpGet("http://httpbin.org/get");
-        JSONArray jArr = new JSONArray();
         HttpSession ses = request.getSession(false);
+        String key = ses.getAttribute("key").toString();
+    	Response requestCentro = Request.get("http://dew-virodbri-2021.dsic.cloud:9090/CentroEducativo/profesores?key="+key)
+                .setHeader(HttpHeaders.CONTENT_TYPE, "application/json")
+                .execute();
    		 String preTituloHTML5 = "<!DOCTYPE html>\n<html>\n<head>\n"
    		 + "<meta http-equiv=\"Content-type\" content=\"text/html; charset=utf-8\" />";
    		 response.setContentType("text/html");
@@ -44,9 +49,9 @@ public class HolaMundo extends HttpServlet {
    		 out.println("</head>");
    		 out.println("<body>");
    		 out.println("<h1>"+ses.getAttribute("dni")+"</h1>");
-   		 out.println("<h1>"+ses.getAttribute("pass")+"</h1>");
+   		 out.println("<h1>"+ses.getAttribute("password")+"</h1>");
    		 out.println("<h1>"+ses.getAttribute("key")+"</h1>");
-   		 out.println("<h1>Hola Mundo!</h1>");
+   		 out.println("<h1>"+requestCentro.returnContent().toString()+"</h1>");
    		 out.println("<h1>Hola Mundo!</h1>");
    		 out.println("</body>");
    		 out.println("</html>");
