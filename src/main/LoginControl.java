@@ -1,5 +1,6 @@
 package main;
 
+import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Base64;
@@ -16,13 +17,18 @@ import javax.servlet.http.HttpSession;
 
 import org.apache.hc.client5.http.HttpResponseException;
 import org.apache.hc.client5.http.classic.HttpClient;
+import org.apache.hc.client5.http.classic.methods.HttpGet;
 import org.apache.hc.client5.http.classic.methods.HttpPost;
 import org.apache.hc.client5.http.fluent.Request;
 import org.apache.hc.client5.http.fluent.Response;
+import org.apache.hc.client5.http.impl.classic.CloseableHttpClient;
+import org.apache.hc.client5.http.impl.classic.CloseableHttpResponse;
 import org.apache.hc.client5.http.impl.classic.HttpClientBuilder;
+import org.apache.hc.client5.http.impl.classic.HttpClients;
 import org.apache.hc.core5.http.HttpEntity;
 import org.apache.hc.core5.http.HttpHeaders;
 import org.apache.hc.core5.http.HttpResponse;
+import org.apache.hc.core5.http.ParseException;
 import org.apache.hc.core5.http.io.entity.EntityUtils;
 import org.apache.hc.core5.http.io.entity.StringEntity;
 import org.json.JSONObject;
@@ -67,16 +73,45 @@ public class LoginControl implements Filter {
 	        	cred.put("dni", user);
 	        	cred.put("password", pass);
 	            StringEntity entity = new StringEntity(cred.toString());
-	            try {
 	            	
 		           
-		            Response requestCentro = Request.post("http://dew-virodbri-2021.dsic.cloud:9090/CentroEducativo/login/")
+		            /*Response requestCentro = Request.post("http://dew-virodbri-2021.dsic.cloud:9090/CentroEducativo/login/")
 		                    .body(entity)
 		                    .setHeader(HttpHeaders.CONTENT_TYPE, "application/json")
 		                    .execute();
 		            String keyRes = requestCentro.returnContent().toString();
 	
-	                if(!keyRes.equals("-1")){
+		            */
+	            	/*
+	            	 * Nueva forma que permite coger la response body con JSON que devuelve CentroEducativo
+	            	 * 
+	            	 * Se crea un cliente HTTP para hacer la petición
+	            	 * Se crea la petición POST con HttpPost (Modo más largo)
+	            	 * Se añaden los headers y la entity (es el body de la petición post)
+	            	 * Usamos CloseableHttpResponse para ejecutar la petición Post con HttpClient
+	            	 * 
+	            	 * Con esto podemos conseguir el Code (200, 406...) y el HTML que será la key del login
+	            	 * 
+	            	 * */
+	            	CloseableHttpClient httpclient = HttpClients.createDefault();
+	                HttpPost httpPost = new HttpPost("http://dew-virodbri-2021.dsic.cloud:9090/CentroEducativo/login/");
+	                httpPost.setHeader(HttpHeaders.CONTENT_TYPE, "application/json");
+	                httpPost.setEntity(entity);
+	                CloseableHttpResponse response1 = httpclient.execute(httpPost);
+	                String keyRes = "-1";
+	                    HttpEntity entity1 = response1.getEntity();
+	                    try {
+	                    	//Esto es un parse y puede dar una excepción
+							keyRes = EntityUtils.toString(entity1);
+						} catch (ParseException e) {
+						}
+	                    
+	                    EntityUtils.consume(entity1);
+	                  //Hay que cerrar la petición 
+	                    response1.close();
+	                    //Si el código de respuesta es 200 y se ha hecho bien el parse (nos ha dado la key)
+	                    //Creamos la sesión
+	                if(response1.getCode() == 200 && !keyRes.equals("-1")){
 		            	session.setAttribute("dni", user);
 			            session.setAttribute("password", pass);
 			            session.setAttribute("key", keyRes);
@@ -84,10 +119,7 @@ public class LoginControl implements Filter {
 		            	request.getRequestDispatcher("/login3.html").include(request, response);
 	
 		            }
-	            }catch(HttpResponseException e) {
-	            	request.getRequestDispatcher("/login3.html").include(request, response);
-
-	            }
+	            
 	            /*HttpClient httpClient = HttpClientBuilder.create().build();
 
 	            try {
@@ -105,7 +137,9 @@ public class LoginControl implements Filter {
 	            
 	        }
 			chain.doFilter(request, response);
-        }
+        } 
+        
+        
 	}
 
 	/**
