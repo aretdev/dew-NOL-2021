@@ -2,7 +2,6 @@ package main;
 
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.HashMap;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -10,11 +9,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import org.apache.hc.client5.http.classic.methods.HttpGet;
 import org.apache.hc.client5.http.fluent.Request;
 import org.apache.hc.client5.http.fluent.Response;
 import org.apache.hc.core5.http.HttpHeaders;
-import org.json.JSONArray;
 
 /**
  * Servlet implementation class HolaMundo
