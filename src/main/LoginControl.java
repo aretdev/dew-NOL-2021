@@ -77,8 +77,7 @@ public class LoginControl implements Filter {
 		           
 		            /*Response requestCentro = Request.post("http://dew-virodbri-2021.dsic.cloud:9090/CentroEducativo/login/")
 		                    .body(entity)
-		                    .setHeader(HttpHeaders.CONTENT_TYPE, "application/json")
-		                    .execute();
+		                    .setHeader(HttpHeaders.CONTENT_TYPE, "application/json");
 		            String keyRes = requestCentro.returnContent().toString();
 	
 		            */
@@ -103,7 +102,8 @@ public class LoginControl implements Filter {
 	                    try {
 	                    	//Esto es un parse y puede dar una excepción
 							keyRes = EntityUtils.toString(entity1);
-						} catch (ParseException e) {
+							
+	                    }catch (ParseException e) {
 						}
 	                    
 	                    EntityUtils.consume(entity1);
