@@ -57,7 +57,7 @@ public class LoginControl implements Filter {
         String pass = request.getParameter("pass");
 
         if(user == null || pass == null) {
-        	request.getRequestDispatcher("/login3.html").include(request, response);;
+        	request.getRequestDispatcher("/welcome.html").include(request, response);;
         }else {
         	
 	        if(session.getAttribute("key") == null) {
@@ -86,7 +86,7 @@ public class LoginControl implements Filter {
 			            session.setAttribute("password", pass);
 			            session.setAttribute("key", keyRes);
 		            }else {
-		            	request.getRequestDispatcher("/login3.html").include(request, response);
+		            	request.getRequestDispatcher("/welcome.html").include(request, response);
 	
 		            }	            
 	        }
