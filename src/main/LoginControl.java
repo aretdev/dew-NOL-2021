@@ -13,6 +13,7 @@ import javax.servlet.http.HttpSession;
 
 
 import org.apache.hc.client5.http.classic.methods.HttpPost;
+import org.apache.hc.client5.http.cookie.BasicCookieStore;
 import org.apache.hc.client5.http.impl.classic.CloseableHttpClient;
 import org.apache.hc.client5.http.impl.classic.CloseableHttpResponse;
 import org.apache.hc.client5.http.impl.classic.HttpClients;
@@ -52,21 +53,21 @@ public class LoginControl implements Filter {
         
         
        
-        HttpSession session = req.getSession(true);
-        String user = request.getParameter("user");
-        String pass = request.getParameter("pass");
 
-        if(user == null || pass == null) {
-        	request.getRequestDispatcher("/welcome.html").include(request, response);;
-        }else {
-        	
+        HttpSession session = req.getSession(true);
+
+
+        
 	        if(session.getAttribute("key") == null) {
+	            String user = req.getRemoteUser();
+	            String pass = "123456";
 	        	JSONObject cred = new JSONObject();
 	        	cred.put("dni", user);
 	        	cred.put("password", pass);
 	            StringEntity entity = new StringEntity(cred.toString());
-	            	
-	            	CloseableHttpClient httpclient = HttpClients.createDefault();
+	            
+	            BasicCookieStore cookieStore = new BasicCookieStore();
+	        	CloseableHttpClient httpclient = HttpClients.custom().setDefaultCookieStore(cookieStore).build();
 	                HttpPost httpPost = new HttpPost("http://dew-virodbri-2021.dsic.cloud:9090/CentroEducativo/login/");
 	                httpPost.setHeader(HttpHeaders.CONTENT_TYPE, "application/json");
 	                httpPost.setEntity(entity);
@@ -85,13 +86,15 @@ public class LoginControl implements Filter {
 		            	session.setAttribute("dni", user);
 			            session.setAttribute("password", pass);
 			            session.setAttribute("key", keyRes);
+			            session.setAttribute("cookie", cookieStore.getCookies());
 		            }else {
 		            	request.getRequestDispatcher("/welcome.html").include(request, response);
 	
 		            }	            
 	        }
+
 			chain.doFilter(request, response);
-        } 
+        
         
 	}
 
