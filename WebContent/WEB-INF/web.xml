@@ -128,4 +128,24 @@
     <servlet-name>test</servlet-name>
     <url-pattern>/test</url-pattern>
   </servlet-mapping>
+  <servlet>
+    <description></description>
+    <display-name>alumnoApi</display-name>
+    <servlet-name>alumnoApi</servlet-name>
+    <servlet-class>main.alumnoApi</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>alumnoApi</servlet-name>
+    <url-pattern>/alumnoApi</url-pattern>
+  </servlet-mapping>
+  <servlet>
+    <description></description>
+    <display-name>profesorApi</display-name>
+    <servlet-name>profesorApi</servlet-name>
+    <servlet-class>main.profesorApi</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>profesorApi</servlet-name>
+    <url-pattern>/profesorApi</url-pattern>
+  </servlet-mapping>
 </web-app>
