@@ -47,34 +47,27 @@ public class alumnoApi extends HttpServlet {
     	String dni = ses.getAttribute("dni").toString();
     	String key = ses.getAttribute("key").toString();
     	if(request.isUserInRole("rolalu")) {
+    		String param = request.getParameter("opcion");
     		
-    		
-    		HttpGet httpGet = new HttpGet("http://dew-virodbri-2021.dsic.cloud:9090/CentroEducativo/alumnos/"+dni+"/asignaturas?key="+key);
-            httpGet.setHeader(HttpHeaders.CONTENT_TYPE, "application/json");
-            cookieStore.addCookie(cookies.get(0));
-            
-            CloseableHttpResponse response1 = httpclient.execute(httpGet);	
-            String content = "-1";
-            HttpEntity entity1 = response1.getEntity();
-            
-            try {
-            	content = EntityUtils.toString(entity1);
-            }catch (ParseException e) {System.out.println("Error entity");}
-            
-            EntityUtils.consume(entity1);
-            response1.close();
-    		response.getWriter().append(content);
+    		if(param.equals("asignaturas")) {
+	    		HttpGet httpGet = new HttpGet("http://dew-virodbri-2021.dsic.cloud:9090/CentroEducativo/alumnos/"+dni+"/asignaturas?key="+key);
+	            httpGet.setHeader(HttpHeaders.CONTENT_TYPE, "application/json");
+	            cookieStore.addCookie(cookies.get(0));
+	            
+	            CloseableHttpResponse response1 = httpclient.execute(httpGet);	
+	            String content = "-1";
+	            HttpEntity entity1 = response1.getEntity();
+	            
+	            try {
+	            	content = EntityUtils.toString(entity1);
+	            }catch (ParseException e) {System.out.println("Error entity");}
+	            
+	            EntityUtils.consume(entity1);
+	            response1.close();
+	    		response.getWriter().append(content);
+    		}
     	}
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		response.getWriter().append("Served at: ").append(request.getContextPath());
+			
 	}
 
 	/**
