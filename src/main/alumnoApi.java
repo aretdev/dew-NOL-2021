@@ -39,6 +39,14 @@ public class alumnoApi extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		/*
+		 * Cambiar nombreMaquina a tu maquina con CentroEducativo
+		 * */
+		String nombreMaquina = "virodbri";
+		/*
+		 * Empezamos a preparar la peticion
+		 * 
+		 * */
 		HttpSession ses = request.getSession(false);
     	BasicCookieStore cookieStore = new BasicCookieStore();
     	CloseableHttpClient httpclient = HttpClients.custom().setDefaultCookieStore(cookieStore).build();
@@ -46,36 +54,50 @@ public class alumnoApi extends HttpServlet {
     	List<Cookie> cookies = (List<Cookie>) ses.getAttribute("cookie");
     	String dni = ses.getAttribute("dni").toString();
     	String key = ses.getAttribute("key").toString();
+    	HttpGet httpGet = null;
+    	/*
+    	 * Solo aquellos con rolalu pueden realizar esta operacion
+    	 * */
     	if(request.isUserInRole("rolalu")) {
+    		/*
+    		 * Para diferenciar las operaciones del Servlet usamos el parametro opcion
+    		 * 
+    		 * opcion = asignaturas
+    		 * opcion = dni
+    		 * */
     		String param = request.getParameter("opcion");
             response.setContentType("application/json");
+            
     		if(param.equals("asignaturas")) {
-	    		HttpGet httpGet = new HttpGet("http://dew-virodbri-2021.dsic.cloud:9090/CentroEducativo/alumnos/"+dni+"/asignaturas?key="+key);
-	            httpGet.setHeader(HttpHeaders.CONTENT_TYPE, "application/json");
-	            cookieStore.addCookie(cookies.get(0));
-	            
-	            CloseableHttpResponse response1 = httpclient.execute(httpGet);	
-	            String content = "-1";
-	            HttpEntity entity1 = response1.getEntity();
-	            
-	            if(response1.getCode() == 200) {
-		            try {
-		            	content = EntityUtils.toString(entity1);
-		            }catch (ParseException e) {System.out.println("Error entity");}
-		            
-		            EntityUtils.consume(entity1);
-		            response1.close();
-		    		response.getWriter().append(content);
-	            }else {
-	            	response.setStatus(401);
-	        		response.getWriter().append("No tienes permitido realizar esta accion!");
-	            }
+	    		httpGet = new HttpGet("http://dew-"+nombreMaquina+"-2021.dsic.cloud:9090/CentroEducativo/alumnos/"+dni+"/asignaturas?key="+key);
     		} else if(param.equals("dni")) {
-    			
+	    		httpGet = new HttpGet("http://dew-"+nombreMaquina+"-2021.dsic.cloud:9090/CentroEducativo/alumnos/"+dni+"?key="+key);
     		}
     	}else {
     		response.setStatus(401);
     		response.getWriter().append("No tienes permitido realizar esta accion!");
+    		return;
+    	}
+    	
+    	if(httpGet != null) {
+	    	httpGet.setHeader(HttpHeaders.CONTENT_TYPE, "application/json");
+	        cookieStore.addCookie(cookies.get(0));
+	        
+	        CloseableHttpResponse response1 = httpclient.execute(httpGet);	
+	        String content = "-1";
+	        HttpEntity entity1 = response1.getEntity();
+	        
+	        if(response1.getCode() == 200) {
+	            try {
+	            	content = EntityUtils.toString(entity1);
+	            }catch (ParseException e) {System.out.println("Error entity");}
+	            
+	            EntityUtils.consume(entity1);
+	            response1.close();
+	    		response.getWriter().append(content);
+	        }else {
+	    		response.getWriter().append("No tienes permitido realizar esta accion!");
+	        }
     	}
 			
 	}
