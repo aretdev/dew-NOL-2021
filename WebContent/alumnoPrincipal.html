@@ -38,9 +38,23 @@
 		
 		$("#asig-click").click(function(){
 			  $("#insertar-asignaturas").toggle();
-		});
+			});
 		
-	});
+		$.ajax({
+            url: '/dew-NOL-2021/alumnoApi',
+            type: 'POST',
+            dataType: 'json',
+            async: true,
+            data: 'opcion=dni',
+            success: function(data){
+                $("#insertar-dni").append("<h2> Bienvenido " + data.nombre + " " + data.apellidos + "</h2>")
+            },
+            error: function(){
+                $("#insertar-dni").append("<p>ERROR EN AJAX</p>");
+            }
+        })
+		
+	})
 	
 	
 	</script>
@@ -79,6 +93,7 @@
 		</div>
 	</div>
 </div>
+<div id="insertar-dni" ></div>
 	
 <div id="insertar-asignaturas" style="display:none;"></div>
 
