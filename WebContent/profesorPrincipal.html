@@ -12,46 +12,50 @@
 
 	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css" type="text/css" rel="stylesheet"/>
 	<script >
+	var n = 0;
+	var acronimos = [];
 	$(document).ready(function(){
-		var n = 0;
 		$.ajax({
 			url: '/dew-NOL-2021/profesorApi',
 			type: 'POST',
 			dataType: 'json',
-			async: true,
+			async: false,
 			data: 'opcion=profasig',
 			success: function(data){
 				$("#insertar-asignaturas-prof").append("<ul>");
 				$.each(data, function (index, val) {
 					$("#insertar-asignaturas-prof").append('<li id="asig' + n + ' "> ' + val.acronimo + '</li>');
-				  	n++;  
+					n++;
+					acronimos.push(val.acronimo);
 				  });
 				
-				$("#insertar-asignaturas").append("</ul>");
+				$("#insertar-asignaturas-prof").append("</ul>");
 			},
 			error: function(){
-				$("#insertar-asignaturas").append("<p>ERROR EN AJAX</p>");
+				$("#insertar-asignaturas-prof").append("<p>ERROR EN AJAX</p>");
 			}
 			});
-
+		
 		for(i=0;i<n;i++){
-			var html = $("#asig" + i).html();
-			String opcion = "'opcion=asigalum&acronimo=" + html +"'";
+			var idAsig = "#asig"+i;
+			
+			console.log(acronimos[i]);
+
 			$.ajax({
 				url: '/dew-NOL-2021/profesorApi',
 				type: 'POST',
 				dataType: 'json',
-				async: true,
-				data: opcion,
+				async: false,
+				data: 'opcion=asigalum&acronimo='+acronimos[i],
 				success: function(data){
 					$("#asig" + i).append("<ul>");
 					$.each(data, function (index, val) {
 						$("#asig" + i).append('<li>' + val.nombre +" " + val.apellidos +'</li>');  
 					  });
-					$("#insertar-asignaturas").append("</ul>");
+					$("#asig" + i).append("</ul>");
 				},
 				error: function(){
-					$("#insertar-asignaturas").append("<p>ERROR EN AJAX</p>");
+					$("#insertar-asignaturas-prof").append("<p>ERROR EN AJAX</p>");
 				}
 				});
 		}
@@ -96,7 +100,7 @@
 </div>
 <div id="insertar-dni" ></div>
 	
-<div id="insertar-asignaturas-prof" style="display:none;"></div>
+<div id="insertar-asignaturas-prof" ></div>
 
 
 

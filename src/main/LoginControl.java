@@ -88,6 +88,7 @@ public class LoginControl implements Filter {
 	                }
 	                else if(req.isUserInRole("rolpro")) {
 	                	req.getRequestDispatcher("/profesorPrincipal.html").include(request, response);
+	                	return;
 	                }
 	                
 	                
