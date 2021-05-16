@@ -48,7 +48,7 @@ public class alumnoApi extends HttpServlet {
     	String key = ses.getAttribute("key").toString();
     	if(request.isUserInRole("rolalu")) {
     		String param = request.getParameter("opcion");
-    		
+            response.setContentType("application/json");
     		if(param.equals("asignaturas")) {
 	    		HttpGet httpGet = new HttpGet("http://dew-virodbri-2021.dsic.cloud:9090/CentroEducativo/alumnos/"+dni+"/asignaturas?key="+key);
 	            httpGet.setHeader(HttpHeaders.CONTENT_TYPE, "application/json");
@@ -58,15 +58,24 @@ public class alumnoApi extends HttpServlet {
 	            String content = "-1";
 	            HttpEntity entity1 = response1.getEntity();
 	            
-	            try {
-	            	content = EntityUtils.toString(entity1);
-	            }catch (ParseException e) {System.out.println("Error entity");}
-	            
-	            EntityUtils.consume(entity1);
-	            response1.close();
-	            response.setContentType("application/json");
-	    		response.getWriter().append(content);
+	            if(response1.getCode() == 200) {
+		            try {
+		            	content = EntityUtils.toString(entity1);
+		            }catch (ParseException e) {System.out.println("Error entity");}
+		            
+		            EntityUtils.consume(entity1);
+		            response1.close();
+		    		response.getWriter().append(content);
+	            }else {
+	            	response.setStatus(401);
+	        		response.getWriter().append("No tienes permitido realizar esta accion!");
+	            }
+    		} else if(param.equals("dni")) {
+    			
     		}
+    	}else {
+    		response.setStatus(401);
+    		response.getWriter().append("No tienes permitido realizar esta accion!");
     	}
 			
 	}
