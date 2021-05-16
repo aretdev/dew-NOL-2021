@@ -13,7 +13,8 @@
 	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css" type="text/css" rel="stylesheet"/>
 	<script >
 	$(document).ready(function(){
-		$.ajax({
+		$("#asig-click").toggle(
+			$.ajax({
 			url: '/dew-NOL-2021/alumnoApi',
 			type: 'POST',
 			dataType: 'json',
@@ -33,7 +34,7 @@
 			error: function(){
 				$("#insertar-asignaturas").append("<p>ERROR EN AJAX</p>");
 			}
-		});
+		}););
 		
 	});
 	
@@ -67,9 +68,9 @@
 <div class="container">
 	<div class="d-flex justify-content-center">
 		<div class="card bg-light mb-3 mt-4" style="max-width: 18rem;">
-		  <div class="card-header">Información</div>
+		  <div class="card-header" id="asig-click">Ver asignaturas y notas</div>
 		  <div class="card-body">
-		    <p class="card-text">Bienvenido <span id="nombre-usuario"></span></p>
+		    <p class="card-text">Bienvenido<span id="nombre-usuario"></span></p>
 		  </div>
 		</div>
 	</div>
