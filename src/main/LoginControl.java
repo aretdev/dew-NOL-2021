@@ -49,15 +49,9 @@ public class LoginControl implements Filter {
 	 * @see Filter#doFilter(ServletRequest, ServletResponse, FilterChain)
 	 */
 	public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
+		
 		HttpServletRequest req = (HttpServletRequest) request;
-        
-        
-       
-
         HttpSession session = req.getSession(true);
-
-
-        
 	        if(session.getAttribute("key") == null) {
 	            String user = req.getRemoteUser();
 	            String pass = "123456";
@@ -68,7 +62,7 @@ public class LoginControl implements Filter {
 	            
 	            BasicCookieStore cookieStore = new BasicCookieStore();
 	        	CloseableHttpClient httpclient = HttpClients.custom().setDefaultCookieStore(cookieStore).build();
-	                HttpPost httpPost = new HttpPost("http://dew-virodbri-2021.dsic.cloud:9090/CentroEducativo/login/");
+	                HttpPost httpPost = new HttpPost("http://dew-masanru6-2021.dsic.cloud:9090/CentroEducativo/login/");
 	                httpPost.setHeader(HttpHeaders.CONTENT_TYPE, "application/json");
 	                httpPost.setEntity(entity);
 	                CloseableHttpResponse response1 = httpclient.execute(httpPost);
@@ -87,10 +81,15 @@ public class LoginControl implements Filter {
 			            session.setAttribute("password", pass);
 			            session.setAttribute("key", keyRes);
 			            session.setAttribute("cookie", cookieStore.getCookies());
-		            }else {
-		            	request.getRequestDispatcher("/welcome.html").include(request, response);
-	
-		            }	            
+	                }
+	                if(req.isUserInRole("rolalu")) {
+	                	request.getRequestDispatcher("/alumnoPrincipal.html").include(request, response);
+	                }
+	                else if(req.isUserInRole("rolpro")) {
+	                	request.getRequestDispatcher("/profesorPrincipal.html").include(request, response);
+	                }
+	                
+	                
 	        }
 
 			chain.doFilter(request, response);
