@@ -62,7 +62,7 @@ public class LoginControl implements Filter {
 	            
 	            BasicCookieStore cookieStore = new BasicCookieStore();
 	        	CloseableHttpClient httpclient = HttpClients.custom().setDefaultCookieStore(cookieStore).build();
-	                HttpPost httpPost = new HttpPost("http://dew-masanru6-2021.dsic.cloud:9090/CentroEducativo/login/");
+	                HttpPost httpPost = new HttpPost("http://dew-virodbri-2021.dsic.cloud:9090/CentroEducativo/login/");
 	                httpPost.setHeader(HttpHeaders.CONTENT_TYPE, "application/json");
 	                httpPost.setEntity(entity);
 	                CloseableHttpResponse response1 = httpclient.execute(httpPost);

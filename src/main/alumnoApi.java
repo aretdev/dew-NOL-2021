@@ -40,18 +40,16 @@ public class alumnoApi extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		HttpSession ses = request.getSession(false);
-        String key = ses.getAttribute("key").toString();
     	BasicCookieStore cookieStore = new BasicCookieStore();
-    	CloseableHttpClient httpclient = HttpClients.custom()
-        	    .setDefaultCookieStore(cookieStore)
-        	    .build();
+    	CloseableHttpClient httpclient = HttpClients.custom().setDefaultCookieStore(cookieStore).build();
     	
     	List<Cookie> cookies = (List<Cookie>) ses.getAttribute("cookie");
     	String dni = ses.getAttribute("dni").toString();
-		
+    	String key = ses.getAttribute("key").toString();
     	if(request.isUserInRole("rolalu")) {
     		
-    		HttpGet httpGet = new HttpGet("http://dew-masanru6-2021.dsic.cloud:9090/CentroEducativo/alumnos/"+dni+"/asignaturas?key="+key);
+    		
+    		HttpGet httpGet = new HttpGet("http://dew-virodbri-2021.dsic.cloud:9090/CentroEducativo/alumnos/"+dni+"/asignaturas?key="+key);
             httpGet.setHeader(HttpHeaders.CONTENT_TYPE, "application/json");
             cookieStore.addCookie(cookies.get(0));
             
@@ -65,8 +63,7 @@ public class alumnoApi extends HttpServlet {
             
             EntityUtils.consume(entity1);
             response1.close();
-            
-            JSONArray o = new JSONArray(content);
+    		response.getWriter().append(content);
     	}
 		
 		
