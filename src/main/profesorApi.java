@@ -72,6 +72,11 @@ public class profesorApi extends HttpServlet {
     		} else if(param.equals("asigalum")) {
     			String acronimo = request.getParameter("acronimo");
 	    		httpGet = new HttpGet("http://dew-"+nombreMaquina+"-2021.dsic.cloud:9090/CentroEducativo/asignaturas/"+acronimo+"/alumnos?key="+key);
+    		}else if(param.equals("getalumno")) {
+    			String dnialumno = request.getParameter("dnialumno");
+	    		httpGet = new HttpGet("http://dew-"+nombreMaquina+"-2021.dsic.cloud:9090/CentroEducativo/alumnos/"+dnialumno+"?key="+key);
+    		}else if(param.equals("dni")) {
+	    		httpGet = new HttpGet("http://dew-"+nombreMaquina+"-2021.dsic.cloud:9090/CentroEducativo/profesores/"+dni+"?key="+key);
     		}
     	}else {
     		response.setStatus(401);
