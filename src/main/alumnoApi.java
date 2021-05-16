@@ -64,6 +64,7 @@ public class alumnoApi extends HttpServlet {
 	            
 	            EntityUtils.consume(entity1);
 	            response1.close();
+	            response.setContentType("application/json");
 	    		response.getWriter().append(content);
     		}
     	}

@@ -83,10 +83,11 @@ public class LoginControl implements Filter {
 			            session.setAttribute("cookie", cookieStore.getCookies());
 	                }
 	                if(req.isUserInRole("rolalu")) {
-	                	request.getRequestDispatcher("/alumnoPrincipal.html").include(request, response);
+	                	req.getRequestDispatcher("/alumnoPrincipal.html").include(request, response);
+	                	return;
 	                }
 	                else if(req.isUserInRole("rolpro")) {
-	                	request.getRequestDispatcher("/profesorPrincipal.html").include(request, response);
+	                	req.getRequestDispatcher("/profesorPrincipal.html").include(request, response);
 	                }
 	                
 	                
