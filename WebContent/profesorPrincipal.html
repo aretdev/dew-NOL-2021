@@ -26,7 +26,23 @@
 				$.each(data, function (index, val) {
 					$("#insertar-asignaturas-prof").append('<li id="asig' + n + ' "> ' + val.acronimo + '</li>');
 					n++;
-					acronimos.push(val.acronimo);
+					$.ajax({
+						url: '/dew-NOL-2021/profesorApi',
+						type: 'POST',
+						dataType: 'json',
+						async: false,
+						data: 'opcion=asigalum&acronimo='+val.acronimo,
+						success: function(data){
+							$("#asig"+n).append("<ul>");
+							$.each(data, function (index, val) {
+								$("#asig"+n).append('<li>' + val.alumno +'</li>');  
+							  });
+							$("#asig"+n).append("</ul>");
+						},
+						error: function(){
+							$("#insertar-asignaturas-prof").append("<p>ERROR EN AJAX</p>");
+						}
+						});
 				  });
 				
 				$("#insertar-asignaturas-prof").append("</ul>");
@@ -36,7 +52,7 @@
 			}
 			});
 		
-		for(i=0;i<n;i++){
+		<!--for(i=0;i<n;i++){
 			var idAsig = "#asig"+i;
 			
 			console.log(acronimos[i]);
@@ -48,17 +64,17 @@
 				async: false,
 				data: 'opcion=asigalum&acronimo='+acronimos[i],
 				success: function(data){
-					$("#asig" + i).append("<ul>");
+					$(idAsig).append("<ul>");
 					$.each(data, function (index, val) {
-						$("#asig" + i).append('<li>' + val.nombre +" " + val.apellidos +'</li>');  
+						$(idAsig).append('<li>' + val.alumno +'</li>');  
 					  });
-					$("#asig" + i).append("</ul>");
+					$(idAsig).append("</ul>");
 				},
 				error: function(){
 					$("#insertar-asignaturas-prof").append("<p>ERROR EN AJAX</p>");
 				}
 				});
-		}
+		}-->
 		})
 	
 	

@@ -55,7 +55,7 @@ public class profesorApi extends HttpServlet {
     	String key = ses.getAttribute("key").toString();
     	HttpGet httpGet = null;
     	/*
-    	 * Solo aquellos con rolalu pueden realizar esta operacion
+    	 * Solo aquellos con rolpro pueden realizar esta operacion
     	 * */
     	if(request.isUserInRole("rolpro")) {
     		/*
