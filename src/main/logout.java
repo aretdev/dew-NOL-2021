@@ -24,9 +24,11 @@ public class logout extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+
+		response.sendRedirect("/dew-NOL-2021/login.html");
+		
 		request.getSession().invalidate();
 
-		request.getRequestDispatcher("/login.html").include(request, response);
 	}
 
 	/**

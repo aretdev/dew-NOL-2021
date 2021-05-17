@@ -37,10 +37,8 @@
 			async: false,
 			data: 'opcion=profasig',
 			success: function(data){
-				$("#insertar-asignaturas-prof").append("<ul>");
 				$.each(data, function (index, val) {
-					$("#insertar-asignaturas-prof").append('<li id="asig' + index + '"> ' + val.acronimo + '</li>');
-					
+					$("#insertar-asignaturas-prof").append('<li id="asig' + index + '" class="list-group-item" > <b style="font-size:20px;">' + val.acronimo + '</b></li>');
 					$.ajax({
 						url: '/dew-NOL-2021/profesorApi',
 						type: 'POST',
@@ -48,11 +46,11 @@
 						async: false,
 						data: 'opcion=asigalum&acronimo='+val.acronimo,
 						success: function(data1){
-							$("#asig"+index).append("<ul>");
+							$("#asig"+index).append('<ul id="asigUL' + index + '" class="list-group">');
 							$.each(data1, function (index1, val1) {
 								console.log()
 								var a = getNombre(val1.alumno);
-								$("#asig"+index).append('<li>' + a +" con dni: "+ val1.alumno +'</li>');  
+								$("#asigUL"+index).append('<li class="list-group-item">' + a +" con dni: "+ val1.alumno +'</li>');  
 							  });
 							$("#asig"+index).append("</ul>");
 						},
@@ -62,7 +60,6 @@
 						});
 				  });
 				
-				$("#insertar-asignaturas-prof").append("</ul>");
 			},
 			error: function(){
 				$("#insertar-asignaturas-prof").append("<p>ERROR EN AJAX</p>");
@@ -113,17 +110,21 @@
 </nav>
 <div class="container">
 	<div class="d-flex justify-content-center">
-		<div class="card bg-light mb-3 mt-4" style="max-width: 18rem;">
-		  <div class="card-header" id="asig-click">Ver asignaturas y notas</div>
+		<div class="card bg-light mb-3 mt-4">
+		  <div class="card-header" id="insertar-dni"></div>
 		  <div class="card-body">
-		    <p class="card-text">Bienvenido<span id="nombre-usuario"></span></p>
+		    <p class="card-text">
+		    <div >
+				<ul id="insertar-asignaturas-prof" class="list-group">
+				</ul>
+			</div>
+			</p>
 		  </div>
 		</div>
 	</div>
 </div>
-<div id="insertar-dni" ></div>
 	
-<div id="insertar-asignaturas-prof" ></div>
+
 
 
 

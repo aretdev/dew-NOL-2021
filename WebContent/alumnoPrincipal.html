@@ -20,14 +20,13 @@
 			async: true,
 			data: 'opcion=asignaturas',
 			success: function(data){
-				$("#insertar-asignaturas").append("<ul>");
 
 				$.each(data, function (index, val) {
-					$("#insertar-asignaturas").append('<li>' + val.asignatura + "		Nota: "+ val.nota + '</li>');
+					var notaFormatted = (val.nota == "") ? "No calificado" : val.nota;
+					$("#insertar-asignaturas ul").append('<li class="list-group-item">' + val.asignatura + "		Nota: "+ notaFormatted + '</li>');
 				    
 				  });
 				
-				$("#insertar-asignaturas").append("</ul>");
 			},
 			error: function(){
 				$("#insertar-asignaturas").append("<p>ERROR EN AJAX</p>");
@@ -78,24 +77,25 @@
       </ul>
   <div class="text-end">
           <button type="button" class="btn btn-outline-light me-2">Perfil</button>
-          <button type="button" class="btn btn-danger">Salir</button>
+          <button type="button" class="btn btn-danger"><a style="text-decoration:none;" href="/dew-NOL-2021/logout">Salir</a></button>
         </div>
     </div>
   </div>
 </nav>
 <div class="container">
 	<div class="d-flex justify-content-center">
-		<div class="card bg-light mb-3 mt-4" style="max-width: 18rem;">
-		  <div class="card-header" id="asig-click">Ver asignaturas y notas</div>
+		<div class="card bg-light mb-3 mt-4" >
+		  <div class="card-header" id="insertar-dni"></div>
 		  <div class="card-body">
-		    <p class="card-text">Bienvenido<span id="nombre-usuario"></span></p>
+		    <p class="card-text"><button id="asig-click" type="button" class="btn btn-success">Ver Asignaturas</button></p>
 		  </div>
 		</div>
 	</div>
+</div>	
+<div id="insertar-asignaturas" style="display:none;">
+	<ul class="list-group">
+	</ul>
 </div>
-<div id="insertar-dni" ></div>
-	
-<div id="insertar-asignaturas" style="display:none;"></div>
 
 
 
