@@ -1,7 +1,5 @@
 # Acta de la reunión 4 y 5 del grupo DEW 3TI11-02.
-
 > ##### Asistentes: Vicente, Joel, Mario, Josep, Krasimir y Sergio.
-
 ------------
 ###### Esta acta contiene las reuniones 4 y 5: la del 10 de mayo y la del 12 de mayo.
 #### 1. Dinámica de trabajo.
@@ -9,58 +7,41 @@ Se establece claramente un plan de trabajo detallado a seguir para la actividad 
 En la actividad 3 se procede de la misma manera generando un plan compartido a todos los miembros del grupo detallando las actividades a desarrollar.
 
 #### 2. Trabajo realizado.
+Se termina en su totalidad la actividad número 2 y se comienza con los primeros detalles de la actividad 3.
+En primer lugar se realizó el consenso para la elección de bibliotecas. Nos decantamos por utilizar HttpComponents y JSON-Java. 
+Tras mirar documentación de todas las librerias propuestas nos quedamos con estas dos puesto que la forma en la que se desarrolla el código con ellas nos parece la más intuitiva y cómoda para nuestra forma de ver tanto las estructuras de las peticiones y respuestas HTTP, como, la estructura de los objetos JSON y su manipulación. Además hacer hincapié en que JSON-Java nos ofrece infinidad de formatos y constructores para la definición y control de estos objetos JSON.
+Una vez descargadas e incorporadas al proyecto las librerías,  se procede con la actividad de inicio TheCatApi completando con éxito la operación GET y mostrandose correctamente las imágenes en la web.
+Después se comenzó a indagar en los pasos 2 y 3 de nuestro plan que incluyen, la creación de roles en tomcat-users.xml, la modificación del web.xml para la incorporación de las auth-contraint y se desarrolló el filtro SessionControl siguiendo el seudocódigo ofrecido en el manual *(Trabajo en grupo NOL)*, que nos indica como transitar y comunicar la capa lógica con la capa de datos mediante el uso de una sesión, un objeto json con las variables a utilizar en la operación de login, y la propia petición POST de login a CentroEducativo.
 
-Se termina en su totalidad la actividad numero 2 y se comienza con los primeros detalles de la actividad 3.
-En primer lugar se realizó el consenso para la eleccion de bibliotecas. Nos decantamos por utilizar HttpComponents y JSON-Java. 
-
-Tras mirar documentación de todas las librerias propuestas nos quedamos con estas dos puesto que la forma en la que se desarrolla el codigo con ellas nos parece la mas intuitiva y cómoda para nuestra forma de ver tanto las estructuras de las peticiones y respuestas HTTP, como, la estructura de los objetos JSON y su manipulacion. Además hacer especial incapié en que JSON-Java nos ofrece infinidad de formatos y constructores para la definicion y control de estos objetos JSON.
-
-Una vez descargadas e incorporadas al proyecto las librerias,  se procede con la actividad de inicio TheCatApi completando con éxito la operación GET y mostrandose correctamente las imagenes en la web.
-
-Después se comienzó a indagar en los pasos 2 y 3 de nuestro plan que incluyen, la creacion de roles en tomcat-users.xml, la modificación del web.xml para la incorporación de las auth-contraint y se desarrolló el filtro SessionControl siguiendo el pseudocodigo ofrecido en el manual *(Trabajo en grupo NOL)*, que nos indica como transitar y comunicar la capa lógica con la capa de datos mediante el uso de una sesión, un objeto json con las variables a utilizar en la operacion de login, y la propia peticion POST de login a CentroEducativo.
-
-Tras, ello se crea un formulario base (login3.html) para comenzar con la autenticación de los usuarios y tambien se crea un nuevo filtro LoginControl que selecciona los datos dni y pass de manera diferente al anterior Servlet "SessionControl". Se modifica tambien el Servlet HolaMundo para poder obtener la respuesta en formato JSON a una posible consulta a CentroEducativo.
-
-> NOTA: La actividad de testeo se realizó desde la maquina de porta-ng de Vicente:
+Tras, ello se crea un formulario base (login3.html) para comenzar con la autenticación de los usuarios y también se crea un nuevo filtro LoginControl que selecciona los datos dni y pass de manera diferente al anterior Servlet "SessionControl". Se modifica también el Servlet HolaMundo para poder obtener la respuesta en formato JSON a una posible consulta a CentroEducativo.
+> NOTA: La actividad de testeo se realizó desde la máquina de porta-ng de Vicente:
 > **dew-virodbri-2020.dsic.cloud**
-
 #### 3. Problemas acontecidos y soluciones propuestas
-Ningún problema ocurrido en el transcurso de las sesiones, y se ofrece una posible solucion ante problemas de compatibilidad de horario debido a la creciente carga de trabajo que la realizacion del proyecto supone y la compaginacion con otras asignaturas.
-
+Ningún problema ocurrido en el transcurso de las sesiones, y se ofrece una posible solución ante problemas de compatibilidad de horario debido a la creciente carga de trabajo que la realización del proyecto supone y la compaginación con otras asignaturas.
 La solución propuesta fue realizar una delegación de trabajo con previa explicación en un horario fuera del habitual al miembro del grupo que no pueda asistir a alguna reunión en particular.
 Todos los miembros aceptaron la propuesta y se introdujeron nuevas jornadas de trabajo para intensificar la productividad.
-
-
 # Acta de la reunión 6,7,8 del grupo DEW 3TI11-02.
-
 > ##### Asistentes: Vicente, Joel, Mario y Sergio.
 ------------
 ###### Esta acta contiene las reuniones 6,7 y 8: la del 14 de mayo, 16 de mayo y 17 de mayo.
-
 #### 1. Dinámica de trabajo.
-Se continua con la dinamica propuesta en las sesiones anteriores. Seguir con el plan de ejecución propuesto, en estas reuniones especificamente, se trabajó
+Se continua con la dinámica propuesta en las sesiones anteriores. Seguir con el plan de ejecución propuesto, en estas reuniones específicamente, se trabajó
 #### 2. Trabajo realizado.
+Se comienza al desarrollo de las piezas desarrolladas en los requisitos de la tarea, se modifican ciertos ficheros para hacer una condensación de la información y hacer el proceso más simple. Comenzamos con el estudio individualizado de todas los integrantes del equipo de jQuery y Ajax para poder trabajar "ágilmente". Posteriormente se colabora en la construcción de las APIs y el diseño de las páginas HTML con Bootstrap. 
+Se profundiza en el concepto de interconexión entre servlets y html ya que lo consideramos muy importante para el completo entendimiento del proyecto. 
+Realizamos un trabajo paralelo desarrollando la parte de servlets en grupo y la parte de Ajax/jQuery también en grupo.
 
-Se comienza al desarrollo de las piezas desarrolladas en los requisitos de la tarea, se modifican ciertos ficheros para hacer una condensación de la información y hacer el proceso mas simple. Comenzamos con el estudio individualizado de todas los integrantes del equipo de jQuery y Ajax para poder trabajar "agilmente". Posteriormente se colabora en la construcción de las APIs y el diseño de las páginas HTML con Bootstrap. 
-
-Se profundiza en el concepto de interconexion entre servlets y html ya que lo consideramos muy importante para el completo entendimiento del proyecto. 
-
-Realizamos un trabajo paralelo desarrollando la parte de Servlets en grupo y la parte de Ajax/jQuery también en grupo.
-
-> NOTA: La actividad de testeo se realizó desde la maquina de porta-ng de Vicente:
+> NOTA: La actividad de testeo se realizó desde la máquina de porta-ng de Vicente:
 > **dew-virodbri-2020.dsic.cloud**
 
 #### 3. Problemas acontecidos y soluciones propuestas
 Destacamos la falta de asistencia de Krasimir durante todas las reuniones, y la falta de asistencia de Josep a las 2 primeras. 
-Las dos primeras reuniones fue donde mas trabajo se realizo y se explicó a los miembros del grupo que no asistieron que debían estudiar y ponerse al día interpretando el código y probando las diferentes partes del proyecto. 
+Las dos primeras reuniones fue donde más trabajo se realizó y se explicó a los miembros del grupo que no asistieron que debían estudiar y ponerse al día interpretando el código y probando las diferentes partes del proyecto. 
 Observamos compromiso por parte de Josep, se verá su evolución y se comentará en las siguientes actas.
-
-### Login
+# Pantalla de login.
 A continuación, procedemos a explicar el funcionamiento del login que utilizaremos para acceder a nuestra aplicación de notas online.
-
-Para la implementación del login, hemos condensado los distintos login que utilizamos en el hito anterior para hacer pruebas de funcionamiento en un solo login. De esta manera podremos usarlo más facilmente y de una manera que se ajusta más a lo apropiado para este hito.
-
-A pesar de no ser necesario para la consecucion de este hito, hemos decidido darle un diseño simple pero más vistoso utilizando Bootstrap. Las siguientes lineas de código serán necesarias para la utilización de ajax y de bootstrap.
+Para la implementación del login, hemos condensado los distintos login que utilizamos en el hito anterior para hacer pruebas de funcionamiento en un solo login. De esta manera podremos usarlo más fácilmente y de una manera que se ajusta más a lo apropiado para este hito.
+A pesar de no ser necesario para la consecución de este hito, hemos decidido darle un diseño simple pero más vistoso utilizando Bootstrap. Las siguientes líneas de código serán necesarias para la utilización de Ajax y de Bootstrap.
 ``` html
 <head>
 	<title>Notas Online - Iniciar Sesión</title>
@@ -76,7 +57,7 @@ A pesar de no ser necesario para la consecucion de este hito, hemos decidido dar
     <script crossorigin="anonymous" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
 </head>
 ```
-En este apartado de la memoria  no se entrará en detalles del funcionamiento de bootstrap.  En el codigo que podemos ver a continuación creamos una cabecera de la pagina donde se da la bienvenida y se da a elegir con dos botones entre hacer login como alumno o como profesor.
+En este apartado de la memoria no se entrará en detalles del funcionamiento de bootstrap.  En el código que podemos ver a continuación creamos una cabecera de la página donde se da la bienvenida y se da a elegir con dos botones entre hacer login como alumno o como profesor.
 ```html
 <body>
 	<header>
@@ -90,7 +71,7 @@ En este apartado de la memoria  no se entrará en detalles del funcionamiento de
   </div>
 </header>
 ```
-Al pulsar en uno de estos botones se abrira una ventana modal en la que se nos pedira un DNI y una contraseña, al introducirlos podemos pulsar en un botón  de iniciar sesión y hacer un submit para confirmar si podemos logearnos o no es un usuario valido. Podemos ver el codigo de esta funcionalidad a continuación. Un aspecto interesante a explicar del siguiente fragmento de codigo es la utilizacion de *j_security_check* en el action del post asi como  *j_username  y  j_password* en el parametro nombre de sus respectivos inputs. Estos son los nombres estandarizados en la especificacion de servlets Java, de esta manera los servidores de la aplicación puede autentificar los contenedores independientemente de la aplicacion implementada. 
+Al pulsar en uno de estos botones se abrirá una ventana modal en la que se nos pedirá un DNI y una contraseña, al introducirlos podemos pulsar en un botón  de iniciar sesión y hacer un submit para confirmar si podemos logearnos o no es un usuario valido. Podemos ver el código de esta funcionalidad a continuación. Un aspecto interesante a explicar del siguiente fragmento de código es la utilización de *j_security_check* en el action del post así como  *j_username  y  j_password* en el parámetro nombre de sus respectivos inputs. Estos son los nombres estandarizados en la especificación de servlets Java, de esta manera los servidores de la aplicación pueden autentificar los contenedores independientemente de la aplicacion implementada. 
 ```html
 <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered" role="document">
@@ -124,29 +105,21 @@ Al pulsar en uno de estos botones se abrira una ventana modal en la que se nos p
   </div>
 </div>
 ```
-El aspecto de el login sin haber abierto la ventana modal sera como se muestra en la siguiente figura.
+El aspecto del login sin haber abierto la ventana modal será como se muestra en la siguiente figura.
 
 ![](http://personales.alumno.upv.es/virodbri/img/capturas/inicio-sinlogin.png)
 > Figura 1.  
-
-Y de la siguiente manera es como se visualizara con la ventana del login abierta.
-
+Y de la siguiente manera es como se visualizará con la ventana del login abierta.
 ![](http://personales.alumno.upv.es/virodbri/img/capturas/inicio-login.png)
 > Figura 2.  
-
-Como podemos ver en las imagenes, tambien hemos añadido un pie de pagina en el que hemos añadido nuestros nombres. Esto se ha hecho con el siguiente fragmento de codigo en el que creamos una lista dentro de un *footer* .
-
-Si nos identificamos  de manera correcta como alumno accederemos a una pagina con la apariencia que vemos en la siguiente fiugra. En esta se da la bienvenida al usuario que se ha autentificado y un boton con el que accedemos a la consulta de asignaturas. Al pulsarlo se puede ver la lista que vemos más abajo en la figura. 
-
+Como podemos ver en las imágenes, también hemos añadido un pie de página en el que hemos añadido nuestros nombres. Esto se ha hecho con el siguiente fragmento de código en el que creamos una lista dentro de un *footer* .
+Si nos identificamos de manera correcta como alumno accederemos a una página con la apariencia que vemos en la siguiente figura. En esta se da la bienvenida al usuario que se ha autentificado y un botón con el que accedemos a la consulta de asignaturas. Al pulsarlo se puede ver la lista que vemos más abajo en la figura. 
 ![](http://personales.alumno.upv.es/virodbri/img/capturas/alumno.png)
 > Figura 3.  
-
-De la misma manera, cuando nos identificamos de manera correcta como profesor accedemos a la página que vemos a contuniación. En esta también se nos da la bienvenida y se muestra una lista con las asignaturas y los alumnos de cada asignatura.
-
+De la misma manera, cuando nos identificamos de manera correcta como profesor accedemos a la página que vemos a continuación. En esta también se nos da la bienvenida y se muestra una lista con las asignaturas y los alumnos de cada asignatura.
 ![](http://personales.alumno.upv.es/virodbri/img/capturas/profesor1.png)
 > Figura 4.  
-
-El metodo de autentificación utilizado es FORM en vez de BASIC como utilizamos anteriormente.
+El método de autentificación utilizado es FORM en vez de BASIC como utilizamos anteriormente.
 ```xml
 <login-config>
     <auth-method>FORM</auth-method>
@@ -175,7 +148,6 @@ Además de este filtro también hemos realizado otro previamente llamado Session
   </filter-mapping>
 ```
 Ahora entrando en aspectos más profundos de nuestro código, podemos observar que en el filtro siempre se define una operación doFilter que nos permitirá crear una sesión para un usuario y contraseña concretos además de hacer la petición "login" a CentroEducativo.
-
 En primer lugar se crea una sesión y se comprueba si existe el identificador de la sesión(key). Si no se ha iniciado sesión entonces se obtiene el nombre de usuario y la contraseña se establece a 123456 al ser única en CentroEducativo.
 ```java
 public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
@@ -230,7 +202,7 @@ Se comprobará para realizar esta asignación de variables de sesión si el cód
 			            session.setAttribute("cookie", cookieStore.getCookies());
 	                }
 ```
-Finalmente comprobamos si el usuario que se ha autenticado es un alumno o es un profesor mediante el uso de los roles, implementados anteriormente en  el fichero tomcat-users.xml y web.xml. Tras esta comprobación se redirige al usuario a su ventana correspondiente.
+Finalmente comprobamos si el usuario que se ha autenticado es un alumno o es un profesor mediante el uso de los roles, implementados anteriormente en el fichero tomcat-users.xml y web.xml. Tras esta comprobación se redirige al usuario a su ventana correspondiente.
 ```java
 	                if(req.isUserInRole("rolalu")) {
 	                	req.getRequestDispatcher("/alumnoPrincipal.html").include(request, response);
@@ -248,10 +220,8 @@ Finalmente comprobamos si el usuario que se ha autenticado es un alumno o es un 
 # Construcción y envío de las peticiones a CentroEducativo
 ------------
 Para poder comunicarse con centro educativo, necesitamos que un servlet haga de "intermediario" con el mismo , ya que realmente el cliente no tiene acceso directo con la base de datos CentroEducativo.
-
 Ante esta situación este servlet tendrá la capacidad de obtener la respuesta del mismo y devuelva al cliente la información que debe mostrar en el navegador.
-
-En nuestro caso, hemos decidido llamar a este "servlet intermediario" alumnoApi. Este servlet admite peticiones tanto por el método GET y POST y empezará por obtener los datos del usuarió que lo llamó con el fin de ir construyendo la petición a CentroEducativo, estos datos son su dni, su key y su cookie.
+En nuestro caso, hemos decidido llamar a este "servlet intermediario" alumnoApi. Este servlet admite peticiones tanto por el método GET y POST y empezará por obtener los datos del usuario que lo llamó con el fin de ir construyendo la petición a CentroEducativo, estos datos son su dni, su key y su cookie.
 ```java
 protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		String nombreMaquina = "virodbri";
@@ -265,13 +235,13 @@ protected void doGet(HttpServletRequest request, HttpServletResponse response) t
 ```
 ------------
 
-Una vez obtenido los datos del usuario, debemos comprobar que realmente tiene persmisos para realizar las peticiones correspondientes, esto lo comprobaremos con la siguiente linea:
+Una vez obtenido los datos del usuario, debemos comprobar que realmente tiene permisos para realizar las peticiones correspondientes, esto lo comprobaremos con la siguiente línea:
 ```java
 if(request.isUserInRole("rolalu")) {
 ```
 ------------
 
-Ya seguros de que el usuario es del rol correspondiente, pasaremos a realizar la petición a CentroEducativo. Este servlet está creado para que pueda admitir varias peticiones a varios datos de CentroEducativo, estas peticiones se diferencian mediante un parámetro por POST el cual es *opcion*, dependiendo de que valor le asignemos a este parámetro alumnoApi sabrá que petición exacta debe realizar.
+Ya seguros de que el usuario es del rol correspondiente, pasaremos a realizar la petición a CentroEducativo. Este servlet está creado para que pueda admitir varias peticiones a varios datos de CentroEducativo, estas peticiones se diferencian mediante un parámetro por POST el cual es *opcion*, dependiendo de qué valor le asignemos a este parámetro alumnoApi sabrá que petición exacta debe realizar.
 ```java
 String param = request.getParameter("opcion");
             response.setContentType("application/json");
@@ -315,22 +285,18 @@ if(httpGet != null) {
 ```
 ------------
 
-También esta la implementación de profesorApi, en esencia es exactamente lo mismo que alumnoApi pero con peticiones diferentes a CentroEducativo y con las comprobaciones correspondientes para asegurar que la petición es realizada por un usuario con el rol profesor.
+También está la implementación de profesorApi, en esencia es exactamente lo mismo que alumnoApi pero con peticiones diferentes a CentroEducativo y con las comprobaciones correspondientes para asegurar que la petición es realizada por un usuario con el rol profesor.
 
 # Interpretación de respuestas de CentroEducativo y retorno de las páginas HTML.
 En primer lugar debemos destacar que la interacción entre nuestras hojas HTML y los resultados de las peticiones realizadas por los Servlets construidos se realiza utilizando jQuery y AJAX.
-
 En este hito se han implementado tanto las primeras funcionalidades del "escenario de la alumna" como el "escenario del profesor".
-
 Por ejemplo, analizando en profundidad el escenario de la alumna se realizarán principalmente dos peticiones AJAX a nuestro Servlet "alumnoApi.java" que será el encargado de devolvernos el contenido deseado para su posterior tratamiento.
-
 A continuación se detalla el funcionamiento de la petición que nos ofrece las asignaturas matriculadas y la nota de estas, para un alumno especificado en concreto.
 
 ------------
 
-
 En primer lugar comenzamos a construir la petición AJAX con la función `$(document).ready()`, esta nos permite que la peticion se ejecute una vez se ha cargado toda la página.
-Posteriormente dentro de la petición se incluyen campos como la ruta del servlet que hace las peticiones (url de "alumnoApi"), el tipo de petición, que será del tipo POST para poder enviar parámetros al Servlet y que este discrimine las peticiones segun ese parametro. Otros campos pueden ser el tipo de contenido de la respuesta (json) y el propio parametro a enviar al servlet codificado como `opcion=asignaturas`.
+Posteriormente dentro de la petición se incluyen campos como la ruta del servlet que hace las peticiones (url de "alumnoApi"), el tipo de petición, que será del tipo POST para poder enviar parámetros al Servlet y que este discrimine las peticiones según ese parámetro. Otros campos pueden ser el tipo de contenido de la respuesta (json) y el propio parámetro a enviar al servlet codificado como `opcion=asignaturas`.
 ```javascript
 $(document).ready(function(){
 		$.ajax({
@@ -340,7 +306,7 @@ $(document).ready(function(){
 			async: true,
 			data: 'opcion=asignaturas',
 ```
-Ahora en el parametro **success** se define la funcion que sera ejecutada si nuestra petición se ha realizado con éxito. En este caso, "data" será el contenido de respuesta de la petición que se realiza por medio del Servlet y que aquí procesamos. Con la funcion `$.each` recorremos el JSON data asociado e insertamos en nuestra hoja HTML los valores de asignatura y nota del alumno para dicha asignatura. Si ese alumno no tiene nota se pondrá como "No calificado".
+Ahora en el parámetro **success** se define la función que será ejecutada si nuestra petición se ha realizado con éxito. En este caso, "data" será el contenido de respuesta de la petición que se realiza por medio del Servlet y que aquí procesamos. Con la función `$.each` recorremos el JSON data asociado e insertamos en nuestra hoja HTML los valores de asignatura y nota del alumno para dicha asignatura. Si ese alumno no tiene nota se pondrá como "No calificado".
 ```javascript
 			success: function(data){
 				$.each(data, function (index, val) {
@@ -349,7 +315,7 @@ Ahora en el parametro **success** se define la funcion que sera ejecutada si nue
 				  });
 			},
 ```
-Por último el campo error que ejecutara la función asociada cuando algo no funcione segun lo esperado y el codigo devuelto por la petición a CentroEducativo difiera de 200. Se insertará un simple "ERROR EN AJAX". 
+Por último el campo error que ejecutara la función asociada cuando algo no funcione según lo esperado y el código devuelto por la petición a CentroEducativo difiera de 200. Se insertará un simple "ERROR EN AJAX". 
 ```javascript
 			error: function(){
 				$("#insertar-asignaturas").append("<p>ERROR EN AJAX</p>");
@@ -362,7 +328,6 @@ Por último el campo error que ejecutara la función asociada cuando algo no fun
 
 La diferencia principal entre esta y la anterior radica en el campo data, ahora no le enviamos `opcion=asignatura` enviamos `opcion=dni` para que nuestro Servlet "alumnoApi" diferencie entre las diferentes peticiones POST que se le hacen dentro de este fichero HTML asociado al alumno.
 El procesamiento del fichero JSON de respuesta es parecido, añadiendo a nuestro documento el nombre y los apellidos en un encabezado H2.
-
 ```javascript
 $.ajax({
             url: '/dew-NOL-2021/alumnoApi',
