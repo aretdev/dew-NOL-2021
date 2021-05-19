@@ -1,8 +1,12 @@
 package main;
 
+import java.io.BufferedReader;
+import java.io.FileReader;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.List;
 
+import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -77,6 +81,23 @@ public class profesorApi extends HttpServlet {
 	    		httpGet = new HttpGet("http://dew-"+nombreMaquina+"-2021.dsic.cloud:9090/CentroEducativo/alumnos/"+dnialumno+"?key="+key);
     		}else if(param.equals("dni")) {
 	    		httpGet = new HttpGet("http://dew-"+nombreMaquina+"-2021.dsic.cloud:9090/CentroEducativo/profesores/"+dni+"?key="+key);
+    		} else if(param.equals("avatar")) {
+    			
+    			ServletContext context = getServletContext();
+    			String pathToAvatar = context.getRealPath("/WEB-INF/img");
+    			
+    			response.setContentType("text/plain");
+    			response.setCharacterEncoding("UTF-8");
+    			BufferedReader origen = new BufferedReader(new FileReader(pathToAvatar+"/"+dni+".pngb64"));
+    			response.setContentType("text/plain");
+    			
+    			PrintWriter out = response.getWriter();
+    			out.print("{\"dni\": \""+dni+"\", \"img\": \""); 
+    			String linea = origen.readLine(); out.print(linea); 
+    			while ((linea = origen.readLine()) != null) {out.print("\n"+linea);}
+    			out.print("\"}");
+    			out.close(); origen.close();
+    			return;
     		}
     	}else {
     		response.setStatus(401);
