@@ -52,6 +52,16 @@
                 $("#insertar-dni").append("<p>ERROR EN AJAX</p>");
             }
         })
+        
+        $.getJSON("/dew-NOL-2021/alumnoApi?opcion=avatar")
+		.done(function(response){
+		$("#esto").text(response.dni);
+		$("#aqui").attr("src", "data:image/png;base64,"+response.img);
+		})
+		.fail(function(jqxhr, textStatus, error ) {
+		 var err = jqxhr.response.replace(",", "\n"); // Pequeños ajustes
+		 alert("Algo mal: "+error);
+		});
 		
 	})
 	
@@ -87,6 +97,8 @@
 		<div class="card bg-light mb-3 mt-4" >
 		  <div class="card-header" id="insertar-dni"></div>
 		  <div class="card-body">
+		  	<h4 id="esto"></h4>
+			<img id="aqui" src="">
 		    <p class="card-text"><button id="asig-click" type="button" class="btn btn-success">Ver Asignaturas</button></p>
 		  </div>
 		</div>

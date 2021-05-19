@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.List;
 
+import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -77,8 +78,9 @@ public class alumnoApi extends HttpServlet {
 	    		httpGet = new HttpGet("http://dew-"+nombreMaquina+"-2021.dsic.cloud:9090/CentroEducativo/alumnos/"+dni+"?key="+key);
     		} else if(param.equals("avatar")) {
     			
+    			ServletContext context = getServletContext();
+    			String pathToAvatar = context.getRealPath("/WEB-INF/img");
     			
-    			String pathToAvatar = getServletContext().getInitParameter("/WEB-INF/img");
     			response.setContentType("text/plain");
     			response.setCharacterEncoding("UTF-8");
     			BufferedReader origen = new BufferedReader(new FileReader(pathToAvatar+"/"+dni+".pngb64"));
