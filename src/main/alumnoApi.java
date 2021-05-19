@@ -1,6 +1,9 @@
 package main;
 
+import java.io.BufferedReader;
+import java.io.FileReader;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.List;
 
 import javax.servlet.ServletException;
@@ -72,6 +75,22 @@ public class alumnoApi extends HttpServlet {
 	    		httpGet = new HttpGet("http://dew-"+nombreMaquina+"-2021.dsic.cloud:9090/CentroEducativo/alumnos/"+dni+"/asignaturas?key="+key);
     		} else if(param.equals("dni")) {
 	    		httpGet = new HttpGet("http://dew-"+nombreMaquina+"-2021.dsic.cloud:9090/CentroEducativo/alumnos/"+dni+"?key="+key);
+    		} else if(param.equals("avatar")) {
+    			
+    			
+    			String pathToAvatar = getServletContext().getInitParameter("/WEB-INF/img");
+    			response.setContentType("text/plain");
+    			response.setCharacterEncoding("UTF-8");
+    			BufferedReader origen = new BufferedReader(new FileReader(pathToAvatar+"/"+dni+".pngb64"));
+    			response.setContentType("text/plain");
+    			
+    			PrintWriter out = response.getWriter();
+    			out.print("{\"dni\": \""+dni+"\", \"img\": \""); 
+    			String linea = origen.readLine(); out.print(linea); 
+    			while ((linea = origen.readLine()) != null) {out.print("\n"+linea);}
+    			out.print("\"}");
+    			out.close(); origen.close();
+    			return;
     		}
     	}else {
     		response.setStatus(401);
