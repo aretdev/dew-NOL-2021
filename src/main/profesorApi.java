@@ -14,6 +14,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.apache.hc.client5.http.classic.methods.HttpGet;
+import org.apache.hc.client5.http.classic.methods.HttpPut;
 import org.apache.hc.client5.http.cookie.BasicCookieStore;
 import org.apache.hc.client5.http.cookie.Cookie;
 import org.apache.hc.client5.http.impl.classic.CloseableHttpClient;
@@ -83,6 +84,7 @@ public class profesorApi extends HttpServlet {
 	    		httpGet = new HttpGet("http://dew-"+nombreMaquina+"-2021.dsic.cloud:9090/CentroEducativo/profesores/"+dni+"?key="+key);
     		} else if(param.equals("avatar")) {
     			
+    			
     			ServletContext context = getServletContext();
     			String pathToAvatar = context.getRealPath("/WEB-INF/img");
     			
@@ -98,6 +100,8 @@ public class profesorApi extends HttpServlet {
     			out.print("\"}");
     			out.close(); origen.close();
     			return;
+    		}else if(param.equals("setnota")) {
+    			HttpPut httpPut = new HttpPut("http://dew-virodbri-2021.dsic.cloud:9090/CentroEducativo/alumnos/12345678W/asignaturas/DEW");
     		}
     	}else {
     		response.setStatus(401);
