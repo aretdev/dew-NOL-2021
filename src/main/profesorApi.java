@@ -24,6 +24,7 @@ import org.apache.hc.core5.http.HttpEntity;
 import org.apache.hc.core5.http.HttpHeaders;
 import org.apache.hc.core5.http.ParseException;
 import org.apache.hc.core5.http.io.entity.EntityUtils;
+import org.apache.hc.core5.http.io.entity.StringEntity;
 
 /**
  * Servlet implementation class profesorApi
@@ -46,7 +47,7 @@ public class profesorApi extends HttpServlet {
 		/*
 		 * Cambiar nombreMaquina a tu maquina con CentroEducativo
 		 * */
-		String nombreMaquina = "virodbri";
+		String nombreMaquina = "masanru6";
 		/*
 		 * Empezamos a preparar la peticion
 		 * 
@@ -84,24 +85,47 @@ public class profesorApi extends HttpServlet {
 	    		httpGet = new HttpGet("http://dew-"+nombreMaquina+"-2021.dsic.cloud:9090/CentroEducativo/profesores/"+dni+"?key="+key);
     		} else if(param.equals("avatar")) {
     			
-    			
+    			String dniparam = request.getParameter("dniavatar");
     			ServletContext context = getServletContext();
     			String pathToAvatar = context.getRealPath("/WEB-INF/img");
     			
     			response.setContentType("text/plain");
     			response.setCharacterEncoding("UTF-8");
-    			BufferedReader origen = new BufferedReader(new FileReader(pathToAvatar+"/"+dni+".pngb64"));
+    			BufferedReader origen = new BufferedReader(new FileReader(pathToAvatar+"/"+dniparam+".pngb64"));
     			response.setContentType("text/plain");
     			
     			PrintWriter out = response.getWriter();
-    			out.print("{\"dni\": \""+dni+"\", \"img\": \""); 
+    			out.print("{\"dni\": \""+dniparam+"\", \"img\": \""); 
     			String linea = origen.readLine(); out.print(linea); 
     			while ((linea = origen.readLine()) != null) {out.print("\n"+linea);}
     			out.print("\"}");
     			out.close(); origen.close();
     			return;
     		}else if(param.equals("setnota")) {
-    			HttpPut httpPut = new HttpPut("http://dew-virodbri-2021.dsic.cloud:9090/CentroEducativo/alumnos/12345678W/asignaturas/DEW");
+    			String dnialum = request.getParameter("dnialumno");
+    			String acron = request.getParameter("acron");
+    			HttpPut httpPut = new HttpPut("http://dew-"+nombreMaquina+"-2021.dsic.cloud:9090/CentroEducativo/alumnos/"+dnialum+"/asignaturas/"+acron+"?key="+key);
+    			String nota = request.getParameter("nota");
+    			StringEntity notaChanged = new StringEntity(nota);
+    			httpPut.setEntity(notaChanged);
+    			httpPut.setHeader(HttpHeaders.CONTENT_TYPE, "application/json");
+    	        cookieStore.addCookie(cookies.get(0));
+    	        
+    	        CloseableHttpResponse response1 = httpclient.execute(httpPut);	
+    	        String content = "-1";
+    	        HttpEntity entity1 = response1.getEntity();
+    	        
+    	        if(response1.getCode() == 200) {
+    	            try {
+    	            	content = EntityUtils.toString(entity1);
+    	            }catch (ParseException e) {System.out.println("Error entity");}
+    	            EntityUtils.consume(entity1);
+    	            response1.close();
+    	            response.setContentType("text/plain");
+    	    		response.getWriter().append(content);
+    	        }else {
+    	    		response.getWriter().append("No tienes permitido realizar esta accion!");
+    	        }
     		}
     	}else {
     		response.setStatus(401);

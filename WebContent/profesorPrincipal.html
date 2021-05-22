@@ -14,6 +14,17 @@
 	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css" type="text/css" rel="stylesheet"/>
 	<script>
 	var visualizandoAlumno = "";
+	var visualizandoAsignatura = "";
+	var dniProfesor = "";
+	
+	var jsonGlobal = new Array();
+	
+	function siguienteAlumno(){
+		
+	}
+	function anteriorAlumno(){
+	}
+	
 	function getNombre(dni){
 		var res = "";
 		$.ajax({
@@ -31,28 +42,31 @@
 			});
 		return res;
 	}
-	function showPopUp(dni, nota, nombre){
+	function showPopUp(dni, nombre, acron){
 		$("#ModalTitulo").html("Cambiar nota - " + nombre + " [" + dni + "]")
+		var nota = document.getElementById(dni).getAttribute("nota");
 		$("#insertar-nota").html(nota)
 		visualizandoAlumno = dni;
+		visualizandoAsignatura = acron;
 		$('#cambiarNota').modal('toggle')
 		
 	}
 	
 	function actualizarNota(){
 		var nota = $("#nuevaNota").val();
-		
 		$.ajax({
 			url: '/dew-NOL-2021/profesorApi',
 			type: 'POST',
-			dataType: 'json',
 			async: false,
-			data: 'opcion=setnota&dnialumno='+visualizandoAlumno+"&nota="+nota,
+			data: 'opcion=setnota&dnialumno='+visualizandoAlumno+"&nota="+nota+"&acron="+visualizandoAsignatura,
 			success: function(data){
+				console.log(nota)
+				document.getElementById(visualizandoAlumno).setAttribute("nota", nota)
 				$("#insertar-nota").html(nota);
+				
 			},
 			error: function(){
-				$("#insertar-asignaturas-prof").append("<p>ERROR EN AJAX</p>");
+				console.log("ERROR EN AJAX");
 			}
 			});
 		
@@ -100,26 +114,54 @@
 							ulAlum.className="list-group"
 							ulAlum.id = "asigUL"+index
 							
-							$.each(data1, function (index1, val1) {
+							
+							var asignatura =  val.acronimo;
+							var a = new Object();
+							
+                            a.alumnos = []
+							
+                            $.each(data1, function (index1, val1) {
 								var a = getNombre(val1.alumno);
 	                            var li = document.createElement('li')
 	                            li.className="list-group-item"
 	                            li.innerHTML = a + " con dni: "+ val1.alumno
 	                            var button = document.createElement('button')
-	                            button.id = a
+	                            button.id = val1.alumno
 	                            button.className = "btn-sm btn-outline-success pull-right"
 	                            button.innerHTML = "Añadir nota"
 	                            var nota = (val1.nota == "") ? 0 : val1.nota
-	                            button.setAttribute("onclick","showPopUp('"+val1.alumno+"','"+ nota+"','"+ a+ "')" )
+	                            button.setAttribute("nota",nota)
+	                            button.setAttribute("onclick","showPopUp('"+val1.alumno+"','"+ a + "','"+ val.acronimo + "')")
 	                            button.setAttribute("data-target","#cambiarNota")
 	                            button.setAttribute("data-toggle","modal")
 	                            li.appendChild(button)
 	                            ulAlum.appendChild(li)  
+	                            
+	                            var alumno = new Object();
+	                            alumno.dni = val1.alumno;
+	                            alumno.nombre = a;
+	                            alumno.nota = nota;
+	                            
+	                            
+	                            $.getJSON("/dew-NOL-2021/profesorApi?opcion=avatar&dniavatar="+val1.alumno)
+	                			.done(function(response){
+	                			
+	                			alumno.img = response.img;
+	                			
+	                			}).fail(function() {
+	                			 alert("Algo mal: ");
+	                			});
+	                            
+	                            alumnos.push(alumno);
+	                            
 							  });
 							divAlum.appendChild(ulAlum)
 							divSecond.appendChild(divAlum);
 							var contenedor = document.getElementById('contenedorAsig')
 							contenedor.appendChild(divMain)
+							jsonGlobal.push(asignatura);
+							var jsonString = JSON.stringify(jsonGlobal);
+							console.log(jsonString);
 						},
 						error: function(){
 							$("#insertar-asignaturas-prof").append("<p>ERROR EN AJAX</p>");
@@ -139,26 +181,24 @@
 	            url: '/dew-NOL-2021/profesorApi',
 	            type: 'POST',
 	            dataType: 'json',
-	            async: true,
+	            async: false,
 	            data: 'opcion=dni',
 	            success: function(data){
 	                $("#insertar-dni").append(data.nombre + " " + data.apellidos)
+	                dniProfesor = data.dni;
 	            },
 	            error: function(){
 	                $("#insertar-dni").append("<p>ERROR EN AJAX</p>");
 	            }
 	        })
 	        
-	        $.getJSON("/dew-NOL-2021/profesorApi?opcion=avatar")
+	        $.getJSON("/dew-NOL-2021/profesorApi?opcion=avatar&dniavatar="+dniProfesor)
 			.done(function(response){
 			$("#esto").text(response.dni);
 			$("#aqui").attr("src", "data:image/png;base64,"+response.img);
-			$("#aqui2").attr("src", "data:image/png;base64,"+response.img);
-
 			})
-			.fail(function(jqxhr, textStatus, error ) {
-			 var err = jqxhr.response.replace(",", "\n"); // Pequeños ajustes
-			 alert("Algo mal: "+error);
+			.fail(function() {
+			 alert("Algo mal: ");
 			});
 		})
 	
@@ -235,9 +275,9 @@
 			  </div>
 			  <div class="d-flex justify-content-center mt-5">
 			  <div class="btn-group" role="group" aria-label="Basic example">
-				  <button type="button" class="btn btn-primary">Anterior</button>
+				  <button type="button" onclick="anteriorAlumno()" class="btn btn-primary">Anterior</button>
 				  <button type="button" onclick="actualizarNota()" class="btn btn-success">Calificar</button>
-				  <button type="button" class="btn btn-primary">Siguiente</button>
+				  <button type="button" onclick="siguienteAlumno()"class="btn btn-primary">Siguiente</button>
 				</div>
 			  </div>
 			</div>
