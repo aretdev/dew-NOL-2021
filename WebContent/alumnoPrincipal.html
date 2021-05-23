@@ -12,6 +12,27 @@
 
 	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css" type="text/css" rel="stylesheet"/>
 	<script >
+	var nombre ="";
+	var nota = 0;
+	var dni = "";
+	
+	function generarDocumento(){
+		$.ajax({
+	        url: '/dew-NOL-2021/alumnoApi',
+	        type: 'POST',
+	        dataType: 'json',
+	        async: true,
+	        data: 'opcion=imprimir',
+	        success: function(data){
+	        	alert("Todo OK");
+	        },
+	        error: function(){
+	            $("#insertar-dni").append("<p>ERROR EN AJAX</p>");
+	        }
+	    })
+	}
+	
+	
 	$(document).ready(function(){
 		$.ajax({
 			url: '/dew-NOL-2021/alumnoApi',
@@ -23,6 +44,7 @@
 
 				$.each(data, function (index, val) {
 					var notaFormatted = (val.nota == "") ? "No calificado" : val.nota;
+					
 					$("#insertar-asignaturas ul").append('<li class="list-group-item">' + val.asignatura + "		Nota: "+ notaFormatted + '</li>');
 				    
 				  });
@@ -32,7 +54,6 @@
 				$("#insertar-asignaturas").append("<p>ERROR EN AJAX</p>");
 			}
 			});
-		
 		
 		
 		$("#asig-click").click(function(){
@@ -46,6 +67,8 @@
             async: true,
             data: 'opcion=dni',
             success: function(data){
+            	nombre = data.nombre + " " + data.apellidos;
+            	dni = data.dni;
                 $("#insertar-dni").append("<h2> Bienvenido " + data.nombre + " " + data.apellidos + "</h2>")
             },
             error: function(){
@@ -86,7 +109,7 @@
         </li>
       </ul>
   <div class="text-end">
-          <button type="button" class="btn btn-outline-light me-2">Perfil</button>
+          <button type="button" onclick = "generarDocumento()" target="_blank" class="btn btn-outline-light me-2">Generar documento</button>
           <button type="button" class="btn btn-danger"><a style="text-decoration:none;" href="/dew-NOL-2021/logout">Salir</a></button>
         </div>
     </div>
