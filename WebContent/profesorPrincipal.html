@@ -16,13 +16,25 @@
 	var visualizandoAlumno = "";
 	var visualizandoAsignatura = "";
 	var dniProfesor = "";
+	var indicePos = 0;
+	var indiceAlum = 0;
 	
 	var jsonGlobal = new Array();
 	
 	function siguienteAlumno(){
+		indiceAlum++
+		if(jsonGlobal[indicePos].alumnos.length <= indiceAlum ){
+			indiceAlum = 0;
+		}
+		actualizaContenido();
 		
 	}
 	function anteriorAlumno(){
+		indiceAlum--;
+		if(indiceAlum < 0){
+			indiceAlum = jsonGlobal[indicePos].alumnos.length - 1;
+		}
+		actualizaContenido();
 	}
 	
 	function getNombre(dni){
@@ -43,12 +55,37 @@
 		return res;
 	}
 	function showPopUp(dni, nombre, acron){
-		$("#ModalTitulo").html("Cambiar nota - " + nombre + " [" + dni + "]")
-		var nota = document.getElementById(dni).getAttribute("nota");
-		$("#insertar-nota").html(nota)
 		visualizandoAlumno = dni;
 		visualizandoAsignatura = acron;
+		
+		$.each(jsonGlobal, function (index, val) {
+			if(val.acronimo == acron){
+				indicePos = index;
+				$.each(jsonGlobal[indicePos].alumnos, function(index1, val1){
+					if(val1.dni == dni){
+						indiceAlum = index1;
+					}
+				})
+			}
+			
+		});
+			
+		actualizaContenido()	
 		$('#cambiarNota').modal('toggle')
+		
+	}
+	function actualizaContenido(){
+		var acronimo = jsonGlobal[indicePos].acronimo;
+		visualizandoAsignatura = acronimo;
+		var nombre = jsonGlobal[indicePos].alumnos[indiceAlum].nombre;
+		var dni = jsonGlobal[indicePos].alumnos[indiceAlum].dni;
+		visualizandoAlumno = dni;
+		var nota = jsonGlobal[indicePos].alumnos[indiceAlum].nota;
+		var img = jsonGlobal[indicePos].alumnos[indiceAlum].img;
+		$("#ModalTitulo").html("Cambiar nota - " + nombre + " [" + dni + "]");
+		$("#insertar-nota").html(nota);
+		$("#aqui2").attr("src", "data:image/png;base64,"+img);
+		$("#nuevaNota").val("");
 		
 	}
 	
@@ -60,8 +97,7 @@
 			async: false,
 			data: 'opcion=setnota&dnialumno='+visualizandoAlumno+"&nota="+nota+"&acron="+visualizandoAsignatura,
 			success: function(data){
-				console.log(nota)
-				document.getElementById(visualizandoAlumno).setAttribute("nota", nota)
+				jsonGlobal[indicePos].alumnos[indiceAlum].nota = nota;
 				$("#insertar-nota").html(nota);
 				
 			},
@@ -115,10 +151,10 @@
 							ulAlum.id = "asigUL"+index
 							
 							
-							var asignatura =  val.acronimo;
-							var a = new Object();
+							var asignatura =  new Object();
+							asignatura.acronimo = val.acronimo
 							
-                            a.alumnos = []
+                            asignatura.alumnos = []
 							
                             $.each(data1, function (index1, val1) {
 								var a = getNombre(val1.alumno);
@@ -152,7 +188,7 @@
 	                			 alert("Algo mal: ");
 	                			});
 	                            
-	                            alumnos.push(alumno);
+	                            asignatura.alumnos.push(alumno);
 	                            
 							  });
 							divAlum.appendChild(ulAlum)
