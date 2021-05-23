@@ -20,14 +20,14 @@
 		$.ajax({
 	        url: '/dew-NOL-2021/alumnoApi',
 	        type: 'POST',
-	        dataType: 'json',
-	        async: true,
+	        async: false,
 	        data: 'opcion=imprimir',
 	        success: function(data){
 	        	alert("Todo OK");
+	        	window.open("data:application/pdf," + data);
 	        },
-	        error: function(){
-	            $("#insertar-dni").append("<p>ERROR EN AJAX</p>");
+	        error: function(data){
+	        	window.open("data:application/pdf," + data);
 	        }
 	    })
 	}
@@ -44,7 +44,7 @@
 
 				$.each(data, function (index, val) {
 					var notaFormatted = (val.nota == "") ? "No calificado" : val.nota;
-					
+					console.log(data);
 					$("#insertar-asignaturas ul").append('<li class="list-group-item">' + val.asignatura + "		Nota: "+ notaFormatted + '</li>');
 				    
 				  });
@@ -109,7 +109,7 @@
         </li>
       </ul>
   <div class="text-end">
-          <button type="button" onclick = "generarDocumento()" target="_blank" class="btn btn-outline-light me-2">Generar documento</button>
+          <button type="button" onclick = "generarDocumento()" class="btn btn-outline-light me-2">Generar documento</button>
           <button type="button" class="btn btn-danger"><a style="text-decoration:none;" href="/dew-NOL-2021/logout">Salir</a></button>
         </div>
     </div>

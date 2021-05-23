@@ -82,7 +82,7 @@ public class alumnoApi extends HttpServlet {
     	/*
     	 * Solo aquellos con rolalu pueden realizar esta operacion
     	 * */
-    	JSONObject asignaturas = new JSONObject();
+    	JSONArray asignaturas = new JSONArray();
     	JSONObject dniydatos = new JSONObject();
     	JSONObject avatar = new JSONObject();
     	
@@ -179,15 +179,18 @@ public class alumnoApi extends HttpServlet {
     	            EntityUtils.consume(entity1);
     	            response1.close();
     	    		response.getWriter().append(content);
+    	    		
     	    		if(param.equals("asignaturas")) {
-    	    			asignaturas = new JSONObject(content);
+    	    			asignaturas = new JSONArray(content);
     	    		}
-    	    		else if(param.equals("dni")) {
+    	    		
+    	    		if(param.equals("dni")) {
     	    			dniydatos = new JSONObject(content);
     	    		}
     	    		else if(param.equals("avatar")) {
     	    			avatar = new JSONObject(content);
     	    		}
+    	    		
     	    		
     	        }else {
     	    		response.getWriter().append("NO");
