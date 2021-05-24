@@ -115,12 +115,10 @@
 					$("#alumnosNoCalificados span").html(alumnosSinCalificar)
 					if(alumnosSinCalificar == 0){
 						$("#alumnosNoCalificados").toggle()
-						$("#alert"+visualizandoAsignatura).fadeOut()
 					}
 				}
 				var aprobados = parseInt($("#aprobados"+visualizandoAsignatura).html())
 				var suspendidos = parseInt($("#suspendidos"+visualizandoAsignatura).html())
-
 				if(notaAnterior == "Sin Calificar"){ 
 					if(nota >= 5){ 
 						$("#aprobados"+visualizandoAsignatura).html(aprobados+1)
@@ -137,9 +135,10 @@
 					$("#aprobados"+visualizandoAsignatura).html(aprobados-1)
 					$("#suspendidos"+visualizandoAsignatura).html(suspendidos+1)
 				}
-				console.log(aprobados)
-				console.log(suspendidos)
 				jsonGlobal[indicePos].alumnos[indiceAlum].nota = nota;
+				if(aprobados+suspendidos == parseInt($("#matriculados"+visualizandoAsignatura).html())){
+					$("#alert"+visualizandoAsignatura).fadeOut()
+				}
 				$("#insertar-nota").html(nota);
 				$("#Nota"+visualizandoAlumno+""+visualizandoAsignatura).html(nota);
 				$("#calificaconError").hide()
@@ -313,7 +312,7 @@
 						var displayStatus = (totalPuntuados != alumnosMatriculados) ? "visible" : "none"
 							var structure = [
 								'<div class="alert alert-warning text-center" role="alert" id="alert'+val.acronimo+'" style="display:'+displayStatus+';">',
-								  'Algunos alumnos no tienen calificación asignada',
+								  'Algunos alumnos no tienen calificación asignada.',
 								'</div>'
 							]
 							$(structure.join('')).appendTo(divAlum)
