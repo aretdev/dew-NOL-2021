@@ -107,6 +107,7 @@
 			$("#alumnosNoCalificados span").html(alumnosSinCalificar)
 			if(alumnosSinCalificar == 0){
 				$("#alumnosNoCalificados").toggle()
+				$("#alert"+visualizandoAsignatura).fadeOut()
 			}
 		}
 		var nota = $("#nuevaNota").val();
@@ -127,7 +128,7 @@
 						$("#suspendidos"+visualizandoAsignatura).html(suspendidos+1)
 						suspendidos++
 					}
-					$("#"+visualizandoAlumno+""+visualizandoAsignatura).html("Modificar")
+					$("#"+visualizandoAlumno+""+visualizandoAsignatura).html("Modificar <i class=\"bi bi-pencil-square\"></i>")
 				}else if(notaAnterior < 5 && nota >= 5){ 
 					$("#aprobados"+visualizandoAsignatura).html(aprobados+1)
 					$("#suspendidos"+visualizandoAsignatura).html(suspendidos-1)
@@ -224,6 +225,7 @@
                             asignatura.alumnos = []
 							
 							var structureAlumTable = [
+								'<hr>',
 							    '<table class="table table-sm table-borderless table-striped" style="border-collapse:separate; border-spacing:0px 20px;" >',
 							    	'<thead>',
 							    		'<tr>',
@@ -279,6 +281,7 @@
 	                            
 							  });
 							var totalPuntuados = alumnosAprobados + alumnosSuspendidos;
+							
 							var media = (totalPuntuados == 0) ? 0 : parseFloat(alumnosMedia / (totalPuntuados)).toFixed(2)
 							var structure = [
 							    '<table class="table table-sm table-borderless mb-5">',
@@ -303,6 +306,15 @@
 							]
 						$(structure.join('')).appendTo(divAlum)
 						
+						var displayStatus = (totalPuntuados != alumnosMatriculados) ? "visible" : "none"
+							var structure = [
+								'<div class="alert alert-warning text-center" role="alert" id="alert'+val.acronimo+'" style="display:'+displayStatus+';">',
+								  'Algunos alumnos no tienen calificación asignada',
+								'</div>'
+							]
+							$(structure.join('')).appendTo(divAlum)
+							
+							
 						var structure = [
 									'</tbody>',
 								'</table>'
@@ -426,7 +438,7 @@
 		</div>
 	</div>
 	<div class="d-flex justify-content-center" >
-		<div class="w-75 text-center border rounded mb-2 p-2" style="background: #e3f2fd;">
+		<div class="w-75 text-center border rounded mb-2 p-2" style="background: #bbdefb;">
 			Sus asignaturas impartidas son las siguientes
 		</div>
 	</div>
