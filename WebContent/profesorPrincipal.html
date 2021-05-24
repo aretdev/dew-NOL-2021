@@ -78,6 +78,7 @@
 		
 	}
 	function actualizaContenido(){
+		$("#calificaconError,#calificaconSuccess").hide();
 		var acronimo = jsonGlobal[indicePos].acronimo;
 		visualizandoAsignatura = acronimo;
 		var nombre = jsonGlobal[indicePos].alumnos[indiceAlum].nombre;
@@ -101,15 +102,6 @@
 		$("#media"+visualizandoAsignatura).html(parseFloat(sumatorioNota/calificados).toFixed(2))
 	}
 	function actualizarNota(){
-		var notaAnterior = $("#insertar-nota").html();
-		if(notaAnterior == "Sin Calificar"){
-			alumnosSinCalificar--;
-			$("#alumnosNoCalificados span").html(alumnosSinCalificar)
-			if(alumnosSinCalificar == 0){
-				$("#alumnosNoCalificados").toggle()
-				$("#alert"+visualizandoAsignatura).fadeOut()
-			}
-		}
 		var nota = $("#nuevaNota").val();
 		$.ajax({
 			url: '/dew-NOL-2021/profesorApi',
@@ -117,6 +109,15 @@
 			async: false,
 			data: 'opcion=setnota&dnialumno='+visualizandoAlumno+"&nota="+nota+"&acron="+visualizandoAsignatura,
 			success: function(data){
+				var notaAnterior = $("#insertar-nota").html();
+				if(notaAnterior == "Sin Calificar"){
+					alumnosSinCalificar--;
+					$("#alumnosNoCalificados span").html(alumnosSinCalificar)
+					if(alumnosSinCalificar == 0){
+						$("#alumnosNoCalificados").toggle()
+						$("#alert"+visualizandoAsignatura).fadeOut()
+					}
+				}
 				var aprobados = parseInt($("#aprobados"+visualizandoAsignatura).html())
 				var suspendidos = parseInt($("#suspendidos"+visualizandoAsignatura).html())
 
@@ -141,11 +142,14 @@
 				jsonGlobal[indicePos].alumnos[indiceAlum].nota = nota;
 				$("#insertar-nota").html(nota);
 				$("#Nota"+visualizandoAlumno+""+visualizandoAsignatura).html(nota);
+				$("#calificaconError").hide()
+				$("#calificaconSuccess").fadeIn()
 				actualizarMedia(aprobados+suspendidos)
 				
 			},
 			error: function(){
-				console.log("ERROR EN AJAX");
+				$("#calificaconSuccess").hide()
+				$("#calificaconError").fadeIn()
 			}
 			});
 		
@@ -465,9 +469,17 @@
 			    <div class="col" >
 			      <p>La nota del alumno es: <span><b id="insertar-nota"></b></span></p>
 			      <p>
-			      <input id="nuevaNota" class="form-control" type="number" placeholder="Nota [0-10]">
-			      
+			      <input id="nuevaNota" class="form-control" type="number" min="0" max="10" placeholder="Nota [0-10]">
 			      </p>
+			      <p>
+			      <div class="alert alert-success" role="alert" style="display:none" id="calificaconSuccess">
+				  	Se ha calificado con éxito!
+				  </div>
+				  <div class="alert alert-danger" role="alert" style="display:none" id="calificaconError">
+				  	Ha ocurrido un error! Revisa los campos
+				  </div>
+				  </p>
+			      
 			    </div>
 			  </div>
 			  <div class="d-flex justify-content-center mt-5">

@@ -102,30 +102,35 @@ public class profesorApi extends HttpServlet {
     			out.close(); origen.close();
     			return;
     		}else if(param.equals("setnota")) {
-    			String dnialum = request.getParameter("dnialumno");
-    			String acron = request.getParameter("acron");
-    			HttpPut httpPut = new HttpPut("http://dew-"+nombreMaquina+"-2021.dsic.cloud:9090/CentroEducativo/alumnos/"+dnialum+"/asignaturas/"+acron+"?key="+key);
-    			String nota = request.getParameter("nota");
-    			StringEntity notaChanged = new StringEntity(nota);
-    			httpPut.setEntity(notaChanged);
-    			httpPut.setHeader(HttpHeaders.CONTENT_TYPE, "application/json");
-    	        cookieStore.addCookie(cookies.get(0));
-    	        
-    	        CloseableHttpResponse response1 = httpclient.execute(httpPut);	
-    	        String content = "-1";
-    	        HttpEntity entity1 = response1.getEntity();
-    	        
-    	        if(response1.getCode() == 200) {
-    	            try {
-    	            	content = EntityUtils.toString(entity1);
-    	            }catch (ParseException e) {System.out.println("Error entity");}
-    	            EntityUtils.consume(entity1);
-    	            response1.close();
-    	            response.setContentType("text/plain");
-    	    		response.getWriter().append(content);
-    	        }else {
-    	    		response.getWriter().append("No tienes permitido realizar esta accion!");
-    	        }
+    			Float nota = Float.parseFloat(request.getParameter("nota"));
+    			if(nota >= 0 && nota <= 10 ) {
+	    			String dnialum = request.getParameter("dnialumno");
+	    			String acron = request.getParameter("acron");
+	    			HttpPut httpPut = new HttpPut("http://dew-"+nombreMaquina+"-2021.dsic.cloud:9090/CentroEducativo/alumnos/"+dnialum+"/asignaturas/"+acron+"?key="+key);
+	    			StringEntity notaChanged = new StringEntity(nota.toString());
+	    			httpPut.setEntity(notaChanged);
+	    			httpPut.setHeader(HttpHeaders.CONTENT_TYPE, "application/json");
+	    	        cookieStore.addCookie(cookies.get(0));
+	    	        
+	    	        CloseableHttpResponse response1 = httpclient.execute(httpPut);	
+	    	        String content = "-1";
+	    	        HttpEntity entity1 = response1.getEntity();
+	    	        
+	    	        if(response1.getCode() == 200) {
+	    	            try {
+	    	            	content = EntityUtils.toString(entity1);
+	    	            }catch (ParseException e) {System.out.println("Error entity");}
+	    	            EntityUtils.consume(entity1);
+	    	            response1.close();
+	    	            response.setContentType("text/plain");
+	    	    		response.getWriter().append(content);
+	    	        }else {
+	    	    		response.getWriter().append("No tienes permitido realizar esta accion!");
+	    	        }
+    			}else {
+    				response.getWriter().append("La nota se ha podido actualizar");
+    				response.setStatus(500);
+    			}
     		}
     	}else {
     		response.setStatus(401);
