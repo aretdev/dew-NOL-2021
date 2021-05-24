@@ -12,12 +12,15 @@
 
 
 	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css" type="text/css" rel="stylesheet"/>
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css">
+	
 	<script>
 	var visualizandoAlumno = "";
 	var visualizandoAsignatura = "";
 	var dniProfesor = "";
 	var indicePos = 0;
 	var indiceAlum = 0;
+	var alumnosSinCalificar = 0;
 	
 	var jsonGlobal = new Array();
 	
@@ -88,8 +91,24 @@
 		$("#nuevaNota").val("");
 		
 	}
-	
+	function actualizarMedia(calificados){
+		console.log("media:" + calificados)
+		var sumatorioNota = 0;
+		$.each(jsonGlobal[indicePos].alumnos, function (index, val) {
+			if(val.nota != "Sin Calificar"){
+			sumatorioNota += parseFloat(val.nota)}
+		})
+		$("#media"+visualizandoAsignatura).html(parseFloat(sumatorioNota/calificados).toFixed(2))
+	}
 	function actualizarNota(){
+		var notaAnterior = $("#insertar-nota").html();
+		if(notaAnterior == "Sin Calificar"){
+			alumnosSinCalificar--;
+			$("#alumnosNoCalificados span").html(alumnosSinCalificar)
+			if(alumnosSinCalificar == 0){
+				$("#alumnosNoCalificados").toggle()
+			}
+		}
 		var nota = $("#nuevaNota").val();
 		$.ajax({
 			url: '/dew-NOL-2021/profesorApi',
@@ -97,8 +116,31 @@
 			async: false,
 			data: 'opcion=setnota&dnialumno='+visualizandoAlumno+"&nota="+nota+"&acron="+visualizandoAsignatura,
 			success: function(data){
+				var aprobados = parseInt($("#aprobados"+visualizandoAsignatura).html())
+				var suspendidos = parseInt($("#suspendidos"+visualizandoAsignatura).html())
+
+				if(notaAnterior == "Sin Calificar"){ 
+					if(nota >= 5){ 
+						$("#aprobados"+visualizandoAsignatura).html(aprobados+1)
+						aprobados++
+					}else { 
+						$("#suspendidos"+visualizandoAsignatura).html(suspendidos+1)
+						suspendidos++
+					}
+					$("#"+visualizandoAlumno+""+visualizandoAsignatura).html("Modificar")
+				}else if(notaAnterior < 5 && nota >= 5){ 
+					$("#aprobados"+visualizandoAsignatura).html(aprobados+1)
+					$("#suspendidos"+visualizandoAsignatura).html(suspendidos-1)
+				}else if(notaAnterior >= 5 && nota < 5){ 
+					$("#aprobados"+visualizandoAsignatura).html(aprobados-1)
+					$("#suspendidos"+visualizandoAsignatura).html(suspendidos+1)
+				}
+				console.log(aprobados)
+				console.log(suspendidos)
 				jsonGlobal[indicePos].alumnos[indiceAlum].nota = nota;
 				$("#insertar-nota").html(nota);
+				$("#Nota"+visualizandoAlumno+""+visualizandoAsignatura).html(nota);
+				actualizarMedia(aprobados+suspendidos)
 				
 			},
 			error: function(){
@@ -116,6 +158,7 @@
 			data: 'opcion=profasig',
 			success: function(data){
 				$.each(data, function (index, val) {
+					
 					var divMain = document.createElement('div')
 					divMain.className = "accordion-item"
 					var h2Header = document.createElement('h2')
@@ -130,12 +173,13 @@
 					button.innerHTML = val.acronimo;
 					h2Header.appendChild(button)
 					divMain.appendChild(h2Header)
-					
 					var divSecond = document.createElement('div')
 					divSecond.id="asig-"+val.acronimo; 
 					divSecond.className="accordion-collapse collapse";  
 					divSecond.setAttribute("data-bs-parent","#contenedorAsig");
 					divMain.appendChild(divSecond)
+					
+					
 					$.ajax({
 						url: '/dew-NOL-2021/profesorApi',
 						type: 'POST',
@@ -143,12 +187,35 @@
 						async: false,
 						data: 'opcion=asigalum&acronimo='+val.acronimo,
 						success: function(data1){
+							var alumnosMatriculados = 0
+							var alumnosSuspendidos = 0
+							var alumnosAprobados = 0
+							var alumnosMedia = 0;
+							
 							var divAlum = document.createElement('div')
 							divAlum.className="accordion-body"
+							divAlum.id = "bodyAc"+val.acronimo
+								var structure = [
+								    '<table class="table table-sm table-borderless mb-4">',
+								    	'<thead>',
+								    		'<tr>',
+						      				 '<th scope="col">Nombre de la Asignatura</th>',
+										      '<th scope="col">Curso</th>',
+											   '<th scope="col">Créditos</th>',
+										    '</tr>',
+										  '</thead>',
+										  '<tbody>',
+									    '<tr class="table-secondary" >',
+									      '<td>'+val.nombre+'</td>',
+									      '<td>'+val.curso+'</td>',
+									      '<td>'+val.creditos+'</td>',
+									   '</tr>',
+									  '</tbody>',
+									'</table>',
+								 '</hr>'
+								]
+							$(structure.join('')).appendTo(divAlum)
 							
-							var ulAlum = document.createElement('ul')
-							ulAlum.className="list-group"
-							ulAlum.id = "asigUL"+index
 							
 							
 							var asignatura =  new Object();
@@ -156,23 +223,43 @@
 							
                             asignatura.alumnos = []
 							
+							var structureAlumTable = [
+							    '<table class="table table-sm table-borderless table-striped" style="border-collapse:separate; border-spacing:0px 20px;" >',
+							    	'<thead>',
+							    		'<tr>',
+					      				 '<th scope="col">Nombre</th>',
+									      '<th scope="col">DNI</th>',
+										  '<th scope="col">Nota</th>',
+										  '<th scope="col">Acción</th>',
+									    '</tr>',
+									  '</thead>',
+									  '<tbody>'
+									  ]
+
                             $.each(data1, function (index1, val1) {
-								var a = getNombre(val1.alumno);
-	                            var li = document.createElement('li')
-	                            li.className="list-group-item"
-	                            li.innerHTML = a + " con dni: "+ val1.alumno
-	                            var button = document.createElement('button')
-	                            button.id = val1.alumno
-	                            button.className = "btn-sm btn-outline-success pull-right"
-	                            button.innerHTML = "Añadir nota"
-	                            var nota = (val1.nota == "") ? 0 : val1.nota
-	                            button.setAttribute("nota",nota)
-	                            button.setAttribute("onclick","showPopUp('"+val1.alumno+"','"+ a + "','"+ val.acronimo + "')")
-	                            button.setAttribute("data-target","#cambiarNota")
-	                            button.setAttribute("data-toggle","modal")
-	                            li.appendChild(button)
-	                            ulAlum.appendChild(li)  
-	                            
+                            	alumnosMatriculados++   
+                            	var a = getNombre(val1.alumno);
+                            	console.log(a)
+	                            if(val1.nota == "") {
+	                            	alumnosSinCalificar++;
+	                            }else{
+	                            	alumnosMedia += parseFloat(val1.nota)
+	                            	if(val1.nota > 4){alumnosAprobados++}
+	                            	else{ alumnosSuspendidos++}
+	                            	
+	                            }
+                            	var onClickFunction = "showPopUp('"+val1.alumno+"','"+ a + "','"+ val.acronimo +"')"
+	                            var nota = (val1.nota == "") ? "Sin Calificar" : val1.nota
+	                            var ButtonNameNota = (val1.nota == "") ? "Calificar <i class=\"bi bi-award\"></i>" : "Modificar <i class=\"bi bi-pencil-square\"></i>"
+	                             var alumStruct =[
+	                            	'<tr>'+
+	                            		'<td>'+a+'</td>',
+	                            		'<td>'+val1.alumno+'</td>',
+	                            		'<td id="Nota'+val1.alumno+""+val.acronimo+'" >'+nota+'</td>',
+	                            		'<td><button id="'+val1.alumno+""+val.acronimo+'" class="btn btn-sm btn-outline-success py-0" onclick="'+onClickFunction+'" data-target="#cambiarNota" data-toggle="modal">'+ButtonNameNota+'</button></td>',
+	                            	'</tr>'];
+	                            structureAlumTable = $.merge(structureAlumTable, alumStruct)
+
 	                            var alumno = new Object();
 	                            alumno.dni = val1.alumno;
 	                            alumno.nombre = a;
@@ -191,10 +278,44 @@
 	                            asignatura.alumnos.push(alumno);
 	                            
 							  });
-							divAlum.appendChild(ulAlum)
+							var totalPuntuados = alumnosAprobados + alumnosSuspendidos;
+							var media = (totalPuntuados == 0) ? 0 : parseFloat(alumnosMedia / (totalPuntuados)).toFixed(2)
+							var structure = [
+							    '<table class="table table-sm table-borderless mb-5">',
+							    	'<thead>',
+							    		'<tr>',
+					      				 '<th scope="col">Matriculados</th>',
+									      '<th scope="col">Aprobados</th>',
+										  '<th scope="col">Suspendidos</th>',
+										  '<th scope="col">Media</th>',
+									    '</tr>',
+									  '</thead>',
+									  '<tbody>',
+								    '<tr class="table-secondary" >',
+								      '<td id="matriculados'+val.acronimo+'">'+alumnosMatriculados+'</td>',
+								      '<td id="aprobados'+val.acronimo+'">'+alumnosAprobados+'</td>',
+								      '<td id="suspendidos'+val.acronimo+'">'+alumnosSuspendidos+'</td>',
+								      '<td id="media'+val.acronimo+'">'+media+'</td>',
+								   '</tr>',
+								  '</tbody>',
+								'</table>',
+							 '</hr>'
+							]
+						$(structure.join('')).appendTo(divAlum)
+						
+						var structure = [
+									'</tbody>',
+								'</table>'
+									  ]
+							
+							structureAlumTable = structureAlumTable.concat(structure)
+							structureAlumTable = structureAlumTable.join("")
+							
+						
 							divSecond.appendChild(divAlum);
 							var contenedor = document.getElementById('contenedorAsig')
 							contenedor.appendChild(divMain)
+							$("#bodyAc"+val.acronimo).append(structureAlumTable)
 							jsonGlobal.push(asignatura);
 							var jsonString = JSON.stringify(jsonGlobal);
 							console.log(jsonString);
@@ -204,8 +325,22 @@
 						}
 						});
 					
+					var liDropDown = $("<li>",{id:"dropDown"+val.acronimo})
+					var aDropDown = $("<a>",
+							{"class":"dropdown-item",
+							"data-bs-toggle":"collapse",
+							"data-bs-target":"#asig-"+val.acronimo,
+							"aria-expanded":"false",
+							"href":"#"})
+					aDropDown.html(val.acronimo)
+					liDropDown.append(aDropDown)
+					$("#asigsElementsDropDown").append(liDropDown)
 					
 				  });
+				if(alumnosSinCalificar > 0){
+					$("#alumnosNoCalificados").toggle()
+					$("#alumnosNoCalificados span").html(alumnosSinCalificar)
+				}
 				
 			},
 			error: function(){
@@ -254,20 +389,24 @@
         <li class="nav-item">
           <a class="nav-link active" aria-current="page" href="#">Inicio</a>
         </li>
-        <li class="nav-item">
-          <a class="nav-link" href="#">Asignaturas</a>
+        <li class="nav-item dropdown">
+          <a class="nav-link" href="#" id="asignaturasDropDown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            <i class="bi bi-menu-down "></i>
+ Asignaturas
+          </a>
+          <ul class="dropdown-menu" aria-labelledby="asignaturasDropDown" id="asigsElementsDropDown">
+          </ul>
         </li>
       </ul>
   <div class="text-end">
-          <button type="button" class="btn btn-outline-light me-2">Perfil</button>
-          <button type="button" class="btn btn-danger"><a href="/dew-NOL-2021/logout">Salir</a></button>
+          <button type="button" class="btn btn-danger"><a style="text-decoration:none; color:white;" href="/dew-NOL-2021/logout"> <i class="bi bi-door-open"></i> Salir</a></button>
         </div>
     </div>
   </div>
 </nav>
 <div class="container">
 	 <div class="d-flex justify-content-center">
-		<div class="card bg-light mb-3 mt-4 " style="width: 30.7rem;">
+		<div class="card bg-light mb-5 mt-5 " style="width: 31rem;">
 		  <div class="card-header text-center">Información - Profesor</div>
 		  <div class="card-body d-flex justify-content-center">
 		  	<div class="container-sm ">
@@ -278,19 +417,29 @@
 			    <div class="col" >
 			      <p>Bienvenido <span><b id="insertar-dni"></b></span> a Notas Online</p>
 			      <p>Tu dni es: <b id="esto"></b></p>
+			      <p><button id="alumnosNoCalificados" type="button" class="btn-sm btn btn-outline-warning" style="display:none;" data-toggle="tooltip" data-placement="bottom" title="Tienes alumnos sin calificar!">
+  Sin Calificar <span class="badge bg-secondary" ></span></button></p>
 			    </div>
 			  </div>
 			</div>
 		  </div>
 		</div>
 	</div>
-	<div class="accordion accordion-flush border" id="contenedorAsig">
+	<div class="d-flex justify-content-center" >
+		<div class="w-75 text-center border rounded mb-2 p-2" style="background: #e3f2fd;">
+			Sus asignaturas impartidas son las siguientes
+		</div>
+	</div>
+	
+	<div class="d-flex justify-content-center">
+		<div class="accordion accordion-flush border rounded w-75" id="contenedorAsig" style="background: #f5f5f5;">
+		</div>
 	</div>
     
 </div>
 	
 <div class="modal fade" id="cambiarNota" tabindex="-1" role="dialog" aria-labelledby="ModalTitulo" aria-hidden="true">
-  <div class="modal-dialog" role="document">
+  <div class="modal-dialog modal-dialog-centered" role="document">
     <div class="modal-content">
       <div class="modal-header">
         <h5 class="modal-title" style="text-align: center;" id="ModalTitulo"></h5>
@@ -313,7 +462,7 @@
 			  <div class="btn-group" role="group" aria-label="Basic example">
 				  <button type="button" onclick="anteriorAlumno()" class="btn btn-primary">Anterior</button>
 				  <button type="button" onclick="actualizarNota()" class="btn btn-success">Calificar</button>
-				  <button type="button" onclick="siguienteAlumno()"class="btn btn-primary">Siguiente</button>
+				  <button type="button" onclick="siguienteAlumno()" class="btn btn-primary">Siguiente</button>
 				</div>
 			  </div>
 			</div>
@@ -321,8 +470,10 @@
     </div>
   </div>
 </div>
-
-
-
 </body>
+<script>
+ $(function () {
+  $('[data-toggle="tooltip"]').tooltip()
+ });
+</script>
 </html>
