@@ -18,6 +18,19 @@
 	var nota = 0;
 	var dni = "";
 	var modoDocumento = false;
+	
+	function volverWeb(){
+		
+		document.getElementById('navBarAlum').style.visibility  = "visible";
+		$("#parrafoImprimible").html("")
+		$("#fechaImprimible").html("")
+		$('body,html').css({
+			"height":"auto",
+			"width":"auto"
+		})
+		document.getElementById('footerImp').style.visibility  = "hidden";
+	}
+	
 	function generarDocumento(){
 		document.getElementById('navBarAlum').style.visibility  = "hidden";
 		$("#parrafoImprimible").html("DEW-Centro Educativo certifica que D/Dª "+nombre+" con DNI "+dni+" matriculado/a en el curso 2020/2021, ha obtenido las calificaciones que se muestran en la siguiente tabla.")
@@ -27,10 +40,8 @@
 			"height":"297mm",
 			"width":"210mm"
 		})
-		$('footer').css({
-			"height":"297mm",
-			"width":"210mm"
-		})
+		document.getElementById('footerImp').style.visibility  = "visible";
+
 	}
 	
 	
@@ -197,8 +208,8 @@
 	</div>
 </div>	
 
-<footer style="display:none; position: fixed; left: 0; bottom: 0;width: 100%;  text-align: center;">
-<a onclick="volverWeb()">Volver a la Web</a>
+<footer id="footerImp" style="visibility:hidden; position: fixed; left: 0; bottom: 0;width: 100%;  text-align: center;">
+<a onclick="volverWeb()" href="#">Volver a la Web</a>
 </footer>
 
 </body>
