@@ -249,7 +249,7 @@
 	                            	alumnosSinCalificar++;
 	                            }else{
 	                            	alumnosMedia += parseFloat(val1.nota)
-	                            	if(val1.nota > 4){alumnosAprobados++}
+	                            	if(val1.nota >= 5){alumnosAprobados++}
 	                            	else{ alumnosSuspendidos++}
 	                            	
 	                            }
@@ -257,7 +257,7 @@
 	                            var nota = (val1.nota == "") ? "Sin Calificar" : val1.nota
 	                            var ButtonNameNota = (val1.nota == "") ? "Calificar <i class=\"bi bi-award\"></i>" : "Modificar <i class=\"bi bi-pencil-square\"></i>"
 	                             var alumStruct =[
-	                            	'<tr>'+
+	                            	'<tr>',
 	                            		'<td>'+a+'</td>',
 	                            		'<td>'+val1.alumno+'</td>',
 	                            		'<td id="Nota'+val1.alumno+""+val.acronimo+'" >'+nota+'</td>',

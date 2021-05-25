@@ -121,46 +121,9 @@ public class alumnoApi extends HttpServlet {
     			out.close(); origen.close();
     			
     		}
-    		else if(param.equals("imprimir")) {
-    			try {
-    				
-    		        //Date date = new Date();
-    				String lorem = "DEW-Centro Educativo certifica que D/Dª" + 
-    				dniydatos.get("nombre") + " " + 	dniydatos.get("apellidos") + " ," + " con DNI "+ dniydatos.get("dni") +", matriculado/a en el curso 2020/2021, ha obtenido las calificaciones "
-    				+ "que se muestran en la siguiente tabla.";
-    				
-    				Document documento = new Document();
-    				
-    		        ByteArrayOutputStream baos = new ByteArrayOutputStream();
-    		        PdfWriter.getInstance(documento, baos);
-    		       
-    		        documento.open();
-    		       
-    		        String b64image = avatar.get("img").toString();
-    		        byte[] decoded = Base64.decode(b64image);
-    		        Paragraph titulo = new Paragraph("EXPEDIENTE ACADÉMICO\n\n", FontFactory.getFont("arial",32,Font.BOLD,BaseColor.BLUE));
-    		        Paragraph texto = new Paragraph(lorem + "\n\n", FontFactory.getFont("arial",12,Font.NORMAL,BaseColor.BLACK));
-    		        
-    		        documento.add(titulo);
-    		        documento.add(Image.getInstance(decoded));
-    		        documento.add(texto);
-    		        
-    		        documento.close();
-    		        
-    		        response.setHeader("Expires", "0");
-    		        response.setHeader("Cache-Control","must-revalidate, post-check=0,precheck=0");
-    		        response.setHeader("Pragma", "public");
-    		        response.setContentType("application/pdf");
-    		        response.setContentLength(baos.size());
-    		        
-    		        ServletOutputStream os = response.getOutputStream();
-    		        baos.writeTo(os);
-    		        os.flush();
-    		        os.close();
-    		        
-    			}catch(Exception e) {
-    				System.out.println("Error de impresión");
-    			}
+    		else if(param.equals("detallesasig")) {
+    			String acronimo = request.getParameter("acron");
+	    		httpGet = new HttpGet("http://dew-"+nombreMaquina+"-2021.dsic.cloud:9090/CentroEducativo/asignaturas/"+acronimo+"?key="+key);
     		}
     		
         	if(httpGet != null) {
@@ -180,25 +143,13 @@ public class alumnoApi extends HttpServlet {
     	            response1.close();
     	    		response.getWriter().append(content);
     	    		
-    	    		if(param.equals("asignaturas")) {
-    	    			asignaturas = new JSONArray(content);
-    	    		}
-    	    		
-    	    		if(param.equals("dni")) {
-    	    			dniydatos = new JSONObject(content);
-    	    		}
-    	    		else if(param.equals("avatar")) {
-    	    			avatar = new JSONObject(content);
-    	    		}
     	    		
     	    		
     	        }else {
-    	    		response.getWriter().append("NO");
+    	    		response.getWriter().append(response1.getCode()+"");
     	        }
     		
-        	}else if(param.equals("imprimir")) {
-        		return;
-    		}
+        	}
         	else {
     		response.setStatus(401);
     		response.getWriter().append("No tienes permitido realizar esta accion!");
