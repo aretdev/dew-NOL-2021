@@ -34,13 +34,15 @@
 	function generarDocumento(){
 		document.getElementById('navBarAlum').style.visibility  = "hidden";
 		$("#parrafoImprimible").html("DEW-Centro Educativo certifica que D/Dª "+nombre+" con DNI "+dni+" matriculado/a en el curso 2020/2021, ha obtenido las calificaciones que se muestran en la siguiente tabla.")
-		var fechaHoy = new Date()
-		$("#fechaImprimible").html(fechaHoy)
+		const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+		var fechaHoy = new Date().toLocaleDateString('es-ES', options)
+		$("#fechaImprimible").html("En Valencia, a " + fechaHoy)
 		$('body,html').css({
 			"height":"297mm",
 			"width":"210mm"
 		})
 		document.getElementById('footerImp').style.visibility  = "visible";
+		alert("¡Para volver a la vista web, pulsa el logo de NOTAS ONLINE!")
 
 	}
 	
@@ -133,30 +135,23 @@
 		});
 		
 	})
-	
-	
-	
-	
-	
-	
-	
 	</script>
 
 </head>
 <body>
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark" id="navBarAlum">
   <div class="container-fluid">
-    <a class="navbar-brand" href="#">NOL</a>
+    <a class="navbar-brand" href="#"><img src="logo_small.png" alt="Notas on-line" width="100"/></a>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarText" aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
     <div class="collapse navbar-collapse" id="navbarText">
       <ul class="navbar-nav me-auto mb-2 mb-lg-0">
         <li class="nav-item">
-          <a class="nav-link active" aria-current="page" href="#">Inicio</a>
+          <a class="nav-link active" aria-current="page" href="#"></a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="#">Asignaturas</a>
+          <a class="nav-link" href="#"></a>
         </li>
       </ul>
   <div class="text-end">
@@ -209,7 +204,7 @@
 </div>	
 
 <footer id="footerImp" style="visibility:hidden; position: fixed; left: 0; bottom: 0;width: 100%;  text-align: center;">
-<a onclick="volverWeb()" href="#">Volver a la Web</a>
+<a onclick="volverWeb()" href="#"><img src="logo_small_black.png" alt="Notas on-line" width="200"/></a>
 </footer>
 
 </body>
