@@ -50,7 +50,7 @@
     <url-pattern>/logger2</url-pattern>
   </servlet-mapping>
   <context-param>
-    <param-name>logPath</param-name>
+    <param-name>logPath1</param-name>
     <param-value>/home/user/Escritorio/log-NOL-dew.log</param-value>
   </context-param>
   <servlet>
@@ -104,6 +104,10 @@
     <display-name>LoginControl</display-name>
     <filter-name>LoginControl</filter-name>
     <filter-class>main.LoginControl</filter-class>
+    <init-param>
+         <param-name>logPath</param-name>
+         <param-value>/home/user/Escritorio/log-NOL-dew.log</param-value>
+      </init-param>
   </filter>
   <filter-mapping>
     <filter-name>LoginControl</filter-name>

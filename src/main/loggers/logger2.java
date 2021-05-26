@@ -30,6 +30,7 @@ public class logger2 extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		File file1 = new File(getServletContext().getInitParameter("logPath"));
+		
 		PrintWriter pw2 = new PrintWriter(new FileOutputStream(new File(getServletContext().getInitParameter("logPath")),true));
 		String usuario = request.getParameter("user");
 

@@ -1,6 +1,10 @@
 package main;
 
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.PrintWriter;
+import java.time.LocalDateTime;
 
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
@@ -26,30 +30,24 @@ import org.json.JSONObject;
 
 
 
-/**
- * Servlet Filter implementation class LoginControl
- */
+
 public class LoginControl implements Filter {
 
-    /**
-     * Default constructor. 
-     */
+	File logFile;
+	
     public LoginControl() {
         // TODO Auto-generated constructor stub
     }
 
-	/**
-	 * @see Filter#destroy()
-	 */
-	public void destroy() {
-		// TODO Auto-generated method stub
-	}
+    public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
+		/*Logger de peticiones*/
 
-	/**
-	 * @see Filter#doFilter(ServletRequest, ServletResponse, FilterChain)
-	 */
-	public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
+		PrintWriter pw2 = new PrintWriter(new FileOutputStream(logFile,true));
+		HttpServletRequest res = ((HttpServletRequest)request);
+		pw2.println(LocalDateTime.now().toString() + " " + res.getQueryString() + " " + res.getRemoteUser() + " "  + request.getRemoteAddr() + " " + res.getServerName() + " " + res.getRequestURI() + " " + res.getMethod());
+		pw2.close();
 		
+		/*Empieza el inicio de sesión*/
 		HttpServletRequest req = (HttpServletRequest) request;
         HttpSession session = req.getSession(true);
 	        if(session.getAttribute("key") == null) {
@@ -62,7 +60,7 @@ public class LoginControl implements Filter {
 	            
 	            BasicCookieStore cookieStore = new BasicCookieStore();
 	        	CloseableHttpClient httpclient = HttpClients.custom().setDefaultCookieStore(cookieStore).build();
-	                HttpPost httpPost = new HttpPost("http://dew-masanru6-2021.dsic.cloud:9090/CentroEducativo/login/");
+	                HttpPost httpPost = new HttpPost("http://dew-virodbri-2021.dsic.cloud:9090/CentroEducativo/login/");
 	                httpPost.setHeader(HttpHeaders.CONTENT_TYPE, "application/json");
 	                httpPost.setEntity(entity);
 	                CloseableHttpResponse response1 = httpclient.execute(httpPost);
@@ -98,12 +96,25 @@ public class LoginControl implements Filter {
         
         
 	}
+	
+	/**
+	 * @see Filter#destroy()
+	 */
+	public void destroy() {
+		// TODO Auto-generated method stub
+	}
 
 	/**
 	 * @see Filter#init(FilterConfig)
 	 */
 	public void init(FilterConfig fConfig) throws ServletException {
-		// TODO Auto-generated method stub
+		logFile = new File(fConfig.getInitParameter("logPath"));
+		try {
+			logFile.createNewFile();
+		}catch(Exception e) {
+			System.out.println("No se pudo crear el fichero");
+		}
+		
 	}
 
 }
