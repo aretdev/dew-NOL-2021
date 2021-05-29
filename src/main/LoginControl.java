@@ -13,6 +13,7 @@ import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 
@@ -43,12 +44,12 @@ public class LoginControl implements Filter {
 		/*Logger de peticiones*/
 
 		PrintWriter pw2 = new PrintWriter(new FileOutputStream(logFile,true));
-		HttpServletRequest res = ((HttpServletRequest)request);
-		pw2.println(LocalDateTime.now().toString() + " " + res.getQueryString() + " " + res.getRemoteUser() + " "  + request.getRemoteAddr() + " " + res.getServerName() + " " + res.getRequestURI() + " " + res.getMethod());
+		HttpServletRequest req = (HttpServletRequest) request;
+		pw2.println(LocalDateTime.now().toString() + " " + req.getQueryString() + " " + req.getRemoteUser() + " "  + request.getRemoteAddr() + " " + req.getServerName() + " " + req.getRequestURI() + " " + req.getMethod());
 		pw2.close();
 		
 		/*Empieza el inicio de sesión*/
-		HttpServletRequest req = (HttpServletRequest) request;
+		HttpServletResponse res = (HttpServletResponse) response;
         HttpSession session = req.getSession(true);
 	        if(session.getAttribute("key") == null) {
 	            String user = req.getRemoteUser();
@@ -81,19 +82,30 @@ public class LoginControl implements Filter {
 			            session.setAttribute("cookie", cookieStore.getCookies());
 	                }
 	                if(req.isUserInRole("rolalu")) {
-	                	req.getRequestDispatcher("/alumnoPrincipal.html").include(request, response);
+	                	res.sendRedirect(req.getContextPath() + "/alumnoPrincipal.html");
 	                	return;
 	                }
 	                else if(req.isUserInRole("rolpro")) {
-	                	req.getRequestDispatcher("/profesorPrincipal.html").include(request, response);
+	                	res.sendRedirect(req.getContextPath() + "/profesorPrincipal.html");
 	                	return;
 	                }
 	                
 	                
+	        }else {
+	        if(req.getRequestURI().equals(req.getContextPath() + "/index.html") || req.getRequestURI().equals("/dew-NOL-2021/")) {
+	        	if(req.isUserInRole("rolalu")) {
+                	res.sendRedirect(req.getContextPath() + "/alumnoPrincipal.html");
+                	return;
+                }
+                else if(req.isUserInRole("rolpro")) {
+                	res.sendRedirect(req.getContextPath() + "/profesorPrincipal.html");
+                	return;
+                }
+	        }else {
+	        	chain.doFilter(request, response);
 	        }
-
-			chain.doFilter(request, response);
-        
+			
+	        }
         
 	}
 	
