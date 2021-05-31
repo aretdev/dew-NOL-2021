@@ -18,4 +18,4 @@
 
 Nuestro proyecto se organiza con una estructura similar a la 
 
-![](http://personales.alumno.upv.es/masanru6/img/trazaestructural.png)
+![](https://i.imgur.com/HL5PF6l.png)
