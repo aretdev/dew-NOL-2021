@@ -7,7 +7,7 @@
 - **2. Justificación de tecnologías escogidas.**
 - **3. Recorrido y guía de uso simplificada.**
 - **4. Aspectos relacionados con la implementación.**
- -  **4.1 Identificación e inicio de sesión.**
+ - **4.1 Identificación e inicio de sesión.**
  - **4.2 Lógica de los servlets.**
  - **4.3 Lógica de los formularios.**
 - **5. Problemas y soluciones adoptadas.**
@@ -18,4 +18,4 @@
 
 Nuestro proyecto se organiza con una estructura similar a la 
 
-![Traza estructural](https://imgur.com/HL5PF6l "Traza estructural")
+![](https://imgur.com/HL5PF6l)
