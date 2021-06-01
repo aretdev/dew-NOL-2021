@@ -132,6 +132,7 @@ $(document).ready(function () {
 
 -  **Contextualización: clase User**.
 Para hacer efectiva la separación entre el nivel de datos y la lógica de nuestra aplicación hemos optado por crear una clase asociada a los usuarios de la aplicación, esta clase es muy sencilla ya que unicamente contara con dos atributos: dni y password y dos metodos "get" para obtener los mencionados atributos.
+
 ```java
 package main;
 
@@ -153,11 +154,15 @@ public class User {
 	}
 }
 ```
+Esta clase será posteriormente utilizada en nuestro filtro LoginControl.java para poder hacer efectiva la mencionada separación.
 
-Basamos nuestra decisión de operar mediante un filtro para optimizar el código y evitar repeticiones en los servlets que vamos a crear posteriormente.
+------------
+
+Continuando con la explicación de nuestro filtro comenzamos con la decisión que nos llevó a definirlo en la manera en la que se detallará. Basamos nuestra decisión de operar mediante un filtro para optimizar el código y evitar repeticiones en cuanto a obtención de parámetros involucrados con la sesión, en los servlets que vamos a crear posteriormente.
 
 Este filtro LoginControl lleva asociado un campo definido en web.xml denominado url-pattern que nos permite que una petición con cierto formato pase por nuestro filtro.
-En este caso el patrón **/*** permite que cualquier petición tenga el formato que tenga pase por este filtro.
+En este caso el patrón **/* ** permite que cualquier petición tenga el formato que tenga pase por este filtro.
+
 Además de este filtro también hemos realizado otro previamente llamado SessionControl, el cual es una aproximación a LoginControl y utiliza la autenticación BASIC en vez de FORM.
 ```xml
  <filter>
@@ -174,21 +179,65 @@ Además de este filtro también hemos realizado otro previamente llamado Session
   </filter-mapping>
 ```
 
-Ahora entrando en aspectos más profundos de nuestro código, podemos observar que en el filtro siempre se define una operación doFilter que nos permitirá crear una sesión para un usuario y contraseña concretos además de hacer la petición "login" a CentroEducativo.
+Ahora entrando en aspectos más profundos de nuestro código, debemos prestar especial atención en lo que ocurre en la funcion **init** y en los **atributos globales** que se definen dentro de nuestro filtro.
 
-En primer lugar procedemos a crear la funcionalidad de logger tal y como se trato en la primera sesión de este proyecto. Crearemos un objeto PrintWriter que nos permita escribir en un fichero, obtendremos la ruta de este fichero haciendo una extracción del parametro logFile que se encuentra en web.xml como se observa en el anterior codigo autocontenido.
-
-
-En segundo lugar se crea una sesión y se comprueba si existe el identificador de la sesión(key). Si no se ha iniciado sesión entonces se obtiene el nombre de usuario y la contraseña se establece a 123456 al ser única en CentroEducativo.
+En primer lugar comenzando con los atributos globales crearemos 2: un archivo logFile, del que se hablará después y una Tabla Hash que contiene pares de valores String y Usuario.
 ```java
-public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
-		HttpServletRequest req = (HttpServletRequest) request;
-        HttpSession session = req.getSession(true);
-        if(session.getAttribute("key") == null) {
-	            String user = req.getRemoteUser();
-	            String pass = "123456";
+	File logFile;
+	HashMap<String, User> usuarios = null;
 ```
-Después se crea un objeto JSON para introducir las credenciales del usuario que ha iniciado sesión.
+En cuanto al método init, en el es donde precisamente reside nuestra separación logica-datos.
+Como se muestra en el código hemos instanciado la Tabla Hash y le hemos comenzado a asignar valores para introducir a los usuarios que participaran en la aplicación. Ahora podremos acceder a nuestra aplicación utilizando el nickname que le asignamos en la Tabla Hash.
+Tambien se realiza la creación del fichero dedicado al log de la aplicación, cuyo contenido será explicado posteriormente.
+```java
+public void init(FilterConfig fConfig) throws ServletException {
+usuarios = new HashMap<String, User>();
+		
+		//Profesores
+		usuarios.put("rgarcia", new User("23456733H","123456"));
+		usuarios.put("peval", new User("10293756L","123456"));
+		usuarios.put("manal", new User("06374291A","123456"));
+		usuarios.put("jofon", new User("65748923M","123456"));
+		
+		//Alumnos
+		usuarios.put("pegarsan", new User("12345678W","123456"));
+		usuarios.put("marfergo", new User("23456387R","123456"));
+		usuarios.put("miherllo", new User("34567891F","123456"));
+		usuarios.put("laubentor", new User("93847525G","123456"));
+		usuarios.put("minalpe", new User("37264096W","123456"));
+		
+		
+		logFile = new File(fConfig.getInitParameter("logPath"));
+		try {
+			logFile.createNewFile();
+		}catch(Exception e) {
+			System.out.println("No se pudo crear el fichero");
+		}
+		
+	}
+	
+```
+En segundo lugar procedemos a crear la funcionalidad de logger tal y como se trato en la primera sesión de este proyecto. Crearemos un objeto **PrintWriter** que nos permita escribir en un fichero (logFile) que se encuentra inicialmente creado en el método init() como se menciona anteriormente.
+
+```java
+/*Logger de peticiones*/
+ public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
+		PrintWriter pw2 = new PrintWriter(new FileOutputStream(logFile,true));
+		HttpServletRequest req = (HttpServletRequest) request;
+		pw2.println(LocalDateTime.now().toString() + " " + req.getQueryString() + " " + req.getRemoteUser() + " "  + request.getRemoteAddr() + " " + req.getServerName() + " " + req.getRequestURI() + " " + req.getMethod());
+		pw2.close();
+		
+```
+En tercer lugar se crea una sesión y se comprueba si existe el identificador de la sesión(key). Si no se ha iniciado sesión entonces se obtiene el nombre de usuario mediante el método **getRemoteUser() **y la posterior operacion consultora de la TablaHash construida anteriormente y lo mismo ocurre con la contraseña. Ahora el nexo de la clase User con el filtro, se hace efectivo.
+```java
+	HttpServletResponse res = (HttpServletResponse) response;
+        HttpSession session = req.getSession(true);
+	        if(session.getAttribute("key") == null) {
+	        	String userTomcat = req.getRemoteUser();
+	            String user = usuarios.get(userTomcat).getDni();
+	            String pass = usuarios.get(userTomcat).getPassword();;
+```
+Después se crea un **objeto JSON** para introducir las credenciales del usuario que ha iniciado sesión.
 ```java
         JSONObject cred = new JSONObject();
 	        	cred.put("dni", user);
@@ -202,15 +251,14 @@ A continuación se define una BasicCookieStore, que nos permite almacenar las co
 
 ```
 Para crear la petición POST de login necesitamos estos 2 componentes:
-1. La propia petición asociada a la URL correspondiente utilizando el constructor de la clase HttpPost incluida en la libreria HttpComponents.
-2. La cabecera CONTENT_TYPE en la que se especifica que el contenido estará en formato JSON.
+**1.** La propia **petición** asociada a la **URL** correspondiente utilizando el constructor de la clase **HttpPost** incluida en la libreria HttpComponents.
+**2.** La cabecera** CONTENT_TYPE** en la que se especifica que el contenido estará en formato JSON.
 ```java
 		 HttpPost httpPost = new HttpPost("http://dew-virodbri-2021.dsic.cloud:9090/CentroEducativo/login/");
 		 httpPost.setHeader(HttpHeaders.CONTENT_TYPE, "application/json");
 ```
 
 Ahora mediante el uso de HttpEntity obtenemos el cuerpo de la respuesta que nos ofrece CentroEducativo. Este cuerpo de respuesta únicamente contendrá la clave de sesión(keyRes) que posteriormente será asignada a la variable de sesión key, junto al resto de variables de sesión (user y pass).
-
 
 ```java
 		httpPost.setEntity(entity);
@@ -233,7 +281,7 @@ Se comprobará para realizar esta asignación de variables de sesión si el cód
 			            session.setAttribute("cookie", cookieStore.getCookies());
 	                }
 ```
-Finalmente comprobamos si el usuario que se ha autenticado es un alumno o es un profesor mediante el uso de los roles, implementados anteriormente en el fichero tomcat-users.xml y web.xml. Tras esta comprobación se redirige al usuario a su ventana correspondiente.
+También comprobamos si el usuario que se ha autenticado es un alumno o es un profesor mediante el uso de los roles, implementados anteriormente en el fichero tomcat-users.xml y web.xml. Tras esta comprobación se redirige al usuario a su ventana correspondiente.
 ```java
 	                if(req.isUserInRole("rolalu")) {
 	                	req.getRequestDispatcher("/alumnoPrincipal.html").include(request, response);
@@ -245,5 +293,39 @@ Finalmente comprobamos si el usuario que se ha autenticado es un alumno o es un 
 	                }
 	        }
 			chain.doFilter(request, response);
+	}
+```
+Por ultimo trabajamos ciertos aspectos de seguridad en cierto punto, o más bien de pequeñas fallas o bugs en nuestra aplicación. El siguiente fragmento con el que concluye nuestro filtro de identificación LoginControl realiza comprobaciones relativas a las URL.
+
+Ya que por ejemplo se podría introducir la URL del alumno (/alumnoPrincipal.html), estando en la pantalla del profesor y viceversa, realizando así un acceso incoherente a una página que nos generará numerosos errores, por no estar identificados como tal. 
+
+Forzaremos que este comportamiento no ocurra haciendo una redirección a la misma página en la que nos encontramos para no poder salir de ahí en caso de que la URL sea modificada "maliciosamente".
+
+```java
+   if(req.getRequestURI().equals(req.getContextPath() + "/index.html") || 
+	        		req.getRequestURI().equals("/dew-NOL-2021/") ) {
+	        	if(req.isUserInRole("rolalu")) {
+                	res.sendRedirect(req.getContextPath() + "/alumnoPrincipal.html");
+                	return;
+                }
+                else if(req.isUserInRole("rolpro")) {
+                	res.sendRedirect(req.getContextPath() + "/profesorPrincipal.html");
+                	return;
+                }
+	        }else if( (req.isUserInRole("rolalu") && req.getRequestURI().equals(req.getContextPath() + "/profesorPrincipal.html")) ||
+	        		(req.isUserInRole("rolpro") && req.getRequestURI().equals(req.getContextPath() + "/alumnoPrincipal.html")) ) {
+	        	if(req.isUserInRole("rolalu")) {
+                	res.sendRedirect(req.getContextPath() + "/alumnoPrincipal.html");
+                	return;
+                }
+                else if(req.isUserInRole("rolpro")) {
+                	res.sendRedirect(req.getContextPath() + "/profesorPrincipal.html");
+                	return;
+                }
+	        }else {
+	        	chain.doFilter(request, response);
+	        }
+	     }
+        
 	}
 ```
