@@ -52,7 +52,7 @@
 				res = data.nombre + " " + data.apellidos;
 			},
 			error: function(){
-				$("#insertar-asignaturas-prof").append("<p>ERROR EN AJAX</p>");
+				alert("Error en la obtención del nombre del alumno")
 			}
 			});
 		return res;
@@ -336,7 +336,7 @@
 							console.log(jsonString);
 						},
 						error: function(){
-							$("#insertar-asignaturas-prof").append("<p>ERROR EN AJAX</p>");
+							alert("Error en la obtención de las asignaturas del profesor")
 						}
 						});
 					
@@ -359,7 +359,7 @@
 				
 			},
 			error: function(){
-				$("#insertar-asignaturas-prof").append("<p>ERROR EN AJAX</p>");
+				alert("Error en la obtención de las asignaturas del profesor")
 			}
 			});
 		
@@ -374,7 +374,7 @@
 	                dniProfesor = data.dni;
 	            },
 	            error: function(){
-	                $("#insertar-dni").append("<p>ERROR EN AJAX</p>");
+					alert("Error en la obtención del nombre del profesor")
 	            }
 	        })
 	        
@@ -384,7 +384,7 @@
 			$("#aqui").attr("src", "data:image/png;base64,"+response.img);
 			})
 			.fail(function() {
-			 alert("Algo mal: ");
+				alert("Error en la obtención de la imagen del profesor")
 			});
 		})
 	

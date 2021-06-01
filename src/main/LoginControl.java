@@ -5,6 +5,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.time.LocalDateTime;
+import java.util.HashMap;
 
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
@@ -35,7 +36,7 @@ import org.json.JSONObject;
 public class LoginControl implements Filter {
 
 	File logFile;
-	
+	HashMap<String, User> usuarios = null;
     public LoginControl() {
         // TODO Auto-generated constructor stub
     }
@@ -52,8 +53,9 @@ public class LoginControl implements Filter {
 		HttpServletResponse res = (HttpServletResponse) response;
         HttpSession session = req.getSession(true);
 	        if(session.getAttribute("key") == null) {
-	            String user = req.getRemoteUser();
-	            String pass = "123456";
+	        	String userTomcat = req.getRemoteUser();
+	            String user = usuarios.get(userTomcat).getDni();
+	            String pass = usuarios.get(userTomcat).getPassword();;
 	        	JSONObject cred = new JSONObject();
 	        	cred.put("dni", user);
 	        	cred.put("password", pass);
@@ -92,7 +94,18 @@ public class LoginControl implements Filter {
 	                
 	                
 	        }else {
-	        if(req.getRequestURI().equals(req.getContextPath() + "/index.html") || req.getRequestURI().equals("/dew-NOL-2021/")) {
+	        if(req.getRequestURI().equals(req.getContextPath() + "/index.html") || 
+	        		req.getRequestURI().equals("/dew-NOL-2021/") ) {
+	        	if(req.isUserInRole("rolalu")) {
+                	res.sendRedirect(req.getContextPath() + "/alumnoPrincipal.html");
+                	return;
+                }
+                else if(req.isUserInRole("rolpro")) {
+                	res.sendRedirect(req.getContextPath() + "/profesorPrincipal.html");
+                	return;
+                }
+	        }else if( (req.isUserInRole("rolalu") && req.getRequestURI().equals(req.getContextPath() + "/profesorPrincipal.html")) ||
+	        		(req.isUserInRole("rolpro") && req.getRequestURI().equals(req.getContextPath() + "/alumnoPrincipal.html")) ) {
 	        	if(req.isUserInRole("rolalu")) {
                 	res.sendRedirect(req.getContextPath() + "/alumnoPrincipal.html");
                 	return;
@@ -104,8 +117,7 @@ public class LoginControl implements Filter {
 	        }else {
 	        	chain.doFilter(request, response);
 	        }
-			
-	        }
+	     }
         
 	}
 	
@@ -120,6 +132,22 @@ public class LoginControl implements Filter {
 	 * @see Filter#init(FilterConfig)
 	 */
 	public void init(FilterConfig fConfig) throws ServletException {
+		usuarios = new HashMap<String, User>();
+		
+		//Profesores
+		usuarios.put("rgarcia", new User("23456733H","123456"));
+		usuarios.put("peval", new User("10293756L","123456"));
+		usuarios.put("manal", new User("06374291A","123456"));
+		usuarios.put("jofon", new User("65748923M","123456"));
+		
+		//Alumnos
+		usuarios.put("pegarsan", new User("12345678W","123456"));
+		usuarios.put("marfergo", new User("23456387R","123456"));
+		usuarios.put("miherllo", new User("34567891F","123456"));
+		usuarios.put("laubentor", new User("93847525G","123456"));
+		usuarios.put("minalpe", new User("37264096W","123456"));
+		
+		
 		logFile = new File(fConfig.getInitParameter("logPath"));
 		try {
 			logFile.createNewFile();

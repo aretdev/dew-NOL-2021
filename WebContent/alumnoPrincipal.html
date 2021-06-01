@@ -81,7 +81,8 @@
 							tdCuatri.innerHTML = data.cuatrimestre
 			            },
 			            error: function(){
-			                $("#insertar-dni").append("<p>ERROR EN AJAX</p>");
+							alert("Error en la petición de detalles de las asignaturas")
+
 			            }
 			        })
 			        
@@ -102,7 +103,7 @@
 				
 			},
 			error: function(){
-				$("#insertar-asignaturas").append("<p>ERROR EN AJAX</p>");
+				alert("Error en la petición de las asignaturas")
 			}
 			});
 		
@@ -120,7 +121,8 @@
                 $("#insertar-dni").append(data.nombre + " " + data.apellidos )
             },
             error: function(){
-                $("#insertar-dni").append("<p>ERROR EN AJAX</p>");
+				alert("Error en la petición de los datos del alumno")
+
             }
         })
         
@@ -131,7 +133,7 @@
 		})
 		.fail(function(jqxhr, textStatus, error ) {
 		 var err = jqxhr.response.replace(",", "\n"); // Pequeños ajustes
-		 alert("Algo mal: "+error);
+			alert("Error en la petición de la imagen del alumno :" + error)
 		});
 		
 	})
