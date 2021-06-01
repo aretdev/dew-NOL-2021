@@ -38,11 +38,15 @@ Tras mirar documentación de todas las librerias propuestas nos quedamos con est
 También en cuanto a la forma de trabajar con nuestro proyecto, creemos que el filtrado y la inserción de contenido en nuestras páginas HTML es mas adecuado y sencillo de interpretar utilizando AJAX y no utilizando metodologías más rudimentarias como el continuo patrón de "prints" utilizado en versiones básicas de los primeros servlets que se vieron en la asignatura.
 
 ## 3. Recorrido y guía de uso simplificada.
-Esta es la página de bienvenida a nuestra aplicación, en la que debemos de rellenar los campos del formulario que se nos abre en pantalla tras dar click a "identificarse". Una vez hecho esto entraremos a la aplicación.
-![](https://i.imgur.com/9405W5l.png)
+Esta es la página de bienvenida a nuestra aplicación, en la que debemos de rellenar los campos del formulario que se nos abre en pantalla tras dar click a "Iniciar Sesión". Una vez hecho esto entraremos a la aplicación.
+![](https://i.imgur.com/tb7vKA2.png)
 
 ------------
+En caso de que ocurra algun fallo en la introducción de nuestras credenciales podremos ver que aparece una pantalla de error que nos volverá a redirigir a nuestra pantalla inicial.
 
+![](https://i.imgur.com/UC7Qnap.png)
+
+------------
 Posteriormente en el caso que entremos como profesor se nos mostrará una pantalla con la imagen correspondiente, el nombre, dni y asignaturas impartidas. 
 ![](https://i.imgur.com/XgWK2AI.png)
 
