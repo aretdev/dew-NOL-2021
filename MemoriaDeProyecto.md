@@ -91,6 +91,7 @@ Aquí observamos la vista preliminar de nuestro documento, adaptandose a la perf
 En este apartado describiremos los componentes involucrados en el inicio de sesión: el documento HTML de inicio de sesión (index.html) y el filtro asociado a nuestro login (LoginControl.java).
 
 - **Descripción del documento index.html.**
+
 Como en todos los ficheros con esta extensión, hemos optado por dotarlo con una apariencia lo más consistente posible con Bootstrap, pero como este ambito queda fuera de la funcionalidad y operatividad del login no lo trataremos.
 ![](https://i.imgur.com/tb7vKA2.png)
 Como se ha descrito anteriormente contamos con una página centrada en un formulario principal donde introduciremos los datos con los que nos queremos identificar, aqui podemos observar el codigo que consigue esta apariencia.
@@ -117,8 +118,11 @@ Como se ha descrito anteriormente contamos con una página centrada en un formul
 	</form>
 ```
 En este fragmento del código nos topamos con 3 elementos a destacar.
+
 **1.** El propio **formulario** que enviará los datos introducidos, que realizará la acción establecida como j_security_check tras ser enviado. Esta accion viene predeterminada por el tipo de autenticación FORM que estamos utilizando en la aplicacion y que es visible en el documento web.xml.
+
 **2.** Los **campos del formulario** que recogen datos, tambien deben tener sus propios atributos "name" estandarizados por el metodo de autenticación, estos parametros son: **j_username** para el nombre de usuario y **j_password** para la contraseña.
+
 **3.** Finalmente el botón que acciona el **envío del formulario** que aparece con el tipo **"submit"** para hacer efectiva dicha acción.
 
 Si todo ocurre con éxito, entraremos a la aplicación, en caso contrario y como se describe en el apartado 3, entraremos a una pagina de error (**error.html**) que nos volvera a redireccionar a nuestro login. Esta página como elemento más destacable incluye una funcion javascript que permite la redirección tras 5000ms (5s).
@@ -131,6 +135,7 @@ $(document).ready(function () {
 - **Descripción de la lógica del filtro LoginControl.java**
 
 -  **Contextualización: clase User**.
+
 Para hacer efectiva la separación entre el nivel de datos y la lógica de nuestra aplicación hemos optado por crear una clase asociada a los usuarios de la aplicación, esta clase es muy sencilla ya que unicamente contara con dos atributos: dni y password y dos metodos "get" para obtener los mencionados atributos.
 
 ```java
@@ -164,6 +169,7 @@ Este filtro LoginControl lleva asociado un campo definido en web.xml denominado 
 En este caso el patrón **/* ** permite que cualquier petición tenga el formato que tenga pase por este filtro.
 
 Además de este filtro también hemos realizado otro previamente llamado SessionControl, el cual es una aproximación a LoginControl y utiliza la autenticación BASIC en vez de FORM.
+
 ```xml
  <filter>
     <display-name>LoginControl</display-name>
@@ -182,6 +188,7 @@ Además de este filtro también hemos realizado otro previamente llamado Session
 Ahora entrando en aspectos más profundos de nuestro código, debemos prestar especial atención en lo que ocurre en la funcion **init** y en los **atributos globales** que se definen dentro de nuestro filtro.
 
 En primer lugar comenzando con los atributos globales crearemos 2: un archivo logFile, del que se hablará después y una Tabla Hash que contiene pares de valores String y Usuario.
+
 ```java
 	File logFile;
 	HashMap<String, User> usuarios = null;
@@ -189,6 +196,7 @@ En primer lugar comenzando con los atributos globales crearemos 2: un archivo lo
 En cuanto al método init, en el es donde precisamente reside nuestra separación logica-datos.
 Como se muestra en el código hemos instanciado la Tabla Hash y le hemos comenzado a asignar valores para introducir a los usuarios que participaran en la aplicación. Ahora podremos acceder a nuestra aplicación utilizando el nickname que le asignamos en la Tabla Hash.
 Tambien se realiza la creación del fichero dedicado al log de la aplicación, cuyo contenido será explicado posteriormente.
+
 ```java
 public void init(FilterConfig fConfig) throws ServletException {
 usuarios = new HashMap<String, User>();
@@ -217,6 +225,7 @@ usuarios = new HashMap<String, User>();
 	}
 	
 ```
+
 En segundo lugar procedemos a crear la funcionalidad de logger tal y como se trato en la primera sesión de este proyecto. Crearemos un objeto **PrintWriter** que nos permita escribir en un fichero (logFile) que se encuentra inicialmente creado en el método init() como se menciona anteriormente.
 
 ```java
@@ -228,6 +237,7 @@ En segundo lugar procedemos a crear la funcionalidad de logger tal y como se tra
 		pw2.close();
 		
 ```
+
 En tercer lugar se crea una sesión y se comprueba si existe el identificador de la sesión(key). Si no se ha iniciado sesión entonces se obtiene el nombre de usuario mediante el método **getRemoteUser() **y la posterior operacion consultora de la TablaHash construida anteriormente y lo mismo ocurre con la contraseña. Ahora el nexo de la clase User con el filtro, se hace efectivo.
 ```java
 	HttpServletResponse res = (HttpServletResponse) response;
@@ -237,22 +247,29 @@ En tercer lugar se crea una sesión y se comprueba si existe el identificador de
 	            String user = usuarios.get(userTomcat).getDni();
 	            String pass = usuarios.get(userTomcat).getPassword();;
 ```
+
 Después se crea un **objeto JSON** para introducir las credenciales del usuario que ha iniciado sesión.
+
 ```java
         JSONObject cred = new JSONObject();
 	        	cred.put("dni", user);
 	        	cred.put("password", pass);
 	            StringEntity entity = new StringEntity(cred.toString());
 ```
+
 A continuación se define una BasicCookieStore, que nos permite almacenar las cookies entre diferentes peticiones.
 ```java
 		BasicCookieStore cookieStore = new BasicCookieStore();
 		CloseableHttpClient httpclient = HttpClients.custom().setDefaultCookieStore(cookieStore).build();
 
 ```
+
 Para crear la petición POST de login necesitamos estos 2 componentes:
+
 **1.** La propia **petición** asociada a la **URL** correspondiente utilizando el constructor de la clase **HttpPost** incluida en la libreria HttpComponents.
+
 **2.** La cabecera** CONTENT_TYPE** en la que se especifica que el contenido estará en formato JSON.
+
 ```java
 		 HttpPost httpPost = new HttpPost("http://dew-virodbri-2021.dsic.cloud:9090/CentroEducativo/login/");
 		 httpPost.setHeader(HttpHeaders.CONTENT_TYPE, "application/json");
@@ -273,6 +290,7 @@ Ahora mediante el uso de HttpEntity obtenemos el cuerpo de la respuesta que nos 
 	                    response1.close();
 ```
 Se comprobará para realizar esta asignación de variables de sesión si el código de respuesta es un 200 OK y también que la clave sea correcta. Se asignan a la sesión los parámetros dni, password, key y cookie.
+
 ```java
 	                if(response1.getCode() == 200 && !keyRes.equals("-1")){
 		            	session.setAttribute("dni", user);
@@ -281,7 +299,9 @@ Se comprobará para realizar esta asignación de variables de sesión si el cód
 			            session.setAttribute("cookie", cookieStore.getCookies());
 	                }
 ```
+
 También comprobamos si el usuario que se ha autenticado es un alumno o es un profesor mediante el uso de los roles, implementados anteriormente en el fichero tomcat-users.xml y web.xml. Tras esta comprobación se redirige al usuario a su ventana correspondiente.
+
 ```java
 	                if(req.isUserInRole("rolalu")) {
 	                	req.getRequestDispatcher("/alumnoPrincipal.html").include(request, response);
@@ -295,6 +315,7 @@ También comprobamos si el usuario que se ha autenticado es un alumno o es un pr
 			chain.doFilter(request, response);
 	}
 ```
+
 Por ultimo trabajamos ciertos aspectos de seguridad en cierto punto, o más bien de pequeñas fallas o bugs en nuestra aplicación. El siguiente fragmento con el que concluye nuestro filtro de identificación LoginControl realiza comprobaciones relativas a las URL.
 
 Ya que por ejemplo se podría introducir la URL del alumno (/alumnoPrincipal.html), estando en la pantalla del profesor y viceversa, realizando así un acceso incoherente a una página que nos generará numerosos errores, por no estar identificados como tal. 
