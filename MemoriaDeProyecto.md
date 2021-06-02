@@ -7,10 +7,15 @@
 - **2. Justificación de tecnologías escogidas.**
 - **3. Recorrido y guía de uso simplificada.**
 - **4. Aspectos relacionados con la implementación.**
- -  **4.1 Identificación e inicio de sesión.**
+ -  **4.1 Identificación e inicio de sesión. (falta ver identificacion en otro pc y otra credencial)**
  - **4.2 Lógica de los servlets.**
+ - **4.2.1 Explicacion servlet alumnoApi.java**
+ - **4.2.2 Explicacion servlet profesorApi.java**
  - **4.3 Lógica de los formularios.**
-- **5. Problemas y soluciones adoptadas.**
+ - **4.3.1 Explicacion de alumnoPrincipal.html (Josep)**
+ - **4.3.2 Explicacion de profesorPrincipal.html (Vicente)**
+- **5. Problemas y soluciones adoptadas. Testeo (Sergio)**
+- **6. Actas de las reuniones y funcionamiento general del grupo (Mario)**
 
 ------------
 
