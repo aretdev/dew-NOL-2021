@@ -355,3 +355,144 @@ Forzaremos que este comportamiento no ocurra haciendo una redirección a la mism
         
 	}
 ```
+### 4.2 Lógica de los servlets
+
+#### 4.2.2 Explicacion servlet profesorApi.java
+A continuación, se procede a explicar el funcionamiento del servlet encargado de intermediar con CentroEducativo cuando iniciemos sesión como profesor. Este servlet admite peticiones tanto por GET como por POST (ya que POST llama a GET), en las líneas de código mostradas a continuación podemos observar el inicio del metodo GET. En el declaramos un string *"nombreMaquina"* que utilizaremos para poder cambiar con facilidad la maquina en la que vamos a ejecutar la aplicación, ahorrándonos así tener que buscar en distintas líneas de código. Posteriormente, obtendrá los datos del profesor que lo llamó con el fin de ir construyendo la petición a CentroEducativo. Para ello se utilizara la sesión obtenida con el comando *request.getSession(False)* extrayendo de ella los atributos *dni* y *key* asi como la cookie.
+
+```Java
+protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		/*
+		 * Cambiar nombreMaquina a tu maquina con CentroEducativo
+		 * */
+		String nombreMaquina = "virodbri";
+		/*
+		 * Empezamos a preparar la peticion
+		 * 
+		 * */
+		HttpSession ses = request.getSession(false);
+    	BasicCookieStore cookieStore = new BasicCookieStore();
+    	CloseableHttpClient httpclient = HttpClients.custom().setDefaultCookieStore(cookieStore).build();
+    	
+    	List<Cookie> cookies = (List<Cookie>) ses.getAttribute("cookie");
+    	String dni = ses.getAttribute("dni").toString();
+    	String key = ses.getAttribute("key").toString();
+    	HttpGet httpGet = null;
+```
+
+De la misma manera que en el servlet del alumno una vez obtenido los datos del usuario, comprobaremos que realmente tiene permisos para realizar las peticiones correspondientes, esto se realizará con la siguiente línea:
+```java
+/* Solo aquellos con rolpro pueden realizar esta operacion
+    	 * */
+    	if(request.isUserInRole("rolpro")) {
+```
+
+Si el usuario no es del rol correspondiente se devolverá un error 401 y se mostrara el mensaje que se ve en el siguiente fragmento de código
+```java
+}else {
+    		response.setStatus(401);
+    		response.getWriter().append("No tienes permitido realizar esta accion!");
+    		return;
+    	}
+    	
+```
+
+Una vez nos aseguramos que el usuario es del rol correspondiente comenzamos a realizar las distintas peticiones a CentroEducativo. Como podemos observar en el siguiente fragmento de código lo haremos mediante el uso del parámetro*"opcion"* que obtendremos por POST, dependiendo de qué valor le asignemos a este parámetro, profesorApi sabrá que petición exacta debe realizar.
+Dependiendo del valor de dicho parámetro podemos observar la petición para obtener el dni del profesor, las asignaturas, los alumnos de estas entre otras. Veremos otras peticiones que merecen una mención especial más adelante.
+```java
+String param = request.getParameter("opcion");
+            response.setContentType("application/json");
+            
+    		if(param.equals("profasig")) {
+	    		httpGet = new HttpGet("http://dew-"+nombreMaquina+"-2021.dsic.cloud:9090/CentroEducativo/profesores/"+dni+"/asignaturas?key="+key);
+    		} else if(param.equals("asigalum")) {
+    			String acronimo = request.getParameter("acronimo");
+	    		httpGet = new HttpGet("http://dew-"+nombreMaquina+"-2021.dsic.cloud:9090/CentroEducativo/asignaturas/"+acronimo+"/alumnos?key="+key);
+    		}else if(param.equals("getalumno")) {
+    			String dnialumno = request.getParameter("dnialumno");
+	    		httpGet = new HttpGet("http://dew-"+nombreMaquina+"-2021.dsic.cloud:9090/CentroEducativo/alumnos/"+dnialumno+"?key="+key);
+    		}else if(param.equals("dni")) {
+	    		httpGet = new HttpGet("http://dew-"+nombreMaquina+"-2021.dsic.cloud:9090/CentroEducativo/profesores/"+dni+"?key="+key);
+    		}
+```
+
+A continuación, procedemos a explicar el funcionamiento de las peticiones que son distintas o más complejas que las anteriores. La siguiente petición corresponde a la de mostrar el avatar correspondiente al usuario. Para ello, en primer lugar, se obtiene la ruta donde están ubicadas las imágenes de los usuarios. Una vez obtenida la imagen que corresponde al avatar del usuario mediante la utilización de su dni se mostrara por pantalla con un *PrintWriter*.
+```java
+else if(param.equals("avatar")) {
+    			
+    			String dniparam = request.getParameter("dniavatar");
+    			ServletContext context = getServletContext();
+    			String pathToAvatar = context.getRealPath("/WEB-INF/img");
+    			
+    			response.setContentType("text/plain");
+    			response.setCharacterEncoding("UTF-8");
+    			BufferedReader origen = new BufferedReader(new FileReader(pathToAvatar+"/"+dniparam+".pngb64"));
+    			response.setContentType("text/plain");
+    			
+    			PrintWriter out = response.getWriter();
+    			out.print("{\"dni\": \""+dniparam+"\", \"img\": \""); 
+    			String linea = origen.readLine(); out.print(linea); 
+    			while ((linea = origen.readLine()) != null) {out.print("\n"+linea);}
+    			out.print("\"}");
+    			out.close(); origen.close();
+    			return;
+````
+
+La siguiente petición que merece un tratamiento especial en su explicación es la correspondiente a asignar la nota a los alumnos de las asignaturas. Como podemos observar en el siguiente fragmento de código una vez obtenido el parámetro nota solo serán aceptados números en el rango del 0 al 10. Una vez comprobado que la nota es válida, mediante el dni y el acrónimo de la asignatura tendremos la ruta para realizar el *HttpPut* y con ello realizar el cambio de nota. También tendremos que añadir las cookies. Una vez hecho esto procedemos a devolver el contenido de respuesta de la petición put al html correspondiente.
+```java
+else if(param.equals("setnota")) {
+    			Float nota = Float.parseFloat(request.getParameter("nota"));
+    			if(nota >= 0 && nota <= 10 ) {
+	    			String dnialum = request.getParameter("dnialumno");
+	    			String acron = request.getParameter("acron");
+	    			HttpPut httpPut = new HttpPut("http://dew-"+nombreMaquina+"-2021.dsic.cloud:9090/CentroEducativo/alumnos/"+dnialum+"/asignaturas/"+acron+"?key="+key);
+	    			StringEntity notaChanged = new StringEntity(nota.toString());
+	    			httpPut.setEntity(notaChanged);
+	    			httpPut.setHeader(HttpHeaders.CONTENT_TYPE, "application/json");
+	    	        cookieStore.addCookie(cookies.get(0));
+	    	        
+	    	        CloseableHttpResponse response1 = httpclient.execute(httpPut);	
+	    	        String content = "-1";
+	    	        HttpEntity entity1 = response1.getEntity();
+	    	        
+	    	        if(response1.getCode() == 200) {
+	    	            try {
+	    	            	content = EntityUtils.toString(entity1);
+	    	            }catch (ParseException e) {System.out.println("Error entity");}
+	    	            EntityUtils.consume(entity1);
+	    	            response1.close();
+	    	            response.setContentType("text/plain");
+	    	    		response.getWriter().append(content);
+	    	        }else {
+	    	    		response.getWriter().append("No tienes permitido realizar esta accion!");
+	    	        }
+    			}else {
+    				response.getWriter().append("La nota se ha podido actualizar");
+    				response.setStatus(500);
+    			}
+    		}
+```
+
+Para finalizar este subapartado, procedemos a ejecutar la petición, sin olvidarnos de añadir las cookies. Una vez la petición se realice y CentroEducativo nos responda correctamente deberemos colocar su respuesta como el cuerpo de respuesta de profesorApi y ya habremos terminado. Esto se hara como se muestra en el siguiente fragmento de código.
+```java
+if(httpGet != null) {
+	    	httpGet.setHeader(HttpHeaders.CONTENT_TYPE, "application/json");
+	        cookieStore.addCookie(cookies.get(0));
+	        
+	        CloseableHttpResponse response1 = httpclient.execute(httpGet);	
+	        String content = "-1";
+	        HttpEntity entity1 = response1.getEntity();
+	        
+	        if(response1.getCode() == 200) {
+	            try {
+	            	content = EntityUtils.toString(entity1);
+	            }catch (ParseException e) {System.out.println("Error entity");}
+	            
+	            EntityUtils.consume(entity1);
+	            response1.close();
+	    		response.getWriter().append(content);
+	        }else {
+	    		response.getWriter().append("No tienes permitido realizar esta accion!");
+	        }
+    	}
+```
