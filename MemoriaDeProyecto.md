@@ -496,3 +496,157 @@ if(httpGet != null) {
 	        }
     	}
 ```
+## 6. Actas de reuniones y funcionamiento general del grupo.
+En este apartado vamos a realizar una recopilación de las reuniones hasta la fecha y como se ha ido abordando el trabajo en todas ellas.
+Describiremos las reuniones normalmente agrupandolas en sucesivos dias en los que se realizase la misma actividad o el mismo avance en el desarrollo.
+# Acta de las reuniones 1 y 2 del grupo de DEW 3TI11
+Asistentes: Mario, Joel, Josep, Vicente y Sergio
+
+------------
+###### Esta acta contiene las dos primeras reuniones: la del 26 de abril y la del 29 de abril
+
+####  1.	Dinámica de trabajo
+Hemos inicializado un GitHub (git) como herramienta colaborativa para el código, un Discord como herramienta para la comunicación dentro de reuniones y un grupo de Whatsapp para las comunicaciones fuera de las reuniones. Los archivos externos al proyecto se guardarán en un OneDrive colaborativo en el que todos podremos acceder y editar como iguales. 
+El horario tentativo para las reuniones será de 12:30 a 14:00 los jueves y de 10:00 a 12:00 los lunes. Todos podemos cumplir este horario excepto Krasimir, porqué trabaja. Estamos buscando huecos para que todos podamos reunirnos a la vez, pero Krasimir tiene muy poco tiempo libre por lo que parece, aunque ha dicho que podría después de las 19:30.
+
+#### 2.	Trabajo realizado
+En la primera reunión, todos los asistentes hemos expuesto los temas que habían sido asignados con antelación. Antes de la reunión se había asignado a Josep como secretario que realizara las actas correspondientes a cada una de las reuniones a partir de esta. Hemos hecho un proyecto de prueba y lo hemos publicado para comprobar si todo funcionaba correctamente. También hemos configurado el git todos juntos en la máquina de cada uno de los asistentes.
+En la segunda sesión, nos hemos dedicado a crear un proyecto de prueba para familiarizarnos con el proyecto. Hemos usado la versión de Tomcat 2.5 y la versión de Eclipse 2019-03. Nos hemos familiarizado con la conexión del servidor mediante un logger básico y un hola mundo.
+#### Resumen de la actividad "Requerimientos Básicos":
+Se trataron los principales conflictos en los equipos, como juzgar a los demás, superioridad, ignorar o ser deshonesto con el grupo y se remarcó la importancia de la pronta resolución de problemas.
+
+Además se recalcó la importancia que tiene la libertad de expresión y el respeto mutuo por parte de todos los miembros. Por otro lado, los objetivos se establecieron claramente, de manera precisa y atendiendo a las capacidades de cada uno. En cuanto a la resolución de problemas se eligió como favorito el método SWOT.
+
+Por último tratamos el brainstorming, que sera utilizado cuando sea necesario afrontar un problema que tenga diferentes soluciones y todas sean válidas.
+
+En general, los comentarios al respecto fueron de aprobación y no hubo disconformidades en general. Se advirtió la importancia de la puntualidad y se acordó un horario flexible para poder trabajar entre todos.
+
+Mario : Agrupación 1. 
+Vicente : Agrupación 1.
+Joel: Agrupación 2.
+Krasimir: Agrupación 2.
+Sergio : Agrupación 3.
+Josep: Agrupación 3.
+
+#### 3.	Problemas acontecidos y soluciones propuestas
+Esta reunión ha concluido sin problemas. Hay buen ambiente entre todos los asistentes, todos nos comprometemos a un horario estable. El único problema ha sido la falta de asistencia de Krasimir, pero intentaremos reunirnos con él lo más pronto posible y reajustar el horario.
+Sin embargo, posteriormente se trató el tema con Krasimir y quedó conforme con lo expuesto en la reunión.
+
+# Acta de la reunión 3 del grupo de DEW 3TI11
+Asistentes: Mario, Joel, Krasimir, Vicente y Sergio
+
+------------
+###### Esta acta contiene la tercera reunión: 3 de mayo.
+
+####  1.	Dinámica de trabajo
+Se repartieron las tareas en 2 grupos de trabajo claramente diferenciados para agilizar el trabajo.
+
+Mario, Krasimir y Joel trabajaron los aspectos relacionados con la orden curl así como la redacción de la explicación del funcionamiento de las órdenes y su posterior salida en el bash.
+
+Sergio y Vicente se encargaron de la parte de código referida especialmente en modificaciones en formularios y pruebas del proyecto.
+
+#### 2.	Trabajo realizado
+Se hizo un breve comentario sobre el funcionamiento de la orden curl a todos los miembros del grupo y se trabajó con el script tarea1.sh mencionado en la actividad de tratamiento de dicha orden.
+
+Asimismo se modificaron algunos aspectos de los formularios, como la introducción de campos de texto para usuario y contraseña, además, se comprobó el correcto funcionamiento del proyecto en las máquinas de portal-ng.
+#### 3.	Problemas acontecidos y soluciones propuestas
+No sucedió ningún problema y la sesión se llevó a cabo de manera satisfactoria.
+# Acta de la reunión 4 y 5 del grupo DEW 3TI11-02.
+
+> ##### Asistentes: Vicente, Joel, Mario, Josep, Krasimir y Sergio.
+
+------------
+###### Esta acta contiene las reuniones 4 y 5: la del 10 de mayo y la del 12 de mayo.
+#### 1. Dinámica de trabajo.
+Se establece claramente un plan de trabajo detallado a seguir para la actividad 2, con 4 pasos fundamentales para poder organizar el trabajo e ir desarrollando progresivamente la actividad en grupo.
+En la actividad 3 se procede de la misma manera generando un plan compartido a todos los miembros del grupo detallando las actividades a desarrollar.
+
+#### 2. Trabajo realizado.
+Se termina en su totalidad la actividad número 2 y se comienza con los primeros detalles de la actividad 3.
+En primer lugar se realizó el consenso para la elección de bibliotecas. Nos decantamos por utilizar HttpComponents y JSON-Java. 
+Tras mirar documentación de todas las librerias propuestas nos quedamos con estas dos puesto que la forma en la que se desarrolla el código con ellas nos parece la más intuitiva y cómoda para nuestra forma de ver tanto las estructuras de las peticiones y respuestas HTTP, como, la estructura de los objetos JSON y su manipulación. Además hacer hincapié en que JSON-Java nos ofrece infinidad de formatos y constructores para la definición y control de estos objetos JSON.
+Una vez descargadas e incorporadas al proyecto las librerías,  se procede con la actividad de inicio TheCatApi completando con éxito la operación GET y mostrandose correctamente las imágenes en la web.
+Después se comenzó a indagar en los pasos 2 y 3 de nuestro plan que incluyen, la creación de roles en tomcat-users.xml, la modificación del web.xml para la incorporación de las auth-contraint y se desarrolló el filtro SessionControl siguiendo el seudocódigo ofrecido en el manual *(Trabajo en grupo NOL)*, que nos indica como transitar y comunicar la capa lógica con la capa de datos mediante el uso de una sesión, un objeto json con las variables a utilizar en la operación de login, y la propia petición POST de login a CentroEducativo.
+
+Tras, ello se crea un formulario base (login3.html) para comenzar con la autenticación de los usuarios y también se crea un nuevo filtro LoginControl que selecciona los datos dni y pass de manera diferente al anterior Servlet "SessionControl". Se modifica también el Servlet HolaMundo para poder obtener la respuesta en formato JSON a una posible consulta a CentroEducativo.
+> NOTA: La actividad de testeo se realizó desde la máquina de porta-ng de Vicente:
+> **dew-virodbri-2020.dsic.cloud**
+
+#### 3. Problemas acontecidos y soluciones propuestas
+Ningún problema ocurrido en el transcurso de las sesiones, y se ofrece una posible solución ante problemas de compatibilidad de horario debido a la creciente carga de trabajo que la realización del proyecto supone y la compaginación con otras asignaturas.
+La solución propuesta fue realizar una delegación de trabajo con previa explicación en un horario fuera del habitual al miembro del grupo que no pueda asistir a alguna reunión en particular.
+Todos los miembros aceptaron la propuesta y se introdujeron nuevas jornadas de trabajo para intensificar la productividad.
+
+# Acta de la reunión 6,7,8 del grupo DEW 3TI11-02.
+
+> #### Asistentes: Vicente, Joel, Mario y Sergio.
+
+------------
+###### Esta acta contiene las reuniones 6,7 y 8: la del 14 de mayo, 16 de mayo y 17 de mayo.
+
+#### 1. Dinámica de trabajo.
+Se continua con la dinámica propuesta en las sesiones anteriores. Seguir con el plan de ejecución propuesto.
+#### 2. Trabajo realizado.
+Se comienza al desarrollo de las piezas desarrolladas en los requisitos de la tarea, se modifican ciertos ficheros para hacer una condensación de la información y hacer el proceso más simple. Comenzamos con el estudio individualizado de todas los integrantes del equipo de jQuery y Ajax para poder trabajar "ágilmente". Posteriormente se colabora en la construcción de las APIs y el diseño de las páginas HTML con Bootstrap. 
+Se profundiza en el concepto de interconexión entre servlets y html ya que lo consideramos muy importante para el completo entendimiento del proyecto. 
+Realizamos un trabajo paralelo desarrollando la parte de servlets en grupo y la parte de Ajax/jQuery también en grupo.
+
+> NOTA: La actividad de testeo se realizó desde la máquina de porta-ng de Vicente:
+> **dew-virodbri-2020.dsic.cloud**
+
+#### 3. Problemas acontecidos y soluciones propuestas
+Destacamos la falta de asistencia de Krasimir durante todas las reuniones, y la falta de asistencia de Josep a las 2 primeras. 
+Las dos primeras reuniones fue donde más trabajo se realizó y se explicó a los miembros del grupo que no asistieron que debían estudiar y ponerse al día interpretando el código y probando las diferentes partes del proyecto. 
+Observamos compromiso por parte de Josep, se verá su evolución y se comentará en las siguientes actas.
+
+# Acta de la reunión 9, 10 y 11 del grupo DEW 3TI11-02.
+
+> #### Asistentes: Joel, Mario, Vicente, Sergio, Krasimir y Josep.
+
+###### Esta acta contiene las reuniones 6,7 y 8: la del 19 de mayo, 21 de mayo y 22 de mayo.
+
+#### 1. Dinámica de trabajo.
+Se detalla un nuevo plan de trabajo para completar las funcionalidades que faltaban por implementar. Procedemos a separar e identificar diferentes partes de la aplicación a implementar. Separamos el trabajo y trabajamos en las dudas generales del grupo.
+
+#### 2. Trabajo realizado.
+Se comienza a realizar el aspecto más definitivo en cuanto al estilo de Bootstrap de la aplicación. Se intenta consensuar un diseño uniforme, y se realiza con exito. Definimos unas plantillas uniformes para las paginas de alumno y profesor en local y posteriormente las implementamos dentro de la maquina virtual de linux.
+Se sigue trabajando con AJAX y jQuery para seguir desarrollando las peticiones necesarias a los servlets, en este caso comenzamos a profundizar en mas detalles con la decodificación de las imagenes en base64 y se comienza tambien a realizar la implementación de la evaluación del profesor a los diferentes alumnos con la interfaz agil AJAX y la creacion de un "json Global" para acceder a los datos localmente como se indica en la documentación.
+#### 3. Problemas acontecidos y soluciones propuestas
+Algun problema de concepto entre los miembros del grupo debido a la novedad de los contenidos, se soluciona con busqueda e investigación en páginas oficiales.
+Tras la solución de dichos problemas de concepto y la explicación a los miembros del grupo, las reuniones avanzan a un buen ritmo.
+
+# Acta de la reunión 12, 13 y 14 del grupo DEW 3TI11-02.
+
+> #### Asistentes: Vicente, Joel, Mario, Sergio, Krasimir y Josep.
+
+###### Esta acta contiene las reuniones 6,7 y 8: la del 24 de mayo, 26 de mayo y 29 de mayo.
+
+#### 1. Dinámica de trabajo.
+Se prosigue con el plan de trabajo y se comienzan a perfilar los ultimos flecos de la aplicación.
+
+#### 2. Trabajo realizado.
+Se termina el aspecto del diseño con Bootstrap. Se realiza la implementación del diseño CSS para el documento imprimible, tras ciertas dudas sobre como abordarlo y la consulta al profesor, se realizan funciones que modifican la pagina del alumno para obtener dicho imprimible.
+
+Se termina tambien la implementación de la funcionalidad de calificacion de profesor y se crea una nueva estructura dentro de las pestañas de las asignaturas de los profesores. Esta medida es consensuada por los miembros del grupo ya que estos parametros adicionales de media de los alumnos, aprobados, suspensos etc... dotan a la aplicación de una mayor completitud en su contenido.
+
+Se realiza una reunion especial el dia 26 para acordar el miembro que se presentara al examen y en la reunion del dia 29 se cohesiona toda la información relativa a nuestro proyecto mediante una exposicion "estilo clase magistral" de los contenidos realizados en el proyecto para evitar dudas futuras.
+
+Se tratan también aspectos de cara a la entrega final que deberiamos incluir en las actas y se comienza a distribuir el trabajo.
+#### 3. Problemas acontecidos y soluciones propuestas
+De nuevo durante las reuniones ocurre algun problema de concepto por parte de algunos componentes que son rapidamente solucionados mediante la explicación de fragmentos de codigo de nuestro proyecto.
+El resto avanza adecuadamente.
+# Acta de la reunión 15 del grupo DEW 3TI11-02.
+
+> #### Asistentes: Vicente, Joel, Mario, Sergio, Krasimir y Josep.
+
+###### Esta acta contiene la reunión del dia: 4 de junio.
+#### 1. Dinámica de trabajo.
+Se expone a los miembros del grupo soluciones ante posibles problemas tras la correccion del hito dos.
+
+#### 2. Trabajo realizado.
+
+Se solucionan los aspectos relacionados a la correccion del hito y se implementa una nueva página relacionada a detalles de la asignatura.
+Se comenta tambien la necesidad de incluir algun apartado extra en las actas finales, como podria ser un apartado de pruebas de seguridad y un apartado que explique el posible acceso de un alumno con credenciales diferentes y que habria que hacer para lograrlo.
+
+#### 3. Problemas acontecidos y soluciones propuestas
+No hay problemas evidentes puesto que estamos en la etapa de casi finalizacion del proyecto. Los miembros tienen los conceptos claros.
