@@ -48,7 +48,107 @@
 	
 	
 	$(document).ready(function(){
+		const queryString = window.location.search;
+		const urlParams = new URLSearchParams(queryString);
+		const param = urlParams.get('asignatura')
 		
+		
+		$.ajax({
+	            url: '/dew-NOL-2021/alumnoApi',
+	            type: 'POST',
+	            dataType: 'json',
+	            async: true,
+	            data: 'opcion=dni',
+	            success: function(data){
+	            	nombre = data.nombre + " " + data.apellidos;
+	            	dni = data.dni;
+	                $("#insertar-dni").append(data.nombre + " " + data.apellidos )
+	            },
+	            error: function(){
+					alert("Error en la petición de los datos del alumno")
+	
+	            }
+	        })
+	        
+	        $.getJSON("/dew-NOL-2021/alumnoApi?opcion=avatar")
+			.done(function(response){
+			$("#esto").text(response.dni);
+			$("#aqui").attr("src", "data:image/png;base64,"+response.img);
+			})
+			.fail(function(jqxhr, textStatus, error ) {
+			 var err = jqxhr.response.replace(",", "\n"); // Pequeños ajustes
+				alert("Error en la petición de la imagen del alumno :" + error)
+			});
+		
+		if(param == null){
+			$("#mainAsigContent").hide()
+		
+			$.ajax({
+				url: '/dew-NOL-2021/alumnoApi',
+				type: 'POST',
+				dataType: 'json',
+				async: true,
+				data: 'opcion=asignaturas',
+				success: function(data){
+	
+					$.each(data, function (index, val) {
+						var notaFormatted = (val.nota == "") ? "No calificado" : val.nota;
+						console.log(data);
+						var cuerpoAsig = document.getElementById("cuerpoAsig")
+						var tr = document.createElement('tr')
+						tr.id = val.asignatura
+						var tdNombre = document.createElement('td')
+						var enlaceAsig = document.createElement('a')
+						var tdCurso = document.createElement('td')
+						var tdCreditos = document.createElement('td')
+						var tdCuatri = document.createElement('td')
+						var tdNota = document.createElement('td')
+						
+						$.ajax({
+				            url: '/dew-NOL-2021/alumnoApi',
+				            type: 'POST',
+				            dataType: 'json',
+				            async: true,
+				            data: 'opcion=detallesasig&acron='+val.asignatura,
+				            success: function(data){
+				            	tdCreditos.innerHTML = data.creditos
+				            	tdCurso.innerHTML = data.curso
+								tdCuatri.innerHTML = data.cuatrimestre
+				            },
+				            error: function(){
+								alert("Error en la petición de detalles de las asignaturas")
+	
+				            }
+				        })
+				        
+						enlaceAsig.innerHTML = val.asignatura
+						enlaceAsig.setAttribute('href', "alumnoPrincipal.html?asignatura="+val.asignatura)
+						tdNombre.appendChild(enlaceAsig)
+						tdNota.innerHTML = notaFormatted
+						
+						tr.appendChild(tdNombre)
+						tr.appendChild(tdCurso)
+						tr.appendChild(tdCreditos)
+						tr.appendChild(tdCuatri)
+						tr.appendChild(tdNota)
+						
+						cuerpoAsig.appendChild(tr)
+	
+					    
+					  });
+					
+				},
+				error: function(){
+					alert("Error en la petición de las asignaturas")
+				}
+				});		
+			
+			
+		
+	}else {
+		
+		
+		$("#mainAlumContent").hide()
 		$.ajax({
 			url: '/dew-NOL-2021/alumnoApi',
 			type: 'POST',
@@ -58,46 +158,30 @@
 			success: function(data){
 
 				$.each(data, function (index, val) {
-					var notaFormatted = (val.nota == "") ? "No calificado" : val.nota;
-					console.log(data);
-					var cuerpoAsig = document.getElementById("cuerpoAsig")
-					var tr = document.createElement('tr')
-					tr.id = val.asignatura
-					var tdNombre = document.createElement('td')
-					var tdCurso = document.createElement('td')
-					var tdCreditos = document.createElement('td')
-					var tdCuatri = document.createElement('td')
-					var tdNota = document.createElement('td')
-					
-					$.ajax({
-			            url: '/dew-NOL-2021/alumnoApi',
-			            type: 'POST',
-			            dataType: 'json',
-			            async: true,
-			            data: 'opcion=detallesasig&acron='+val.asignatura,
-			            success: function(data){
-			            	tdCreditos.innerHTML = data.creditos
-			            	tdCurso.innerHTML = data.curso
-							tdCuatri.innerHTML = data.cuatrimestre
-			            },
-			            error: function(){
-							alert("Error en la petición de detalles de las asignaturas")
+					if(val.asignatura == param){
+						var notaFormatted = (val.nota == "") ? "No calificado" : val.nota;
+						$.ajax({
+				            url: '/dew-NOL-2021/alumnoApi',
+				            type: 'POST',
+				            dataType: 'json',
+				            async: true,
+				            data: 'opcion=detallesasig&acron='+val.asignatura,
+				            success: function(data){
+				            	$("#notaAsig").html("Nota: "+notaFormatted)
+				            	$("#cuatriAsig").html("Cuatrimestre: "+data.cuatrimestre)
+				            	$("#cursoAsig").html("Curso: "+data.curso)
+				            	$("#credAsig").html("Créditos: "+data.creditos)
+				            	
+				            	var indexName = "("+data.acronimo+") " + data.nombre
+								$("#nombreAsigIndex").html(indexName)
 
-			            }
-			        })
-			        
-					
-					tdNombre.innerHTML = val.asignatura
-					tdNota.innerHTML = notaFormatted
-					
-					tr.appendChild(tdNombre)
-					tr.appendChild(tdCurso)
-					tr.appendChild(tdCreditos)
-					tr.appendChild(tdCuatri)
-					tr.appendChild(tdNota)
-					
-					cuerpoAsig.appendChild(tr)
-
+				            },
+				            error: function(){
+								alert("Error en la petición de detalles de las asignaturas")
+	
+				            }
+				        })
+					}
 				    
 				  });
 				
@@ -105,37 +189,9 @@
 			error: function(){
 				alert("Error en la petición de las asignaturas")
 			}
-			});
+			});	
 		
-		
-		
-		$.ajax({
-            url: '/dew-NOL-2021/alumnoApi',
-            type: 'POST',
-            dataType: 'json',
-            async: true,
-            data: 'opcion=dni',
-            success: function(data){
-            	nombre = data.nombre + " " + data.apellidos;
-            	dni = data.dni;
-                $("#insertar-dni").append(data.nombre + " " + data.apellidos )
-            },
-            error: function(){
-				alert("Error en la petición de los datos del alumno")
-
-            }
-        })
-        
-        $.getJSON("/dew-NOL-2021/alumnoApi?opcion=avatar")
-		.done(function(response){
-		$("#esto").text(response.dni);
-		$("#aqui").attr("src", "data:image/png;base64,"+response.img);
-		})
-		.fail(function(jqxhr, textStatus, error ) {
-		 var err = jqxhr.response.replace(",", "\n"); // Pequeños ajustes
-			alert("Error en la petición de la imagen del alumno :" + error)
-		});
-		
+	}
 	})
 	</script>
 
@@ -185,8 +241,8 @@
 	<div class="d-flex justify-content-center" >
 	 	<p id="parrafoImprimible" ></p>
 	</div>
-	<div class="d-flex justify-content-center">
-		<table class="table table-striped w-75" >
+	<div class="d-flex justify-content-center" >
+		<table class="table table-striped w-75" id="mainAlumContent">
 		  <thead>
 		    <tr>
 		      <th scope="col">Nombre Asignatura</th>
@@ -199,6 +255,41 @@
 		  <tbody id="cuerpoAsig">
 		  </tbody>
 		</table>
+	</div>
+	<div class="d-flex justify-content-center" >
+		<div class="card bg-light mb-5 " id="mainAsigContent" style="width:50rem;">
+		  <div class="card-header">
+		  	<nav style="--bs-breadcrumb-divider: '/'; padding: 15px 0px 0px 15px;" aria-label="breadcrumb">
+				  <ol class="breadcrumb ">
+				    <li class="breadcrumb-item"><a href="alumnoPrincipal.html">Asignaturas</a></li>
+				    <li class="breadcrumb-item active" aria-current="page" id="nombreAsigIndex"></li>
+				  </ol>
+			</nav>
+		  </div>
+		  <div class="card-body d-flex justify-content-center">
+		  	<div class="container-sm ">
+			  <div class="row">
+			    <div class="col">
+				      <ul class="list-group list-group-flush">
+							  <li class="list-group-item" id="notaAsig">Nota: </li>
+							  <li class="list-group-item" id="cursoAsig">Curso: </li>
+							  <li class="list-group-item" id="cuatriAsig">Cuatrimestre: </li>
+							  <li class="list-group-item" id="credAsig">Créditos: </li>
+							  <li class="list-group-item" >Profesor: <br>
+							  	<ul id="profeAsig">
+							  	</ul>
+							  </li>
+							</ul>
+			    </div>
+
+			    <div class="col" style="text-align: justify;">
+			    	<p class="lead">Descripción</p>
+			      <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi blandit vestibulum ligula eget aliquam. Aliquam in risus blandit diam faucibus posuere vel sed arcu. Cras quis ligula enim. Donec et aliquet nisi. Nulla facilisi. Donec auctor dui metus, quis suscipit ligula commodo non. Nulla nec est augue. Curabitur consequat nulla non ligula sollicitudin, ut ultricies nunc pellentesque. Morbi aliquet viverra sollicitudin.</p>
+			    </div>
+			  </div>
+			</div>
+		  </div>
+		</div>
 	</div>
 	<div class="d-flex justify-content-center">
 	<p id="fechaImprimible"></p>
