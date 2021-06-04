@@ -174,6 +174,25 @@
 				            	
 				            	var indexName = "("+data.acronimo+") " + data.nombre
 								$("#nombreAsigIndex").html(indexName)
+								
+								$.ajax({
+									url: '/dew-NOL-2021/alumnoApi',
+									type: 'POST',
+									dataType: 'json',
+									async: true,
+									data: 'opcion=profsasig&acron='+val.asignatura,
+									success: function(data){
+
+										$.each(data, function (indexpro, valpro) {
+											$("#profeAsig").append("<li>"+valpro.nombre+" "+valpro.apellidos+"</li>")
+										    
+										});
+										
+									},
+									error: function(){
+										alert("Error en la petición de las asignaturas")
+									}
+								});	
 
 				            },
 				            error: function(){
@@ -276,7 +295,7 @@
 							  <li class="list-group-item" id="cuatriAsig">Cuatrimestre: </li>
 							  <li class="list-group-item" id="credAsig">Créditos: </li>
 							  <li class="list-group-item" >Profesor: <br>
-							  	<ul id="profeAsig">
+							  	<ul id="profeAsig" style="list-style: initial;">
 							  	</ul>
 							  </li>
 							</ul>

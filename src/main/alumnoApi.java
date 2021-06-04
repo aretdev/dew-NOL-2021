@@ -124,6 +124,10 @@ public class alumnoApi extends HttpServlet {
     		else if(param.equals("detallesasig")) {
     			String acronimo = request.getParameter("acron");
 	    		httpGet = new HttpGet("http://dew-"+nombreMaquina+"-2021.dsic.cloud:9090/CentroEducativo/asignaturas/"+acronimo+"?key="+key);
+    		}else if(param.equals("profsasig")) {
+    			String acronimo = request.getParameter("acron");
+	    		httpGet = new HttpGet("http://dew-"+nombreMaquina+"-2021.dsic.cloud:9090/CentroEducativo/asignaturas/"+acronimo+"/profesores?key="+key);
+
     		}
     		
         	if(httpGet != null) {
