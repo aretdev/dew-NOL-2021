@@ -47,7 +47,7 @@ public class profesorApi extends HttpServlet {
 		/*
 		 * Cambiar nombreMaquina a tu maquina con CentroEducativo
 		 * */
-		String nombreMaquina = "virodbri";
+		String nombreMaquina = "masanru6";
 		/*
 		 * Empezamos a preparar la peticion
 		 * 
