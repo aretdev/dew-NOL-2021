@@ -355,9 +355,9 @@ Forzaremos que este comportamiento no ocurra haciendo una redirección a la mism
         
 	}
 ```
-### 4.2 Lógica de los servlets
+## 4.2 Lógica de los servlets
 
-#### 4.2.2 Explicacion servlet profesorApi.java
+### 4.2.2 Explicacion servlet profesorApi.java
 A continuación, se procede a explicar el funcionamiento del servlet encargado de intermediar con CentroEducativo cuando iniciemos sesión como profesor. Este servlet admite peticiones tanto por GET como por POST (ya que POST llama a GET), en las líneas de código mostradas a continuación podemos observar el inicio del metodo GET. En el declaramos un string *"nombreMaquina"* que utilizaremos para poder cambiar con facilidad la maquina en la que vamos a ejecutar la aplicación, ahorrándonos así tener que buscar en distintas líneas de código. Posteriormente, obtendrá los datos del profesor que lo llamó con el fin de ir construyendo la petición a CentroEducativo. Para ello se utilizara la sesión obtenida con el comando *request.getSession(False)* extrayendo de ella los atributos *dni* y *key* asi como la cookie.
 
 ```Java
@@ -496,6 +496,231 @@ if(httpGet != null) {
 	        }
     	}
 ```
+
+## 4.3. Lógica de los formularios.
+#### 4.3.1 Explicación de alumnoPrincipal.html 
+Ahora vamos a explicar en que consiste la página en la que accede el alumno una vez ha iniciado sesión.
+Esta página, al igual que las demás, está maquetada con Bootstrap; y los elementos como la barra de navegación superior (navBarAlum)
+```<nav class="navbar navbar-expand-lg navbar-dark bg-dark" id="navBarAlum">```
+o el pie de página (footerImp)
+```<footer id="footerImp" style="visibility:hidden; position: fixed; left: 0; bottom: 0;width: 100%;  text-align: center;">```
+se cargan al principio, ya que son estáticos y su función no cambia dependiendo del alumno. 
+La página también contiene ítems dinámicos, que son los que mayor relevancia aportan para el usuario. Una vez cargados estos elementos estáticos, se cargarán los elementos dinámicos, que son los que cambian en función del alumno que se conecta. Para hacer el trabajo más fácil a la hora de actualizar el contenido, existen una serie de variables globales al principio de la etiqueta ```<script>``` que nos permiten introducir con más facilidad estos datos.
+```js
+var nombre ="";
+var nota = 0;
+var dni = "";
+var modoDocumento = false;
+```
+Además, tenemos una serie de constantes al inicio de la ejecución de esta función que permite almacenar la URL y separar sus parametros. Esto nos servirá para más adelante.
+```js
+$(document).ready(function(){
+		const queryString = window.location.search;
+		const urlParams = new URLSearchParams(queryString);
+		const param = urlParams.get('asignatura')
+		// Peticiones AJAX
+
+```
+Básicamente existen 3 elementos centrales: la tarjeta del alumno, en la que se muestra el nombre, el avatar y el DNI; la tabla de asignaturas, en la que se muestran los nombres, los creditos y el cuatrimestre de cada asignatura que tiene el alumno; y los detalles de cada asignatura, cuya información está dentro de una ventana que se obtiene al hacer click dentro del nombre de una asignatura de la tabla.
+Para obtener estos datos, la página efectua sendas peticiones AJAX, que procederemos a explicar a continuación.
+######Peticiones AJAX para la tarjeta del alumno
+```js
+//Petición del DNI
+$.ajax({
+	            url: '/dew-NOL-2021/alumnoApi',
+	            type: 'POST',
+	            dataType: 'json',
+	            async: true,
+	            data: 'opcion=dni',
+	            success: function(data){
+	            	nombre = data.nombre + " " + data.apellidos;
+	            	dni = data.dni;
+	                $("#insertar-dni").append(data.nombre + " " + data.apellidos )
+	            },
+	            error: function(){
+					alert("Error en la petición de los datos del alumno")
+	
+	            }
+	        })
+```
+Esta petición se encarga de, siempre que tenga éxito, obtener el valor del DNI del servlet AlumnoApi, construir el nombre y apellidos e introducirlo todo en la tarjeta. Al principio de la petición, accede al servlet alumnoApi, mediante POST, y le comunicará que desea obtener el DNI mediante «opción=dni». De esta petición se obtendrá unos datos tipo JSON, que se tratarán como se especifica en el apartado «success»: los datos se introducirán en las variables «nombre» y «dni», y posteriormente se concatenará una cadena con el nombre y apellidos del alumno en la etiqueta html con id «#insertar-dni». En caso de error, saltará un cuadro de alerta que comunicará el error.
+
+```js
+//Petición de la imagen del avatar
+$.getJSON("/dew-NOL-2021/alumnoApi?opcion=avatar")
+			.done(function(response){
+			$("#esto").text(response.dni);
+			$("#aqui").attr("src", "data:image/png;base64,"+response.img);
+			})
+			.fail(function(jqxhr, textStatus, error ) {
+			 var err = jqxhr.response.replace(",", "\n"); // Pequeños ajustes
+				alert("Error en la petición de la imagen del alumno :" + error)
+			});
+```
+Esta petición se encarga de, siempre que tenga éxito, obtener el JSON de la imágen del avatar en formato base64. Se usa la petición getJSON, pidiendo la imágen y, al recibir el JSON, extrayendo el string del apartado data e introduciendolo en una etiqueta llamada «#aquí». El navegador interpreta automáticamente esta cadena como una imágen, de forma que ya no hacen falta tratamientos posteriores. En caso de error, saltará un cuadro de alerta que comunicará el error.
+######Petición AJAX de la tabla de asignaturas
+```js
+if(param == null){
+			$("#mainAsigContent").hide()
+		
+			$.ajax({
+				url: '/dew-NOL-2021/alumnoApi',
+				type: 'POST',
+				dataType: 'json',
+				async: true,
+				data: 'opcion=asignaturas',
+				success: function(data){
+	
+					$.each(data, function (index, val) {
+						var notaFormatted = (val.nota == "") ? "No calificado" : val.nota;
+						console.log(data);
+						var cuerpoAsig = document.getElementById("cuerpoAsig")
+						var tr = document.createElement('tr')
+						tr.id = val.asignatura
+						var tdNombre = document.createElement('td')
+						var enlaceAsig = document.createElement('a')
+						var tdCurso = document.createElement('td')
+						var tdCreditos = document.createElement('td')
+						var tdCuatri = document.createElement('td')
+						var tdNota = document.createElement('td')
+						
+						$.ajax({
+				            url: '/dew-NOL-2021/alumnoApi',
+				            type: 'POST',
+				            dataType: 'json',
+				            async: true,
+				            data: 'opcion=detallesasig&acron='+val.asignatura,
+				            success: function(data){
+				            	tdCreditos.innerHTML = data.creditos
+				            	tdCurso.innerHTML = data.curso
+								tdCuatri.innerHTML = data.cuatrimestre
+				            },
+				            error: function(){
+								alert("Error en la petición de detalles de las asignaturas")
+	
+				            }
+				        })
+				        
+						enlaceAsig.innerHTML = val.asignatura
+						enlaceAsig.setAttribute('href', "alumnoPrincipal.html?asignatura="+val.asignatura)
+						tdNombre.appendChild(enlaceAsig)
+						tdNota.innerHTML = notaFormatted
+						
+						tr.appendChild(tdNombre)
+						tr.appendChild(tdCurso)
+						tr.appendChild(tdCreditos)
+						tr.appendChild(tdCuatri)
+						tr.appendChild(tdNota)
+						
+						cuerpoAsig.appendChild(tr)
+	
+					    
+					  });
+					
+				},
+				error: function(){
+					alert("Error en la petición de las asignaturas")
+				}
+				});		
+```
+Esta petición AJAX hace uso de las constantes de la URL que hay al principio de la función «$(document).ready». En el caso de que la URL no contenga ningún parámetro, es decir, que los parámetros sean «null», significará que la tabla debe aparecer. Lo primero que se ejecuta es un trozo de código que oculta los detalles de la asignatura, en caso de que estuvieran presentes o no. 
+Luego se ejecuta la petición AJAX como tal, que en esencia, construirá la tabla de las asignaturas del alumno, con sus datos básicos y la nota del alumno.
+Concretamente lo que hace es pedir un dato JSON a «alumnoApi», pasandole la opción asignaturas. Si tiene éxito, recorrerá cada uno de los datos del JSON (índice y valor), y a partir de estos datos irá maquetando la tabla, creando cada una de las etiquetas e introduciendo los datos donde debe.
+Esta petición AJAX es particular, ya que tiene otra petición AJAX dentro de sí, la cual extraerá los datos de las asignaturas de manera similar a los demás JSON; salvo por el hecho de que en lugar de pasar una sola opción al servlet, pasa tanto la opción de asignaturas, como un dato acron que contiene el nombre de la asignatura con el objetivo de extraer sus datos concretos. Si tiene éxito se introducirán en el HTML los datos concretos de la asignatura, así como se acabará de maquetar la tabla y se introducirá un enlace en cada uno de los nombres para poder acceder a los detalles.
+Si falla cualquiera de las peticiones JSON, saltará un cuadro de alerta que comunicará el error.
+######Petición AJAX de los detalles de las asignaturas
+```js
+else {
+		
+		$("#genDoc").hide()
+		$("#mainAlumContent").hide()
+		$.ajax({
+			url: '/dew-NOL-2021/alumnoApi',
+			type: 'POST',
+			dataType: 'json',
+			async: true,
+			data: 'opcion=asignaturas',
+			success: function(data){
+
+				$.each(data, function (index, val) {
+					if(val.asignatura == param){
+						var notaFormatted = (val.nota == "") ? "No calificado" : val.nota;
+						$.ajax({
+				            url: '/dew-NOL-2021/alumnoApi',
+				            type: 'POST',
+				            dataType: 'json',
+				            async: true,
+				            data: 'opcion=detallesasig&acron='+val.asignatura,
+				            success: function(data){
+				            	$("#notaAsig").html("Nota: "+notaFormatted)
+				            	$("#cuatriAsig").html("Cuatrimestre: "+data.cuatrimestre)
+				            	$("#cursoAsig").html("Curso: "+data.curso)
+				            	$("#credAsig").html("Créditos: "+data.creditos)
+				            	
+				            	var indexName = "("+data.acronimo+") " + data.nombre
+								$("#nombreAsigIndex").html(indexName)
+								
+								$.ajax({
+									url: '/dew-NOL-2021/alumnoApi',
+									type: 'POST',
+									dataType: 'json',
+									async: true,
+									data: 'opcion=profsasig&acron='+val.asignatura,
+									success: function(data){
+
+										$.each(data, function (indexpro, valpro) {
+											$("#profeAsig").append("<li>"+valpro.nombre+" "+valpro.apellidos+"</li>")
+										    
+										});
+										
+									},
+									error: function(){
+										alert("Error en la petición de las asignaturas")
+									}
+								});	
+
+				            },
+				            error: function(){
+								alert("Error en la petición de detalles de las asignaturas")
+	
+				            }
+				        })
+					}
+				    
+				  });
+				
+			},
+			error: function(){
+				alert("Error en la petición de las asignaturas")
+			}
+			});	
+```
+Esta petición en esencia, trata de construir el cuadro de los detalles de las asignaturas, con su nota, curso, profesor, cuatrimestre, créditos y descripción.
+En el caso que se haya pinchado en un nombre de asignatura, se introducirán parámetros a la URL, de forma que se ejecutará este trozo de código, ocultando a la tabla de las asignaturas y creando este cuadro de información.
+En la petición AJAX pedirá al servlet el json de las asignaturas, y si tiene éxito, recorrerá los datos de este JSON, comprobando si la asignatura del JSON coincide con la asignatura que se requieren los datos, y en caso afirmativo se introducirá la nota y se hará otra petición AJAX. Esta segunda petición enviará un segundo dato tipo acron con el nombre de «val.asignatura», para extraer los demás datos de la asignatura: cuatrimestre, curso, etc. Por último se anida una tercera petición AJAX que pide el JSON de los profesores, y recorre el JSON para extraer el dato de los profesores e introducirlo dentro del cuadro de la información detallada. 
+Como siempre, en caso de fallo, salta una mensaje de error en la petición.
+
+######Generación de documento imprimible
+Esta página también dispone de una opción para la creación de un documento imprimible, que se encuentra en el botón ```id="genDoc"```. Este botón invoca la función «generarDocumento()».
+```
+function generarDocumento(){
+		document.getElementById('navBarAlum').style.visibility  = "hidden";
+		$("#parrafoImprimible").html("DEW-Centro Educativo certifica que D/Dª "+nombre+" con DNI "+dni+" matriculado/a en el curso 2020/2021, ha obtenido las calificaciones que se muestran en la siguiente tabla.")
+		const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+		var fechaHoy = new Date().toLocaleDateString('es-ES', options)
+		$("#fechaImprimible").html("En Valencia, a " + fechaHoy)
+		$('body,html').css({
+			"height":"297mm",
+			"width":"210mm"
+		})
+		document.getElementById('footerImp').style.visibility  = "visible";
+		alert("¡Para volver a la vista web, pulsa el logo de NOTAS ONLINE!")
+
+	}
+```
+Esta función estructura la página de forma que este en un formato apto para la impresión o para guardarlo como documento más comodamente. Justo al acceder, salta un cuadro emergente para avisar de que se puede acceder de vuelta a la página pulsando el logo.
+
+
 ## 6. Actas de reuniones y funcionamiento general del grupo.
 En este apartado vamos a realizar una recopilación de las reuniones hasta la fecha y como se ha ido abordando el trabajo en todas ellas.
 Describiremos las reuniones normalmente agrupandolas en sucesivos dias en los que se realizase la misma actividad o el mismo avance en el desarrollo.
