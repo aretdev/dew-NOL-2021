@@ -366,7 +366,7 @@ En segundo lugar, vamos a comprobar de que el alumno que hace la petición tiene
 3)	El avatar de su usuario
 4)	Los detalles de cada asignatura 
 5)	El profesor que imparte dicha asignatura
-En tercer lugar, cada una de estas cinco peticiones tiene su propia estructura y devuelve la información exacta que necesitamos. Cabe mencionar que no son peticiones secuenciales ya que se crean según el uso que el alumno este haciendo de la página web por lo que debemos separarlas respectivamente de la siguiente forma:
+En tercer lugar, cada una de estas cinco peticiones tiene su propia estructura y devuelve la información exacta que necesitamos. Cuando el parametro es avatar tiene una implementación mas detallada que se explica en el punto 4.2.2. También, cabe mencionar que no son peticiones secuenciales ya que se crean según el uso que el alumno este haciendo de la página web por lo que debemos separarlas respectivamente de la siguiente forma:
 ```java
 String nombreMaquina = "masanru6";
 if(param.equals("asignaturas")) {
