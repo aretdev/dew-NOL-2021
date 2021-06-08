@@ -12,10 +12,11 @@
  - **4.2.1 Explicacion servlet alumnoApi.java**
  - **4.2.2 Explicacion servlet profesorApi.java**
  - **4.3 Lógica de los formularios.**
- - **4.3.1 Explicacion de alumnoPrincipal.html (Josep)**
+ - **4.3.1 Explicacion de alumnoPrincipal.html**
  - **4.3.2 Explicacion de profesorPrincipal.html (Vicente)**
 - **5. Problemas y soluciones adoptadas. Testeo (Sergio)**
-- **6. Actas de las reuniones y funcionamiento general del grupo (Mario)**
+- **6. Gestión e introducción de nuevos usuarios.**
+- **7. Actas de las reuniones y funcionamiento general del grupo**
 
 ------------
 
@@ -58,28 +59,39 @@ Posteriormente en el caso que entremos como profesor se nos mostrará una pantal
 ------------
 
 Para entrar a calificar alumnos de estas asignaturas haremos click en alguna de ellas y se nos abrirán una serie de opciones y parametros a considerar, tales como nombre de los alumnos, la media de estos, los aprobados y suspensos etc.
+
 ![](https://i.imgur.com/6uFk3CL.png)
 
 ------------
 
 Si hacemos click en el botón de calificar nos aparecerá un menu contextual con información más detallada del alumno, ahora aparece su imagen también. Para calificar basta con introducir una nota valida y pulsar calificar. Podremos también desplazarnos entre alumnos con los botones de siguiente y anterior, evitando así salir del menú contextual.
+
 ![](https://i.imgur.com/vyYKuwe.png)
 
 ------------
 
 Una vez califiquemos a algun alumno comenzarán a aparecer estadisticas en las casillas superiores de la tabla.
+
 ![](https://i.imgur.com/xnUQI5q.png)
 
 ------------
 
 
 También se podrá acceder como alumno, en esta vista encontraremos como elemento principal una tabla que muestra la información acerca de las asignaturas en las que esta matriculado el alumno y todos los parámetros que debemos tener en cuenta sobre su información.
-![](https://i.imgur.com/4wBnMQB.png)
+
+![](https://i.imgur.com/HIUj2BK.png)
+
+------------
+
+Además si hacemos click sobre cualquier enlace relacionado al "acronimo" de las asignaturas del alumno se generará una tarjeta personalizada con la información detallada así como un texto de descripción de la asignatura. Cuanod entremos a este modo de visor de detalles de asignatura, se deshabilitará la opción de generar el documento imprimible.
+
+![](https://i.imgur.com/jOyipOQ.png)
 
 ------------
 
 Si pulsamos sobre el botón de Generar Documento de la barra superior, podemos ver que se nos generará una página nueva en la que aparecerá el certificado asociado a sus calificaciones.
 Finalmente si pulsamos en el logo de NOTAS ONLINE, volveremos a la vista web anterior.
+
 ![](https://i.imgur.com/trK3tOL.png)
 
 ------------
@@ -359,18 +371,14 @@ Forzaremos que este comportamiento no ocurra haciendo una redirección a la mism
 
 ### 4.2.1 Explicación servlet alumnoApi.java
 En este apartado vamos a centrarnos en explicar el funcionamiento del servlet encargado de comunicarse con CentroEducativo cuando nuestro rol es el de Alumno. Este servlet realiza peticiones POST, pero en el método doPost() hemos redireccionado todas estas peticiones al método doGET() del servlet. El objetivo de esta redirección es que todas las peticiones que hacemos a CentroEducativo nos devuelven la información específica según el argumento que le pasamos por la URL. Vamos a explicar cómo se crea la petición paso por paso.
-
 En primer lugar, empezaremos creando la petición y los datos mínimos requeridos que necesitamos son el usuario, la clave y las cookies. Cada usuario se identifica por su DNI por lo que vamos a obtener de CentroEducativo el DNI del alumno. A continuación, necesitamos una clave la cual nos la proporciona también CentroEducativo y ya por último creamos las cookies como una lista de cookies. 
-
 En segundo lugar, vamos a comprobar de que el alumno que hace la petición tiene el rol adecuado. Para ello vamos a hacer uso del método isUserInRole() y le especificamos que compruebe si el alumno tiene el ro rolalu. Si el alumno tiene ese rol tendrá los privilegios suficientes para obtener:
 1)	Las asignaturas en las que está matriculado
 2)	Su DNI
 3)	El avatar de su usuario
 4)	Los detalles de cada asignatura 
 5)	El profesor que imparte dicha asignatura
-
 En tercer lugar, cada una de estas cinco peticiones tiene su propia estructura y devuelve la información exacta que necesitamos. Cuando el parametro es avatar tiene una implementación mas detallada que se explica en el punto 4.2.2. También, cabe mencionar que no son peticiones secuenciales ya que se crean según el uso que el alumno este haciendo de la página web por lo que debemos separarlas respectivamente de la siguiente forma:
-
 ```java
 String nombreMaquina = "masanru6";
 if(param.equals("asignaturas")) {
@@ -409,7 +417,6 @@ if(param.equals("asignaturas")) {
 En cuarto lugar, dependiendo de la petición que estemos haciendo en ese momento nuestro servlet comprobará si tenemos acceso a esos datos o no. Si no tenemos acceso, nos devolverá un error 401 – No tienes permitido realizar esta acción!. Esta comprobación la hemos implementado para evitar que un alumno pueda obtener los datos de otro alumno creando de forma manual la petición.
  
 Por último, si todo ha concluido con éxito y la petición ha obtenido un código 200 tendremos los datos que necesitamos en local ya que CentroEducativo nos los habría proporcionado. Con esto podremos empezar a crear la página web del alumno con toda su respectiva información.
-
 
 ### 4.2.2 Explicacion servlet profesorApi.java
 A continuación, se procede a explicar el funcionamiento del servlet encargado de intermediar con CentroEducativo cuando iniciemos sesión como profesor. Este servlet admite peticiones tanto por GET como por POST (ya que POST llama a GET), en las líneas de código mostradas a continuación podemos observar el inicio del metodo GET. En el declaramos un string *"nombreMaquina"* que utilizaremos para poder cambiar con facilidad la maquina en la que vamos a ejecutar la aplicación, ahorrándonos así tener que buscar en distintas líneas de código. Posteriormente, obtendrá los datos del profesor que lo llamó con el fin de ir construyendo la petición a CentroEducativo. Para ello se utilizara la sesión obtenida con el comando *request.getSession(False)* extrayendo de ella los atributos *dni* y *key* asi como la cookie.
@@ -796,8 +803,68 @@ function generarDocumento(){
 ```
 Esta función estructura la página de forma que este en un formato apto para la impresión o para guardarlo como documento más comodamente. Justo al acceder, salta un cuadro emergente para avisar de que se puede acceder de vuelta a la página pulsando el logo.
 
+## 6. Gestión e introducción de nuevos usuarios.
 
-## 6. Actas de reuniones y funcionamiento general del grupo.
+Como se explica anteriormente en el apartado vinculado al filtro LoginControl, trabajamos con una tabla Hash que almacena los usuarios disponibles para iniciar sesión, cuya correspondencia debe existir tambien en tomcat-users.xml.
+En el caso que quisieramos introducir las credenciales para podernos identificar con otro usuario existente en otra versión de CentroEducativo, tendríamos que tener en cuenta 3 factores importantes.
+
+1. La existencia de estos usuarios en la tabla hash del Filtro Login Control.
+2. También la respectiva aparición de este usuario en **tomcat-users.xml**.
+3. Conocer las credenciales que utiliza para iniciar sesión y que exista en CentroEducativo.
+
+En el caso de que necesitasemos introducir un usuario (alumno) de nick **alferpe**, con dni **12345677X** y con contraseña **123456789**. Deberíamos añadir los siguientes fragmentos a nuestro código.
+##### Filtro Login Control : Añadimos a tabla Hash.
+```java
+public void init(FilterConfig fConfig) throws ServletException {
+usuarios = new HashMap<String, User>();
+		
+		//Profesores
+		usuarios.put("rgarcia", new User("23456733H","123456"));
+		usuarios.put("peval", new User("10293756L","123456"));
+		usuarios.put("manal", new User("06374291A","123456"));
+		usuarios.put("jofon", new User("65748923M","123456"));
+		
+		//Alumnos
+		usuarios.put("pegarsan", new User("12345678W","123456"));
+		usuarios.put("marfergo", new User("23456387R","123456"));
+		usuarios.put("miherllo", new User("34567891F","123456"));
+		usuarios.put("laubentor", new User("93847525G","123456"));
+		usuarios.put("minalpe", new User("37264096W","123456"));
+		
+		//nuevo usuario alferpe
+		usuarios.put("alferpe", new User("12345677X","123456"));
+		logFile = new File(fConfig.getInitParameter("logPath"));
+		try {
+			logFile.createNewFile();
+		}catch(Exception e) {
+			System.out.println("No se pudo crear el fichero");
+		}
+		
+	}
+	
+```
+##### Tomcat-Users.xml : Añadimos el usuario.
+A lo que ya tenemos en tomcat-users.xml añadiriamos la siguiente linea:
+```xml
+	<user username="alferpe" password="123456789" roles="rolalu"/>
+```
+Con esta configuración ya tendriamos un nuevo usuario para iniciar sesión.
+
+------------
+
+Por otro lado si queremos dar soporte de ejecución a nuestra aplicación en otro lugar distinto a la maquina de portal-ng lo que deberiamos cambiar sería todas las URL asociadas a peticiones HTTP de nuestros servlets AlumnoApi y ProfesorApi y estaría solucionado ese aspecto.
+Por ejemplo: Supongamos que nuestra aplicación se comienza a ejecutar en una maquina llamada (ejemplo-dsic.cloud) y en el puerto 8000. Hariamos las siguientes sustituciones: 
+```java 
+httpGet = new HttpGet("http://dew-"+nombreMaquina+"-2021.dsic.cloud:9090/CentroEducativo/profesores/"+dni+"/asignaturas?key="+key);
+```
+Cambiaría a ser...
+```java 
+httpGet = new HttpGet("http://ejemplo-dsic.cloud:8000/CentroEducativo/profesores/"+dni+"/asignaturas?key="+key);
+```
+Y así hariamos este proceso en todas las peticiones para tener dicho soporte en otra máquina.
+
+## 7. Actas de reuniones y funcionamiento general del grupo.
+
 En este apartado vamos a realizar una recopilación de las reuniones hasta la fecha y como se ha ido abordando el trabajo en todas ellas.
 Describiremos las reuniones normalmente agrupandolas en sucesivos dias en los que se realizase la misma actividad o el mismo avance en el desarrollo.
 # Acta de las reuniones 1 y 2 del grupo de DEW 3TI11
