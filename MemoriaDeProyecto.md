@@ -357,6 +357,56 @@ Forzaremos que este comportamiento no ocurra haciendo una redirección a la mism
 ```
 ## 4.2 Lógica de los servlets
 
+### 4.2.1 Explicación servlet alumnoApi.java
+En este apartado vamos a centrarnos en explicar el funcionamiento del servlet encargado de comunicarse con CentroEducativo cuando nuestro rol es el de Alumno. Este servlet realiza peticiones POST, pero en el método doPost() hemos redireccionado todas estas peticiones al método doGET() del servlet. El objetivo de esta redirección es que todas las peticiones que hacemos a CentroEducativo nos devuelven la información específica según el argumento que le pasamos por la URL. Vamos a explicar cómo se crea la petición paso por paso.
+En primer lugar, empezaremos creando la petición y los datos mínimos requeridos que necesitamos son el usuario, la clave y las cookies. Cada usuario se identifica por su DNI por lo que vamos a obtener de CentroEducativo el DNI del alumno. A continuación, necesitamos una clave la cual nos la proporciona también CentroEducativo y ya por último creamos las cookies como una lista de cookies. 
+En segundo lugar, vamos a comprobar de que el alumno que hace la petición tiene el rol adecuado. Para ello vamos a hacer uso del método isUserInRole() y le especificamos que compruebe si el alumno tiene el ro rolalu. Si el alumno tiene ese rol tendrá los privilegios suficientes para obtener:
+1)	Las asignaturas en las que está matriculado
+2)	Su DNI
+3)	El avatar de su usuario
+4)	Los detalles de cada asignatura 
+5)	El profesor que imparte dicha asignatura
+En tercer lugar, cada una de estas cinco peticiones tiene su propia estructura y devuelve la información exacta que necesitamos. Cabe mencionar que no son peticiones secuenciales ya que se crean según el uso que el alumno este haciendo de la página web por lo que debemos separarlas respectivamente de la siguiente forma:
+```java
+String nombreMaquina = "masanru6";
+if(param.equals("asignaturas")) {
+	    		httpGet = new HttpGet("http://dew-"+nombreMaquina+"-2021.dsic.cloud:9090/CentroEducativo/alumnos/"+dni+"/asignaturas?key="+key);
+	    		
+    		} else if(param.equals("dni")) {
+	    		httpGet = new HttpGet("http://dew-"+nombreMaquina+"-2021.dsic.cloud:9090/CentroEducativo/alumnos/"+dni+"?key="+key);
+	    		
+    		} else if(param.equals("avatar")) {
+    			
+    			ServletContext context = getServletContext();
+    			String pathToAvatar = context.getRealPath("/WEB-INF/img");
+    			
+    			response.setContentType("text/plain");
+    			response.setCharacterEncoding("UTF-8");
+    			BufferedReader origen = new BufferedReader(new FileReader(pathToAvatar+"/"+dni+".pngb64"));
+    			response.setContentType("text/plain");
+    			
+    			PrintWriter out = response.getWriter();
+    			out.print("{\"dni\": \""+dni+"\", \"img\": \""); 
+    			String linea = origen.readLine(); out.print(linea); 
+    			while ((linea = origen.readLine()) != null) {out.print("\n"+linea);}
+    			out.print("\"}");
+    			out.close(); origen.close();
+    			
+    		}
+    		else if(param.equals("detallesasig")) {
+    			String acronimo = request.getParameter("acron");
+	    		httpGet = new HttpGet("http://dew-"+nombreMaquina+"-2021.dsic.cloud:9090/CentroEducativo/asignaturas/"+acronimo+"?key="+key);
+    		}else if(param.equals("profsasig")) {
+    			String acronimo = request.getParameter("acron");
+	    		httpGet = new HttpGet("http://dew-"+nombreMaquina+"-2021.dsic.cloud:9090/CentroEducativo/asignaturas/"+acronimo+"/profesores?key="+key);
+
+}
+```
+En cuarto lugar, dependiendo de la petición que estemos haciendo en ese momento nuestro servlet comprobará si tenemos acceso a esos datos o no. Si no tenemos acceso, nos devolverá un error 401 – No tienes permitido realizar esta acción!. Esta comprobación la hemos implementado para evitar que un alumno pueda obtener los datos de otro alumno creando de forma manual la petición.
+ 
+Por último, si todo ha concluido con éxito y la petición ha obtenido un código 200 tendremos los datos que necesitamos en local ya que CentroEducativo nos los habría proporcionado. Con esto podremos empezar a crear la página web del alumno con toda su respectiva información.
+
+
 ### 4.2.2 Explicacion servlet profesorApi.java
 A continuación, se procede a explicar el funcionamiento del servlet encargado de intermediar con CentroEducativo cuando iniciemos sesión como profesor. Este servlet admite peticiones tanto por GET como por POST (ya que POST llama a GET), en las líneas de código mostradas a continuación podemos observar el inicio del metodo GET. En el declaramos un string *"nombreMaquina"* que utilizaremos para poder cambiar con facilidad la maquina en la que vamos a ejecutar la aplicación, ahorrándonos así tener que buscar en distintas líneas de código. Posteriormente, obtendrá los datos del profesor que lo llamó con el fin de ir construyendo la petición a CentroEducativo. Para ello se utilizara la sesión obtenida con el comando *request.getSession(False)* extrayendo de ella los atributos *dni* y *key* asi como la cookie.
 
