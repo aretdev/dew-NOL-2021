@@ -806,6 +806,446 @@ function generarDocumento(){
 ```
 Esta función estructura la página de forma que este en un formato apto para la impresión o para guardarlo como documento más comodamente. Justo al acceder, salta un cuadro emergente para avisar de que se puede acceder de vuelta a la página pulsando el logo.
 
+
+### 4.3.2 Explicacion de profesorPrincipal.html
+ Pasaremos a explicar la construcción de la página a la cual accederá el profesor correspondiente cuando este inicie sesión.
+
+En la generación de la misma podemos hacer dos distinciones: la generación base de la web (tablas, información del profesor, alumnos correspondientes a asignaturas impartidas etc...) y la preparación para la parte interactiva de la función calificar.
+
+Nos encontramos en primer lugar una seria de variables globales, estas nos permitirás más adelante saber en todo momento con que alumno estamos trabajando, el profesor logrado y algun dato de interés como aquellos alumnos que no han sido calificados.
+ ```javascript
+ var visualizandoAlumno = "";
+var visualizandoAsignatura = "";
+var dniProfesor = "";
+var indicePos = 0;
+var indiceAlum = 0;
+var alumnosSinCalificar = 0;
+var  jsonGlobal  =  new  Array();
+ ```
+ Por separar las dos partes principales , empezaremos detallando la generación de la web (aunque con la misma se recogen datos para posteriormente utilizarlos en la parte interactiva de la aplicación).
+
+La generación de la página se deberá hacer en la carga de la misma, por lo tanto, todo aquello que se necesite de primeras deberá estar en el document ready.
+
+Empezaremos con una llamada Ajax al servlet profesorApi para poder obtener todas las asignaturas las cuales el profesor imparte. La respuesta a esta petición es un array de JSON que deberemos tratar y recorrer para empezar a construir la página.
+
+```javascript
+$(document).ready(function(){
+	$.ajax({
+		url: '/dew-NOL-2021/profesorApi',
+		type: 'POST',
+		dataType: 'json',
+		async: false,
+		data: 'opcion=profasig',
+		success: function(data){
+			$.each(data, function (index, val) {
+				var divMain = document.createElement('div')
+				divMain.className = "accordion-item"
+				var h2Header = document.createElement('h2')
+				h2Header.className = "accordion-header"
+				var button = document.createElement('button')
+				button.className="accordion-button collapsed";
+				button.type="button";
+				button.setAttribute("data-bs-toggle","collapse")
+				button.setAttribute("data-bs-target","#asig-"+val.acronimo)
+				button.setAttribute("aria-expanded","false")
+				button.setAttribute("aria-controls","flush-collapse"+val.acronimo)
+				button.innerHTML = val.acronimo;
+				h2Header.appendChild(button)
+				divMain.appendChild(h2Header)
+				var divSecond = document.createElement('div')
+				divSecond.id="asig-"+val.acronimo;
+				divSecond.className="accordion-collapse collapse";
+				divSecond.setAttribute("data-bs-parent","#contenedorAsig");
+				divMain.appendChild(divSecond)
+```
+
+Ya hemos obtenido las asignaturas, sin embargo, debemos también obtener los alumnos matriculados en tales asignaturas, en el mismo bucle que recorremos las asignaturas obtenidas por el Ajax anterior, deberemos de nuevo pedir a profesorApi un listado con todos los alumnos que cursen dicha asignatura (también por ajax), esto lo haremos de la siguiente forma :
+```javascript
+			$.ajax({
+				url: '/dew-NOL-2021/profesorApi',
+				type: 'POST',
+				dataType: 'json',
+				async: false,
+				data: 'opcion=asigalum&acronimo='+val.acronimo,
+				success: function(data1){
+```
+A partir de este punto , se destaca ya la generación de la estructura que se le dará a cada alumno, además de algunos parámetros extra como : alumnosMatriculados, alumnosSuspendidos etc.. estas variables cobrarán sentido conforme se recorran los alumnos de la asignatura y se usarán para mostrar datos de interés al profesor en la página.
+```javascript
+				var alumnosMatriculados = 0
+				var alumnosSuspendidos = 0
+				var alumnosAprobados = 0
+				var alumnosMedia = 0;
+				var divAlum = document.createElement('div')
+				divAlum.className="accordion-body"
+				divAlum.id = "bodyAc"+val.acronimo
+				var structure = [
+				'<table class="table table-sm table-borderless mb-4">',
+				'<thead>',
+				'<tr>',
+				'<th scope="col">Nombre de la Asignatura</th>',
+				'<th scope="col">Curso</th>',
+				'<th scope="col">Créditos</th>',
+				'</tr>',
+				'</thead>',
+				'<tbody>',
+				'<tr class="table-secondary" >',
+				'<td>'+val.nombre+'</td>',
+				'<td>'+val.curso+'</td>',
+				'<td>'+val.creditos+'</td>',
+				'</tr>',
+				'</tbody>',
+				'</table>',
+				'</hr>'
+				]
+
+				$(structure.join('')).appendTo(divAlum)
+				var asignatura = new Object();
+				asignatura.acronimo = val.acronimo
+				asignatura.alumnos = []
+				var structureAlumTable = [
+				'<hr>',
+				'<table class="table table-sm table-borderless table-striped" style="border-collapse:separate; border-spacing:0px 20px;" >',
+				'<thead>',
+				'<tr>',
+				'<th scope="col">Nombre</th>',
+				'<th scope="col">DNI</th>',
+				'<th scope="col">Nota</th>',
+				'<th scope="col">Acción</th>',
+				'</tr>',
+				'</thead>',
+				'<tbody>'
+				]
+```
+Empezaremos a recorrer cada alumno con un bucle, conforme se vayan recorriendo, se generará su estructura correspondiente además de completar las variables anteriormente mencionadas con el fin de dar mayor información al profesor sobre sus alumnos en dicha asignatura.
+```javascript
+		$.each(data1, function (index1, val1) {
+			alumnosMatriculados++
+			var a = getNombre(val1.alumno);
+			console.log(a)
+			if(val1.nota == "") {
+				alumnosSinCalificar++;
+			}else{
+				alumnosMedia += parseFloat(val1.nota)
+			if(val1.nota >= 5){alumnosAprobados++}
+			else{ alumnosSuspendidos++}
+			}
+			var onClickFunction = "showPopUp('"+val1.alumno+"','"+ a + "','"+ val.acronimo +"')"
+			var nota = (val1.nota == "") ? "Sin Calificar" : val1.nota
+			var ButtonNameNota = (val1.nota == "") ? "Calificar <i class=\"bi bi-award\"></i>" : "Modificar <i class=\"bi bi-pencil-square\"></i>"
+			
+			var alumStruct =[
+			'<tr>',
+			'<td>'+a+'</td>',
+			'<td>'+val1.alumno+'</td>',
+			'<td id="Nota'+val1.alumno+""+val.acronimo+'" >'+nota+'</td>',
+			'<td><button id="'+val1.alumno+""+val.acronimo+'" class="btn btn-sm btn-outline-success py-0" onclick="'+onClickFunction+'" data-target="#cambiarNota" data-toggle="modal">'+ButtonNameNota+'</button></td>',
+			'</tr>'];
+
+			structureAlumTable = $.merge(structureAlumTable, alumStruct)
+```
+Del código mostrado , podemos destacar la creación de un método onClick y la asociación de la misma a un botón , este botón es independiente de cada alumno y la acción de clicar implicará la acción de calificar o modificar la nota de un alumno , esto conllevará el despliegue de la aplicación interactiva que más tarde se explicará con detalle. 
+```javascript
+var onClickFunction = "showPopUp('"+val1.alumno+"','"+ a + "','"+ val.acronimo +"')"
+<button id="'+val1.alumno+""+val.acronimo+'" class="btn btn-sm btn-outline-success py-0" onclick="'+onClickFunction+'" data-target="#cambiarNota" data-toggle="modal">'+ButtonNameNota+'</button>
+```
+
+Nos encontramos la creación de un objeto alumno pero ¿Esto a que es debido? Bien , como mencionado anteriormente, debemos empezar a obtener datos conforme se genera la web para poder crear la segunda parte de la aplicación, la parte interactiva de calificaciones. Para evitarse realizar todas las consultas de nuevo, estos datos se recogen en generación (su nombre, nota , imagen, din etc...) y se añadirán a un json global y que posteriormente se utilizará para tratar a los alumnos.
+```javascript
+			var alumno = new Object();
+			alumno.dni = val1.alumno;
+			alumno.nombre = a;
+			alumno.nota = nota;
+```
+Aquí observamos una petición Ajax estilo JSON extra , con el fin de conseguir la foto del alumno en cuestión y guardar su dato también en el jsonGlobal:
+```javascript
+		$.getJSON("/dew-NOL-2021/profesorApi?opcion=avatar&dniavatar="+val1.alumno)
+		.done(function(response){
+			alumno.img = response.img;
+		}).fail(function() {
+			alert("Algo mal: ");
+		});
+
+		asignatura.alumnos.push(alumno);
+	});
+```
+Seguimos generando la página del profesor y actualizando las variables conforme vamos recorriendo alumnos para ir calculando la información extra (básicamente estadísticas)
+```javascript
+		var totalPuntuados = alumnosAprobados + alumnosSuspendidos;
+		var media = (totalPuntuados == 0) ? 0 : parseFloat(alumnosMedia / (totalPuntuados)).toFixed(2)
+		
+		var structure = [
+			'<table class="table table-sm table-borderless mb-5">',
+			'<thead>',
+			'<tr>',
+			'<th scope="col">Matriculados</th>',
+			'<th scope="col">Aprobados</th>',
+			'<th scope="col">Suspendidos</th>',
+			'<th scope="col">Media</th>',
+			'</tr>',
+			'</thead>',
+			'<tbody>',
+			'<tr class="table-secondary" >',
+			'<td id="matriculados'+val.acronimo+'">'+alumnosMatriculados+'</td>',
+			'<td id="aprobados'+val.acronimo+'">'+alumnosAprobados+'</td>',
+			'<td id="suspendidos'+val.acronimo+'">'+alumnosSuspendidos+'</td>',
+			'<td id="media'+val.acronimo+'">'+media+'</td>',
+			'</tr>',
+			'</tbody>',
+			'</table>',
+			'</hr>'
+		]
+
+		$(structure.join('')).appendTo(divAlum)
+		var displayStatus = (totalPuntuados != alumnosMatriculados) ? "visible" : "none"
+		var structure = [
+			'<div class="alert alert-warning text-center" role="alert" id="alert'+val.acronimo+'" style="display:'+displayStatus+';">',
+			'Algunos alumnos no tienen calificación asignada.',
+			'</div>'
+		]
+
+		$(structure.join('')).appendTo(divAlum)
+		var structure = [
+			'</tbody>',
+			'</table>'
+		]
+
+		structureAlumTable = structureAlumTable.concat(structure)
+		structureAlumTable = structureAlumTable.join("")
+		divSecond.appendChild(divAlum);
+		var contenedor = document.getElementById('contenedorAsig')
+		contenedor.appendChild(divMain)
+	
+	$("#bodyAc"+val.acronimo).append(structureAlumTable)
+		jsonGlobal.push(asignatura);
+		var jsonString = JSON.stringify(jsonGlobal);
+		console.log(jsonString);
+		},
+		error: function(){
+			alert("Error en la obtención de las asignaturas del profesor")
+		}
+		});
+
+		var liDropDown = $("<li>",{id:"dropDown"+val.acronimo})
+		var aDropDown = $("<a>",
+			{"class":"dropdown-item",
+			"data-bs-toggle":"collapse",
+			"data-bs-target":"#asig-"+val.acronimo,
+			"aria-expanded":"false",
+			"href":"#"})
+
+		aDropDown.html(val.acronimo)
+		liDropDown.append(aDropDown)
+		$("#asigsElementsDropDown").append(liDropDown)
+
+		});
+		if(alumnosSinCalificar > 0){
+			$("#alumnosNoCalificados").toggle()
+			$("#alumnosNoCalificados span").html(alumnosSinCalificar)
+		}
+		},
+
+		error: function(){
+			alert("Error en la obtención de las asignaturas del profesor")
+		}
+		});
+```
+Ya generada la parte de los alumnos y añadida la misma a la página html, pasaremos a obtener información sobre el propio profesor e insertar la misma a la web. Primero pediremos a profesorApi el dni del profesor (esta opción también devuelve su nombre y apellidos), y su foto de forma similar a como se pidió la foto de los alumnos matriculados en X asignatura.
+```javascript
+			$.ajax({
+			url: '/dew-NOL-2021/profesorApi',
+			type: 'POST',
+			dataType: 'json',
+			async: false,
+			data: 'opcion=dni',
+			success: function(data){
+			$("#insertar-dni").append(data.nombre + " " + data.apellidos)
+			dniProfesor = data.dni;
+			},
+
+			error: function(){
+			alert("Error en la obtención del nombre del profesor")
+		}
+	})
+	$.getJSON("/dew-NOL-2021/profesorApi?opcion=avatar&dniavatar="+dniProfesor)
+	.done(function(response){
+		$("#esto").text(response.dni);
+		$("#aqui").attr("src", "data:image/png;base64,"+response.img);
+		})
+		.fail(function() {
+		alert("Error en la obtención de la imagen del profesor")
+		});
+
+})
+```
+Ya hemos generada la página principal del profesor, ahora deberemos hacer  que la parte interactiva de calificar notas funcione correctamente , como hemos preparado la parte generada para poder aceptar la parte ágil (id individuales a cada campo, botones para desplegar la misma, creación de un objeto JSON con todos los datos necesarios...), solo deberemos desplegar un modal dinámicamente.
+
+Empezaremos detallando el metodo que hará que se despliegue la parte interactiva, en primer lugar , una vez se accione el botón que activa este método se deberá saber en que posición del array JSON se encuentra el alumno en cuestión y de que asignatura se trata, así pues, actualizaremos las variables globales al alumno que estamos visualizando, la asignatura que estamos visualizando y al indice del array JSON donde se ubica el alumno en cuestión. Una vez hecho esto, actualizaremos contenido y mostraremos el modal al usuario.
+
+```javascript
+function showPopUp(dni, nombre, acron){
+	visualizandoAlumno = dni;
+	visualizandoAsignatura = acron;
+	$.each(jsonGlobal, function (index, val) {
+		if(val.acronimo == acron){
+		indicePos = index;
+		$.each(jsonGlobal[indicePos].alumnos, function(index1, val1){
+			if(val1.dni == dni){
+			indiceAlum = index1;
+		}
+	})
+
+	}
+});
+
+actualizaContenido()
+$('#cambiarNota').modal('toggle')
+}
+```
+La función actualizaContenido simplemente mostrará los datos correspondientes al alumno indicado en el modal , actualizando el contenido del mismo utilizando las variables globales y el arrayJSON.
+
+```javascript
+function actualizaContenido(){
+	$("#calificaconError,#calificaconSuccess").hide();
+	var acronimo = jsonGlobal[indicePos].acronimo;
+	visualizandoAsignatura = acronimo;
+	var nombre = jsonGlobal[indicePos].alumnos[indiceAlum].nombre;
+	var dni = jsonGlobal[indicePos].alumnos[indiceAlum].dni;
+	visualizandoAlumno = dni;
+	var nota = jsonGlobal[indicePos].alumnos[indiceAlum].nota;
+	var img = jsonGlobal[indicePos].alumnos[indiceAlum].img;
+	$("#ModalTitulo").html("Cambiar nota - " + nombre + " [" + dni + "]");
+	$("#insertar-nota").html(nota);
+	$("#aqui2").attr("src", "data:image/png;base64,"+img);
+	$("#nuevaNota").val("");
+}
+```
+El html correspondiente al modal es el siguiente, la estructura estará inicialmente vacía pero preparada para recibir los datos de la función actualizarContenido().
+
+```html
+<div class="modal-body">
+	<div class="container-sm ">
+		<div class="row">
+			<div class="col">
+				<img class="rounded-circle mx-auto d-block shadow-sm" id="aqui2" height="125">
+			</div>
+			<div class="col" >
+			<p>La nota del alumno es: <span><b id="insertar-nota"></b></span></p>
+			<p>
+			<input id="nuevaNota" class="form-control" type="number" step="any" min="0" max="10" placeholder="Nota [0-10]">
+			</p>
+			<p>
+				<div class="alert alert-success" role="alert" style="display:none" id="calificaconSuccess">
+					Se ha calificado con éxito!
+				</div>
+				<div class="alert alert-danger" role="alert" style="display:none" id="calificaconError">
+					Ha ocurrido un error! Revisa los campos
+				</div>
+			</p>
+			</div>
+		</div>
+		<div class="d-flex justify-content-center mt-5">
+		<div class="btn-group" role="group" aria-label="Basic example">
+			<button type="button" onclick="anteriorAlumno()" class="btn btn-primary">Anterior</button>
+			<button type="button" onclick="actualizarNota()" class="btn btn-success">Calificar</button>
+			<button type="button" onclick="siguienteAlumno()" class="btn btn-primary">Siguiente</button>
+		</div>
+	</div>
+</div>
+```
+Una vez desplegado el modal , deberemos preocuparnos de la función para recorrer alumnos, ya que tenemos un array preparado, solo deberemos incrementar o decrementar el índice del alumno teniendo especial cuidado en no salirnos del mismo de la siguiente forma:
+
+```javascript
+function siguienteAlumno(){
+	indiceAlum++
+		if(jsonGlobal[indicePos].alumnos.length <= indiceAlum ){
+			indiceAlum = 0;
+		}
+	actualizaContenido();
+}
+
+function anteriorAlumno(){
+		indiceAlum--;
+		if(indiceAlum < 0){
+			indiceAlum = jsonGlobal[indicePos].alumnos.length - 1;
+		}
+	actualizaContenido();
+}
+```
+
+Pasaremos a la funcionalidad principal , la cual es calificar la nota del alumno,  esto realmente se realizará con otra petición Ajax a profesorApi con el alumno y la nota que le queremos dar, además nos encargaremos de actualizar las variables que le daban al profesor una mayor información sobre sus alumnos , como: aquellos suspendidos, aprobados, la media etc...
+
+```javascript
+function actualizarNota(){
+		var nota = $("#nuevaNota").val();
+		$.ajax({
+			url: '/dew-NOL-2021/profesorApi',
+			type: 'POST',
+			async: false,
+			data: 'opcion=setnota&dnialumno='+visualizandoAlumno+"&nota="+nota+"&acron="+visualizandoAsignatura,
+			success: function(data){
+				var notaAnterior = $("#insertar-nota").html();
+				if(notaAnterior == "Sin Calificar"){
+					alumnosSinCalificar--;
+					$("#alumnosNoCalificados span").html(alumnosSinCalificar)
+					if(alumnosSinCalificar == 0){
+						$("#alumnosNoCalificados").toggle()
+					}
+				}
+				var aprobados = parseInt($("#aprobados"+visualizandoAsignatura).html())
+				var suspendidos = parseInt($("#suspendidos"+visualizandoAsignatura).html())
+				if(notaAnterior == "Sin Calificar"){ 
+					if(nota >= 5){ 
+						$("#aprobados"+visualizandoAsignatura).html(aprobados+1)
+						aprobados++
+					}else { 
+						$("#suspendidos"+visualizandoAsignatura).html(suspendidos+1)
+						suspendidos++
+					}
+					$("#"+visualizandoAlumno+""+visualizandoAsignatura).html("Modificar <i class=\"bi bi-pencil-square\"></i>")
+				}else if(notaAnterior < 5 && nota >= 5){ 
+					$("#aprobados"+visualizandoAsignatura).html(aprobados+1)
+					$("#suspendidos"+visualizandoAsignatura).html(suspendidos-1)
+				}else if(notaAnterior >= 5 && nota < 5){ 
+					$("#aprobados"+visualizandoAsignatura).html(aprobados-1)
+					$("#suspendidos"+visualizandoAsignatura).html(suspendidos+1)
+				}
+				jsonGlobal[indicePos].alumnos[indiceAlum].nota = nota;
+				if(aprobados+suspendidos == parseInt($("#matriculados"+visualizandoAsignatura).html())){
+					$("#alert"+visualizandoAsignatura).fadeOut()
+				}
+				$("#insertar-nota").html(nota);
+				$("#Nota"+visualizandoAlumno+""+visualizandoAsignatura).html(nota);
+```
+
+En el caso de que la nota sea añadida correctamente se le comunicará al profesor y se actualizará la media de los alumnos en dicha asignatura. En caso contrario también deberemos informar al profesor sobre dicho problema para que corrija la nota en cuestión.
+```javascript
+				$("#calificaconError").hide()
+				$("#calificaconSuccess").fadeIn()
+				actualizarMedia(aprobados+suspendidos)
+				
+			},
+			error: function(){
+				$("#calificaconSuccess").hide()
+				$("#calificaconError").fadeIn()
+			}
+			});
+		
+	}
+```
+Por último tendremos el método que se encargará de actualizar la nota de los alumnos en X asignatura , para esto deberemos volver a recorrer el array json sumando las notas y dividiendo las mismas entre los alumnos calificados de la siguiente forma:
+```javascript
+function actualizarMedia(calificados){
+		console.log("media:" + calificados)
+		var sumatorioNota = 0;
+		$.each(jsonGlobal[indicePos].alumnos, function (index, val) {
+			if(val.nota != "Sin Calificar"){
+			sumatorioNota += parseFloat(val.nota)}
+		})
+		$("#media"+visualizandoAsignatura).html(parseFloat(sumatorioNota/calificados).toFixed(2))
+}
+```
+
+
 ## 6. Gestión e introducción de nuevos usuarios.
 
 Como se explica anteriormente en el apartado vinculado al filtro LoginControl, trabajamos con una tabla Hash que almacena los usuarios disponibles para iniciar sesión, cuya correspondencia debe existir tambien en tomcat-users.xml.
