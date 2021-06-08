@@ -374,12 +374,13 @@ En este apartado vamos a centrarnos en explicar el funcionamiento del servlet en
 
 En primer lugar, empezaremos creando la petición y los datos mínimos requeridos por CentroEducativo son el usuario, la clave y las cookies. Cada uno de estos datos los vamos a obtener de la sesión del alumno porqué todas las peticiones que se hacen aquí son una vez el alumno ha iniciado sesión. 
 
-En segundo lugar, vamos a comprobar de que el alumno que hace la petición tiene el rol adecuado. Para ello vamos a hacer uso del método isUserInRole() y le especificamos que compruebe si el alumno tiene el ro rolalu. Si el alumno tiene ese rol tendrá los privilegios suficientes para obtener:
+En segundo lugar, vamos a comprobar de que el alumno que hace la petición tiene el rol adecuado. Para ello vamos a hacer uso del método isUserInRole() y le especificamos que compruebe si el alumno tiene el rol rolalu. Si el alumno tiene ese rol tendrá los privilegios suficientes para obtener:
 1)	Las asignaturas en las que está matriculado
 2)	Su DNI
 3)	El avatar de su usuario
 4)	Los detalles de cada asignatura 
 5)	El profesor que imparte dicha asignatura
+
 En tercer lugar, cada una de estas cinco peticiones tiene su propia estructura y devuelve la información exacta que necesitamos. Cuando el parametro es avatar tiene una implementación mas detallada que se explica en el punto 4.2.2. También, cabe mencionar que no son peticiones secuenciales ya que se crean según el uso que el alumno este haciendo de la página web por lo que debemos separarlas respectivamente de la siguiente forma:
 ```java
 String nombreMaquina = "masanru6";
