@@ -371,7 +371,9 @@ Forzaremos que este comportamiento no ocurra haciendo una redirección a la mism
 
 ### 4.2.1 Explicación servlet alumnoApi.java
 En este apartado vamos a centrarnos en explicar el funcionamiento del servlet encargado de comunicarse con CentroEducativo cuando nuestro rol es el de Alumno. Este servlet realiza peticiones POST, pero en el método doPost() hemos redireccionado todas estas peticiones al método doGET() del servlet. El objetivo de esta redirección es que todas las peticiones que hacemos a CentroEducativo nos devuelven la información específica según el argumento que le pasamos por la URL. Vamos a explicar cómo se crea la petición paso por paso.
-En primer lugar, empezaremos creando la petición y los datos mínimos requeridos que necesitamos son el usuario, la clave y las cookies. Cada usuario se identifica por su DNI por lo que vamos a obtener de CentroEducativo el DNI del alumno. A continuación, necesitamos una clave la cual nos la proporciona también CentroEducativo y ya por último creamos las cookies como una lista de cookies. 
+
+En primer lugar, empezaremos creando la petición y los datos mínimos requeridos por CentroEducativo son el usuario, la clave y las cookies. Cada uno de estos datos los vamos a obtener de la sesión del alumno porqué todas las peticiones que se hacen aquí son una vez el alumno ha iniciado sesión. 
+
 En segundo lugar, vamos a comprobar de que el alumno que hace la petición tiene el rol adecuado. Para ello vamos a hacer uso del método isUserInRole() y le especificamos que compruebe si el alumno tiene el ro rolalu. Si el alumno tiene ese rol tendrá los privilegios suficientes para obtener:
 1)	Las asignaturas en las que está matriculado
 2)	Su DNI
