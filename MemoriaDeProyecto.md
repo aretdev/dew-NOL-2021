@@ -1277,6 +1277,11 @@ De profesor a alumno.
 ![](https://imgur.com/6kQOebe.png)
 
 En ambos casos la redirección se comprueba y no se admite, dado que son dos roles distintos que pertenecen a dos partes independientes de la aplicación. En ningún caso se podría acceder a otro rol sin pasar por el cierre de sesión y una nueva autenticación.
+El acceso a datos de otro usuario del mismo rol(indiferentemente alumno o profesor) no se puede producir debido a la creación de sesiones, las cuales no permiten el acceso a datos que no sean propios del usario propietario de la sesión activa.
+
+Por último cabe comentar algunos escenarios extremos que podrían suceder una vez nuestra aplicación salga al mercado o a un público más extenso que el actual.
+Si un profesor cambia alguna calificación de un alumno mientras éste está consultando sus notas no podrá observar el cambio hasta que vuelva a iniciar sesión en la aplicación. Aunque es un escenario que puede causar confusión, creemos que es la mejor manera de mantener un control de sesiones concurrente y consistente.
+Otro escenario posible es el uso simultáneo de la aplicación por parte de dos profesores que quieren calificar a un mismo alumno. Es una situación difícil de controlar, ya que debería haber un consenso previo entre los profesores de la misma asignatura para asignar una nota a sus alumnos, pero creemos que los cambios en las calificaciones que fueran más recientes deberían ser los que le constaran al alumno en su perfil.
 
 
 ## 6. Gestión e introducción de nuevos usuarios.
