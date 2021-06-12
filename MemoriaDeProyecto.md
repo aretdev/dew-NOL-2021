@@ -1270,7 +1270,7 @@ Caso correcto.
 Respecto a las pruebas de funcionalidad no tenemos más que añadir, ya que la impresión del documento del alumno y la consulta de sus asignaturas y sus notas funciona perfectamente y ya se ha tratado previamente.
 En cuanto a las pruebas de seguridad podemos tener algunos problemas con el cambio de URI para acceder a diferentes partes de nuestra web que no deben ser accesibles por todos los tipos de usuarios. En este caso hemos decidido capturar el intento de acceso de la vista de profesor a alumno y viceversa mediante un cambio de URL en el cual cambiamos el nombre del fichero html en el que nos encontramos.
 
-De usuario a profesor.
+De alumno a profesor.
 ![](https://imgur.com/LObxP7e.png)
 
 De profesor a alumno.
