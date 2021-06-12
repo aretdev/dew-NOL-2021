@@ -1256,7 +1256,7 @@ Caso contraseña errónea.
 Caso nombre de usuario erróneo.
 ![](https://imgur.com/EHi67kq.png)
 
-Una vez identificado el usuario y , en este caso, dentro de la vista del profesor podemos observar que la calificaión de notas se produce correctamente, ya que si introducimos un valor numérico fuera del rango 0-10 o una cadena de caracteres la nota del alumno no se almacena con éxito.
+Una vez identificado el usuario y , en este caso, dentro de la vista del profesor podemos observar que la calificación de notas se produce correctamente, ya que si introducimos un valor numérico fuera del rango 0-10 o una cadena de caracteres la nota del alumno no se almacena con éxito.
 
 Caso cadena de caracteres.
 ![](https://imgur.com/pdcS0uv.png)
@@ -1266,6 +1266,17 @@ Caso número fuera de rango 0-10.
 
 Caso correcto.
 ![](https://imgur.com/837WZbM.png)
+
+Respecto a las pruebas de funcionalidad no tenemos más que añadir, ya que la impresión del documento del alumno y la consulta de sus asignaturas y sus notas funciona perfectamente y ya se ha tratado previamente.
+En cuanto a las pruebas de seguridad podemos tener algunos problemas con el cambio de URI para acceder a diferentes partes de nuestra web que no deben ser accesibles por todos los tipos de usuarios. En este caso hemos decidido capturar el intento de acceso de la vista de profesor a alumno y viceversa mediante un cambio de URL en el cual cambiamos el nombre del fichero html en el que nos encontramos.
+
+De usuario a profesor.
+![](https://imgur.com/LObxP7e.png)
+
+De profesor a alumno.
+![](https://imgur.com/6kQOebe.png)
+
+En ambos casos la redirección se comprueba y no se admite, dado que son dos roles distintos que pertenecen a dos partes independientes de la aplicación. En ningún caso se podría acceder a otro rol sin pasar por el cierre de sesión y una nueva autenticación.
 
 
 ## 6. Gestión e introducción de nuevos usuarios.
