@@ -1,6 +1,6 @@
 # MEMORIA DEL PROYECTO NOTAS ONLINE
 >#### Grupo 3TI11-02
-> Integrantes: **Vicente Rodrigo Brisa, Mario Sánchez Rubio, Josep Molina Muñoz, Sergio Martínez Alejandre, Joel Pérez Gómez, Kraasimir Antonov Valev**
+> Integrantes: **Vicente Rodrigo Brisa, Mario Sánchez Rubio, Josep Molina Martínez, Sergio Muñoz Alejandre, Joel Pérez Gómez, Krasimir Antonov Valev**
 
 ## Índice de contenidos:
 - **1. Introducción a la estructura del proyecto.**
