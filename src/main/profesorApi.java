@@ -4,6 +4,7 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.HashMap;
 import java.util.List;
 
 import javax.servlet.ServletContext;
@@ -31,6 +32,9 @@ import org.apache.hc.core5.http.io.entity.StringEntity;
  */
 public class profesorApi extends HttpServlet {
 	private static final long serialVersionUID = 1L;
+	
+	/*Cada profesor imparte X asignaturas*/
+	private HashMap<String, String>  asignaturasProfe = new HashMap<String,String>();
        
     /**
      * @see HttpServlet#HttpServlet()
@@ -60,6 +64,7 @@ public class profesorApi extends HttpServlet {
     	String dni = ses.getAttribute("dni").toString();
     	String key = ses.getAttribute("key").toString();
     	HttpGet httpGet = null;
+    	String param = "";
     	/*
     	 * Solo aquellos con rolpro pueden realizar esta operacion
     	 * */
@@ -70,7 +75,7 @@ public class profesorApi extends HttpServlet {
     		 * profasig = asignaturas del profesor
     		 * opcion = dni
     		 * */
-    		String param = request.getParameter("opcion");
+    		param = request.getParameter("opcion");
             response.setContentType("application/json");
             
     		if(param.equals("profasig")) {
@@ -102,35 +107,45 @@ public class profesorApi extends HttpServlet {
     			out.close(); origen.close();
     			return;
     		}else if(param.equals("setnota")) {
-    			Float nota = Float.parseFloat(request.getParameter("nota"));
-    			if(nota >= 0 && nota <= 10 ) {
-	    			String dnialum = request.getParameter("dnialumno");
-	    			String acron = request.getParameter("acron");
-	    			HttpPut httpPut = new HttpPut("http://"+nombreMaquina+":9090/CentroEducativo/alumnos/"+dnialum+"/asignaturas/"+acron+"?key="+key);
-	    			StringEntity notaChanged = new StringEntity(nota.toString());
-	    			httpPut.setEntity(notaChanged);
-	    			httpPut.setHeader(HttpHeaders.CONTENT_TYPE, "application/json");
-	    	        cookieStore.addCookie(cookies.get(0));
-	    	        
-	    	        CloseableHttpResponse response1 = httpclient.execute(httpPut);	
-	    	        String content = "-1";
-	    	        HttpEntity entity1 = response1.getEntity();
-	    	        
-	    	        if(response1.getCode() == 200) {
-	    	            try {
-	    	            	content = EntityUtils.toString(entity1);
-	    	            }catch (ParseException e) {System.out.println("Error entity");}
-	    	            EntityUtils.consume(entity1);
-	    	            response1.close();
-	    	            response.setContentType("text/plain");
-	    	    		response.getWriter().append(content);
-	    	        }else {
-	    	    		response.getWriter().append("No tienes permitido realizar esta accion!");
-	    	        }
-    			}else {
-    				response.getWriter().append("La nota se ha podido actualizar");
-    				response.setStatus(500);
-    			}
+    			
+    			String acron = request.getParameter("acron");
+    			/*Si el profesor imparte la asignatura*/
+    			
+	    		if(this.asignaturasProfe.get(dni).contains(acron)) {
+	    				
+	    			Float nota = Float.parseFloat(request.getParameter("nota"));
+	    			if(nota >= 0 && nota <= 10 ) {
+		    			String dnialum = request.getParameter("dnialumno");
+		    			HttpPut httpPut = new HttpPut("http://"+nombreMaquina+":9090/CentroEducativo/alumnos/"+dnialum+"/asignaturas/"+acron+"?key="+key);
+		    			StringEntity notaChanged = new StringEntity(nota.toString());
+		    			httpPut.setEntity(notaChanged);
+		    			httpPut.setHeader(HttpHeaders.CONTENT_TYPE, "application/json");
+		    	        cookieStore.addCookie(cookies.get(0));
+		    	        
+		    	        CloseableHttpResponse response1 = httpclient.execute(httpPut);	
+		    	        String content = "-1";
+		    	        HttpEntity entity1 = response1.getEntity();
+		    	        
+		    	        if(response1.getCode() == 200) {
+		    	            try {
+		    	            	content = EntityUtils.toString(entity1);
+		    	            }catch (ParseException e) {System.out.println("Error entity");}
+		    	            EntityUtils.consume(entity1);
+		    	            response1.close();
+		    	            response.setContentType("text/plain");
+		    	    		response.getWriter().append(content);
+		    	        }else {
+		    	    		response.getWriter().append("No tienes permitido realizar esta accion!");
+		    	        }
+	    			}else {
+	    				response.getWriter().append("La nota no se ha podido actualizar");
+	    				response.setStatus(500);
+	    			}
+	    		}else {
+	    			response.getWriter().append("No impartes esta asignatura!");
+    				response.setStatus(403);
+	    		}
+	    			
     		}
     	}else {
     		response.setStatus(401);
@@ -149,6 +164,12 @@ public class profesorApi extends HttpServlet {
 	        if(response1.getCode() == 200) {
 	            try {
 	            	content = EntityUtils.toString(entity1);
+	            	
+	            	/*Si el profesor no está en el hashmap? y pide las asignaturas?*/
+	            	if(this.asignaturasProfe.get(dni) == null && param.equals("profasig") ) {
+	            		this.asignaturasProfe.put(dni, content);
+	            	}
+	            		
 	            }catch (ParseException e) {System.out.println("Error entity");}
 	            
 	            EntityUtils.consume(entity1);

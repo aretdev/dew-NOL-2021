@@ -10,6 +10,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 
 import javax.imageio.ImageIO;
@@ -50,6 +51,7 @@ import com.itextpdf.text.pdf.codec.Base64.OutputStream;
  */
 public class alumnoApi extends HttpServlet {
 	private static final long serialVersionUID = 1L;
+	private HashMap<String, String> asignaturasAlumno = new HashMap<String, String>();
        
     /**
      * @see HttpServlet#HttpServlet()
@@ -123,11 +125,19 @@ public class alumnoApi extends HttpServlet {
     		}
     		else if(param.equals("detallesasig")) {
     			String acronimo = request.getParameter("acron");
-	    		httpGet = new HttpGet("http://"+nombreMaquina+":9090/CentroEducativo/asignaturas/"+acronimo+"?key="+key);
+    			if(this.asignaturasAlumno.get(dni).contains(acronimo)) {
+    				httpGet = new HttpGet("http://"+nombreMaquina+":9090/CentroEducativo/asignaturas/"+acronimo+"?key="+key);
+    			}else {
+    				response.sendError(403, "La asignatura solicitada no existe / no estás matriculado en ella!");
+    			}
     		}else if(param.equals("profsasig")) {
     			String acronimo = request.getParameter("acron");
-	    		httpGet = new HttpGet("http://"+nombreMaquina+":9090/CentroEducativo/asignaturas/"+acronimo+"/profesores?key="+key);
+    			if(this.asignaturasAlumno.get(dni).contains(acronimo)) {
 
+    				httpGet = new HttpGet("http://"+nombreMaquina+":9090/CentroEducativo/asignaturas/"+acronimo+"/profesores?key="+key);
+    			}else {
+    				response.sendError(403, "La asignatura solicitada no existe / no estás matriculado en ella!");
+    			}
     		}
     		
         	if(httpGet != null) {
@@ -141,6 +151,9 @@ public class alumnoApi extends HttpServlet {
     	        if(response1.getCode() == 200) {
     	            try {
     	            	content = EntityUtils.toString(entity1);
+    	            	if(this.asignaturasAlumno.get(dni) == null && param.equals("asignaturas")) {
+    	            		this.asignaturasAlumno.put(dni, content);
+    	            	}
     	            }catch (ParseException e) {System.out.println("Error entity");}
     	            
     	            EntityUtils.consume(entity1);
