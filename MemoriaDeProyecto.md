@@ -1250,14 +1250,22 @@ Toda aplicación web debe cumplir unos mínimos de seguridad que no comprometan 
 
 En primer lugar la identificación funciona correctamente, ya que al introducir una contraseña o un nombre de usuario que no aparezca en el fichero tomcat-users.xml se redirige al usuario a error.html y posteriormente se ha una redirección a la página de inicio de nuevo.
 
-![](https://imgur.com/Z6myz7k.png)
 Caso contraseña errónea.
+![](https://imgur.com/Z6myz7k.png)
 
-![](https://imgur.com/EHi67kq.png)
 Caso nombre de usuario erróneo.
+![](https://imgur.com/EHi67kq.png)
 
 Una vez identificado el usuario y , en este caso, dentro de la vista del profesor podemos observar que la calificaión de notas se produce correctamente, ya que si introducimos un valor numérico fuera del rango 0-10 o una cadena de caracteres la nota del alumno no se almacena con éxito.
 
+Caso cadena de caracteres.
+![](https://imgur.com/pdcS0uv.png)
+
+Caso número fuera de rango 0-10.
+![](https://imgur.com/jpgKWO7.png)
+
+Caso correcto.
+![](https://imgur.com/837WZbM.png)
 
 
 ## 6. Gestión e introducción de nuevos usuarios.
