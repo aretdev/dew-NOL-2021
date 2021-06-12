@@ -47,7 +47,7 @@ public class profesorApi extends HttpServlet {
 		/*
 		 * Cambiar nombreMaquina a tu maquina con CentroEducativo
 		 * */
-		String nombreMaquina = "masanru6";
+		String nombreMaquina = request.getServerName();
 		/*
 		 * Empezamos a preparar la peticion
 		 * 
@@ -74,15 +74,15 @@ public class profesorApi extends HttpServlet {
             response.setContentType("application/json");
             
     		if(param.equals("profasig")) {
-	    		httpGet = new HttpGet("http://dew-"+nombreMaquina+"-2021.dsic.cloud:9090/CentroEducativo/profesores/"+dni+"/asignaturas?key="+key);
+	    		httpGet = new HttpGet("http://"+nombreMaquina+":9090/CentroEducativo/profesores/"+dni+"/asignaturas?key="+key);
     		} else if(param.equals("asigalum")) {
     			String acronimo = request.getParameter("acronimo");
-	    		httpGet = new HttpGet("http://dew-"+nombreMaquina+"-2021.dsic.cloud:9090/CentroEducativo/asignaturas/"+acronimo+"/alumnos?key="+key);
+	    		httpGet = new HttpGet("http://"+nombreMaquina+":9090/CentroEducativo/asignaturas/"+acronimo+"/alumnos?key="+key);
     		}else if(param.equals("getalumno")) {
     			String dnialumno = request.getParameter("dnialumno");
-	    		httpGet = new HttpGet("http://dew-"+nombreMaquina+"-2021.dsic.cloud:9090/CentroEducativo/alumnos/"+dnialumno+"?key="+key);
+	    		httpGet = new HttpGet("http://"+nombreMaquina+":9090/CentroEducativo/alumnos/"+dnialumno+"?key="+key);
     		}else if(param.equals("dni")) {
-	    		httpGet = new HttpGet("http://dew-"+nombreMaquina+"-2021.dsic.cloud:9090/CentroEducativo/profesores/"+dni+"?key="+key);
+	    		httpGet = new HttpGet("http://"+nombreMaquina+":9090/CentroEducativo/profesores/"+dni+"?key="+key);
     		} else if(param.equals("avatar")) {
     			
     			String dniparam = request.getParameter("dniavatar");
@@ -106,7 +106,7 @@ public class profesorApi extends HttpServlet {
     			if(nota >= 0 && nota <= 10 ) {
 	    			String dnialum = request.getParameter("dnialumno");
 	    			String acron = request.getParameter("acron");
-	    			HttpPut httpPut = new HttpPut("http://dew-"+nombreMaquina+"-2021.dsic.cloud:9090/CentroEducativo/alumnos/"+dnialum+"/asignaturas/"+acron+"?key="+key);
+	    			HttpPut httpPut = new HttpPut("http://"+nombreMaquina+":9090/CentroEducativo/alumnos/"+dnialum+"/asignaturas/"+acron+"?key="+key);
 	    			StringEntity notaChanged = new StringEntity(nota.toString());
 	    			httpPut.setEntity(notaChanged);
 	    			httpPut.setHeader(HttpHeaders.CONTENT_TYPE, "application/json");

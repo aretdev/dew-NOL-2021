@@ -66,7 +66,7 @@ public class alumnoApi extends HttpServlet {
 		/*
 		 * Cambiar nombreMaquina a tu maquina con CentroEducativo
 		 * */
-		String nombreMaquina = "masanru6";
+		String nombreMaquina = request.getServerName();
 		/*
 		 * Empezamos a preparar la peticion
 		 * 
@@ -98,10 +98,10 @@ public class alumnoApi extends HttpServlet {
             response.setContentType("application/json");
             
     		if(param.equals("asignaturas")) {
-	    		httpGet = new HttpGet("http://dew-"+nombreMaquina+"-2021.dsic.cloud:9090/CentroEducativo/alumnos/"+dni+"/asignaturas?key="+key);
+	    		httpGet = new HttpGet("http://"+nombreMaquina+":9090/CentroEducativo/alumnos/"+dni+"/asignaturas?key="+key);
 	    		
     		} else if(param.equals("dni")) {
-	    		httpGet = new HttpGet("http://dew-"+nombreMaquina+"-2021.dsic.cloud:9090/CentroEducativo/alumnos/"+dni+"?key="+key);
+	    		httpGet = new HttpGet("http://"+nombreMaquina+":9090/CentroEducativo/alumnos/"+dni+"?key="+key);
 	    		
     		} else if(param.equals("avatar")) {
     			
@@ -123,10 +123,10 @@ public class alumnoApi extends HttpServlet {
     		}
     		else if(param.equals("detallesasig")) {
     			String acronimo = request.getParameter("acron");
-	    		httpGet = new HttpGet("http://dew-"+nombreMaquina+"-2021.dsic.cloud:9090/CentroEducativo/asignaturas/"+acronimo+"?key="+key);
+	    		httpGet = new HttpGet("http://"+nombreMaquina+":9090/CentroEducativo/asignaturas/"+acronimo+"?key="+key);
     		}else if(param.equals("profsasig")) {
     			String acronimo = request.getParameter("acron");
-	    		httpGet = new HttpGet("http://dew-"+nombreMaquina+"-2021.dsic.cloud:9090/CentroEducativo/asignaturas/"+acronimo+"/profesores?key="+key);
+	    		httpGet = new HttpGet("http://"+nombreMaquina+":9090/CentroEducativo/asignaturas/"+acronimo+"/profesores?key="+key);
 
     		}
     		
