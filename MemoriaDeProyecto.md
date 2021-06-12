@@ -1251,6 +1251,7 @@ Toda aplicación web debe cumplir unos mínimos de seguridad que no comprometan 
 En primer lugar la identificación funciona correctamente, ya que al introducir una contraseña o un nombre de usuario que no aparezca en el fichero tomcat-users.xml se redirige al usuario a error.html y posteriormente se ha una redirección a la página de inicio de nuevo.
 ![](https://imgur.com/Z6myz7k)
 ![](https://imgur.com/EHi67kq)
+[Imgur](https://i.imgur.com/Z6myz7k.png?1)
 
 
 ## 6. Gestión e introducción de nuevos usuarios.
