@@ -26,6 +26,7 @@ import org.apache.hc.core5.http.HttpHeaders;
 import org.apache.hc.core5.http.ParseException;
 import org.apache.hc.core5.http.io.entity.EntityUtils;
 import org.apache.hc.core5.http.io.entity.StringEntity;
+import org.json.JSONArray;
 
 /**
  * Servlet implementation class profesorApi
@@ -35,6 +36,7 @@ public class profesorApi extends HttpServlet {
 	
 	/*Cada profesor imparte X asignaturas*/
 	private HashMap<String, String>  asignaturasProfe = new HashMap<String,String>();
+	private HashMap<String, HashMap<String,String>> alumnosProfe = new HashMap<String, HashMap<String,String>>();
        
     /**
      * @see HttpServlet#HttpServlet()
@@ -89,27 +91,36 @@ public class profesorApi extends HttpServlet {
     			}
     		}else if(param.equals("getalumno")) {
     			String dnialumno = request.getParameter("dnialumno");
-	    		httpGet = new HttpGet("http://"+nombreMaquina+":9090/CentroEducativo/alumnos/"+dnialumno+"?key="+key);
+    			if(this.alumnosProfe.get(dni).get(dnialumno) != null) {
+    				httpGet = new HttpGet("http://"+nombreMaquina+":9090/CentroEducativo/alumnos/"+dnialumno+"?key="+key);
+    			}else {
+    				response.sendError(403,"El alumno solicitado no existe / no tienes permisos para acceder a el.");
+    			}
     		}else if(param.equals("dni")) {
 	    		httpGet = new HttpGet("http://"+nombreMaquina+":9090/CentroEducativo/profesores/"+dni+"?key="+key);
     		} else if(param.equals("avatar")) {
     			
     			String dniparam = request.getParameter("dniavatar");
-    			ServletContext context = getServletContext();
-    			String pathToAvatar = context.getRealPath("/WEB-INF/img");
+    			if(this.alumnosProfe.get(dni).get(dniparam) != null) {
     			
-    			response.setContentType("text/plain");
-    			response.setCharacterEncoding("UTF-8");
-    			BufferedReader origen = new BufferedReader(new FileReader(pathToAvatar+"/"+dniparam+".pngb64"));
-    			response.setContentType("text/plain");
-    			
-    			PrintWriter out = response.getWriter();
-    			out.print("{\"dni\": \""+dniparam+"\", \"img\": \""); 
-    			String linea = origen.readLine(); out.print(linea); 
-    			while ((linea = origen.readLine()) != null) {out.print("\n"+linea);}
-    			out.print("\"}");
-    			out.close(); origen.close();
-    			return;
+	    			ServletContext context = getServletContext();
+	    			String pathToAvatar = context.getRealPath("/WEB-INF/img");
+	    			
+	    			response.setContentType("text/plain");
+	    			response.setCharacterEncoding("UTF-8");
+	    			BufferedReader origen = new BufferedReader(new FileReader(pathToAvatar+"/"+dniparam+".pngb64"));
+	    			response.setContentType("text/plain");
+	    			
+	    			PrintWriter out = response.getWriter();
+	    			out.print("{\"dni\": \""+dniparam+"\", \"img\": \""); 
+	    			String linea = origen.readLine(); out.print(linea); 
+	    			while ((linea = origen.readLine()) != null) {out.print("\n"+linea);}
+	    			out.print("\"}");
+	    			out.close(); origen.close();
+	    			return;
+    			}else {
+    				response.sendError(403,"El alumno solicitado no existe / no tienes permisos para acceder a el.");
+    			}
     		}else if(param.equals("setnota")) {
     			
     			String acron = request.getParameter("acron");
@@ -172,7 +183,15 @@ public class profesorApi extends HttpServlet {
 	            	if(this.asignaturasProfe.get(dni) == null && param.equals("profasig") ) {
 	            		this.asignaturasProfe.put(dni, content);
 	            	}
-	            		
+	            	if(param.equals("asigalum")) {
+	            		JSONArray jsonAsigs = new JSONArray(content);
+	            		if(this.alumnosProfe.get(dni) == null) {this.alumnosProfe.put(dni, new HashMap<String, String>(){{put("","");}});}
+	            		HashMap<String, String> alreadyAlums = this.alumnosProfe.get(dni);
+	            		for(int i = 0; i < jsonAsigs.length(); i++) {
+	            			alreadyAlums.put(jsonAsigs.getJSONObject(i).getString("alumno"), "");
+	            		}
+	            		this.alumnosProfe.put(dni, alreadyAlums);
+	            	}		
 	            }catch (ParseException e) {System.out.println("Error entity");}
 	            
 	            EntityUtils.consume(entity1);
