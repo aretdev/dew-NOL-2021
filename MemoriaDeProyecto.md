@@ -16,7 +16,8 @@
  - **4.3.2 Explicacion de profesorPrincipal.html (Vicente)**
 - **5. Problemas y soluciones adoptadas. Testeo (Sergio)**
 - **6. Gestión e introducción de nuevos usuarios.**
-- **7. Actas de las reuniones y funcionamiento general del grupo**
+- **7. Seguridad en la aplicación*
+- **8. Actas de las reuniones y funcionamiento general del grupo**
 
 ------------
 
@@ -1344,7 +1345,50 @@ httpGet = new HttpGet("http://ejemplo-dsic.cloud:8000/CentroEducativo/profesores
 ```
 Y así hariamos este proceso en todas las peticiones para tener dicho soporte en otra máquina.
 
-## 7. Actas de reuniones y funcionamiento general del grupo.
+## 7. Seguridad en la aplicación
+
+Por último trataremos el tema de la seguridad en la aplicación y como esta se ha resuelto en Notas Online.
+Notas Online permite la calificación y visualizado de notas de alumnos, sin embargo, no todos los usuarios disponen de todas las funciones disponibles, por ejemplo: Un profesor solo debe poder visualizar y calificar a aquellos alumnos que pertenezcan a algunas de sus asignaturas impartidas y un alumno solo puede visionar su nota y detalles de aquellas asiganturas que le pertenezcan.
+
+Para la solución de estos casos hemos optado por la gestión por parte del servidor sobre que asignaturas son impartidas por que profesor y que alumno está matriculado en qué asignatura, todo esto con HashMaps que almacenan todos una estructura similar <DNI,Asignatura/Alumnos Pertenecientes>
+```java
+private HashMap<String, String>  asignaturasProfe = new HashMap<String,String>();
+private HashMap<String, HashMap<String,String>> alumnosProfe = new HashMap<String, HashMap<String,String>>();
+```
+Estos HashMaps se rellenarán a la hora de que se haga la petición principal, listar todas las aignaturas o alumnos pertenecientes a X asignatura, pero ¿Es esa petición segura, no puede ser modificada también por el usuario? Bien , estas peticiones se hacen en función de los DNI y estos nunca serán pasados como parámetros en la petición, el servidor los obtendrá a partir del atributo de sesión dni del usuario que es almacenado en el lado del sevidor y por lo tanto, no alterable por parte del usuario.
+
+Con esto ya claro, solo debemos comprobar cada vez que se pidan datos críticos al servidor si el usuario tiene permitido tal petición con esos datos.
+
+En este caso, si el profesor pide al servidor el avatar de un alumno, este alumno debe estar matriculado en una adignatura impartida por el profesor y para ello debe estar dentro del HashMap propio del profesor, accesible por su dni.
+```java
+} else if(param.equals("avatar")) {
+		String dniparam = request.getParameter("dniavatar");
+		if(this.alumnosProfe.get(dni).get(dniparam) != null || dniparam.equals(dni)) {
+		/*
+		* (Gestión de imagen)
+		*/
+		}else {
+			response.sendError(403,"El alumno solicitado no existe / no tienes permisos para acceder a el.");
+		}
+}
+```
+
+El lado del alumno sigue el mismo mecanismo que el lado del profesor, este solo podrá ver y obtener detalles de aquellas asignaturas en las que esté matriculado, para esto también existirá un hashmap.
+```java
+	private HashMap<String, String> asignaturasAlumno = new HashMap<String, String>();
+```
+Podriamos pensar, al igual que con el profesor, que el alumno podría modificar la petición que lo identifica con su dni para hacerse pasar por otro alumno, pero esto no es posible, ya que en ningún momento se enviará su DNI por petición, este siempre será gestionado por el lado del servidor, pidiendo el mismo por atributo de sesión del usuario
+
+Aqui podemos comprobar que un alumno no podría solicitar detalles de una asignatura si este no pertenece a la misma.
+```java
+if(this.asignaturasAlumno.get(dni).contains(acronimo)) {
+    httpGet = new HttpGet("http://"+nombreMaquina+":9090/CentroEducativo/asignaturas/"+acronimo+"?key="+key);
+}else {
+	response.sendError(403, "La asignatura solicitada no existe / no estás matriculado en ella!");
+}
+```
+
+## 8. Actas de reuniones y funcionamiento general del grupo.
 
 En este apartado vamos a realizar una recopilación de las reuniones hasta la fecha y como se ha ido abordando el trabajo en todas ellas.
 Describiremos las reuniones normalmente agrupandolas en sucesivos dias en los que se realizase la misma actividad o el mismo avance en el desarrollo.
