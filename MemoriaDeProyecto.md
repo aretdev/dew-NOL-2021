@@ -16,7 +16,7 @@
  - **4.3.2 Explicacion de profesorPrincipal.html (Vicente)**
 - **5. Problemas y soluciones adoptadas. Testeo (Sergio)**
 - **6. Gestión e introducción de nuevos usuarios.**
-- **7. Seguridad en la aplicación*
+- **7. Seguridad en la aplicación**
 - **8. Actas de las reuniones y funcionamiento general del grupo**
 
 ------------
