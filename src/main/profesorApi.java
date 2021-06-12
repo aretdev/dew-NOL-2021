@@ -82,7 +82,11 @@ public class profesorApi extends HttpServlet {
 	    		httpGet = new HttpGet("http://"+nombreMaquina+":9090/CentroEducativo/profesores/"+dni+"/asignaturas?key="+key);
     		} else if(param.equals("asigalum")) {
     			String acronimo = request.getParameter("acronimo");
-	    		httpGet = new HttpGet("http://"+nombreMaquina+":9090/CentroEducativo/asignaturas/"+acronimo+"/alumnos?key="+key);
+    			if(this.asignaturasProfe.get(dni).contains(acronimo)) {
+    				httpGet = new HttpGet("http://"+nombreMaquina+":9090/CentroEducativo/asignaturas/"+acronimo+"/alumnos?key="+key);
+    			}else {
+    				response.sendError(403, "La asignatura no existe / no es impartida por usted!");
+    			}
     		}else if(param.equals("getalumno")) {
     			String dnialumno = request.getParameter("dnialumno");
 	    		httpGet = new HttpGet("http://"+nombreMaquina+":9090/CentroEducativo/alumnos/"+dnialumno+"?key="+key);
@@ -142,8 +146,7 @@ public class profesorApi extends HttpServlet {
 	    				response.setStatus(500);
 	    			}
 	    		}else {
-	    			response.getWriter().append("No impartes esta asignatura!");
-    				response.setStatus(403);
+    				response.sendError(403, "La asignatura no existe / no es impartida por usted!");
 	    		}
 	    			
     		}
