@@ -101,7 +101,7 @@ public class profesorApi extends HttpServlet {
     		} else if(param.equals("avatar")) {
     			
     			String dniparam = request.getParameter("dniavatar");
-    			if(this.alumnosProfe.get(dni).get(dniparam) != null || dniparam == dni) {
+    			if(this.alumnosProfe.get(dni).get(dniparam) != null || dniparam.equals(dni)) {
     			
 	    			ServletContext context = getServletContext();
 	    			String pathToAvatar = context.getRealPath("/WEB-INF/img");
