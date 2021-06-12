@@ -1249,6 +1249,8 @@ function actualizarMedia(calificados){
 Toda aplicación web debe cumplir unos mínimos de seguridad que no comprometan la información del usuario en ningún momento. Tampoco se pueden aceptar casos en los cuales los usuarios quieran utilizar el servicio de una forma maliciosa, por lo tanto, a continuación vamos a ver algunas comprobaciones que hemos realizado para verificar el correcto funcionamiento de nuestra página web.
 
 En primer lugar la identificación funciona correctamente, ya que al introducir una contraseña o un nombre de usuario que no aparezca en el fichero tomcat-users.xml se redirige al usuario a error.html y posteriormente se ha una redirección a la página de inicio de nuevo.
+![](https://imgur.com/Z6myz7k)
+![](https://imgur.com/EHi67kq)
 
 
 ## 6. Gestión e introducción de nuevos usuarios.
