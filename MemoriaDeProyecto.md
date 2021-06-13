@@ -7,14 +7,14 @@
 - **2. Justificación de tecnologías escogidas.**
 - **3. Recorrido y guía de uso simplificada.**
 - **4. Aspectos relacionados con la implementación.**
- -  **4.1 Identificación e inicio de sesión. (falta ver identificacion en otro pc y otra credencial)**
+ -  **4.1 Identificación e inicio de sesión.**
  - **4.2 Lógica de los servlets.**
  - **4.2.1 Explicacion servlet alumnoApi.java**
  - **4.2.2 Explicacion servlet profesorApi.java**
  - **4.3 Lógica de los formularios.**
  - **4.3.1 Explicacion de alumnoPrincipal.html**
- - **4.3.2 Explicacion de profesorPrincipal.html (Vicente)**
-- **5. Problemas y soluciones adoptadas. Testeo (Sergio)**
+ - **4.3.2 Explicacion de profesorPrincipal.html**
+- **5. Problemas y soluciones adoptadas. Testeo**
 - **6. Gestión e introducción de nuevos usuarios.**
 - **7. Seguridad en la aplicación**
 - **8. Actas de las reuniones y funcionamiento general del grupo**
@@ -40,7 +40,7 @@ Estas páginas interaccionaran con AJAX con nuestros servlets alumnoApi y profes
 ## 2. Justificación de las tecnologías utilizadas.
 Nos decantamos por utilizar las librerías HttpComponents y JSON-Java. 
 
-Tras mirar documentación de todas las librerias propuestas nos quedamos con estas dos puesto que la forma en la que se desarrolla el código con ellas nos parece la más intuitiva y cómoda para nuestra forma de ver tanto las estructuras de las peticiones y respuestas HTTP, como, la estructura de los objetos JSON y su manipulación. Además hacer hincapié en que JSON-Java nos ofrece infinidad de formatos y constructores para la definición y control de estos objetos JSON.
+Tras mirar documentación de todas las librerías propuestas nos quedamos con estas dos puesto que la forma en la que se desarrolla el código con ellas nos parece la más intuitiva y cómoda para nuestra forma de ver tanto las estructuras de las peticiones y respuestas HTTP, como, la estructura de los objetos JSON y su manipulación. Además hacer hincapié en que JSON-Java nos ofrece infinidad de formatos y constructores para la definición y control de estos objetos JSON.
 
 También en cuanto a la forma de trabajar con nuestro proyecto, creemos que el filtrado y la inserción de contenido en nuestras páginas HTML es mas adecuado y sencillo de interpretar utilizando AJAX y no utilizando metodologías más rudimentarias como el continuo patrón de "prints" utilizado en versiones básicas de los primeros servlets que se vieron en la asignatura.
 
@@ -49,29 +49,29 @@ Esta es la página de bienvenida a nuestra aplicación, en la que debemos de rel
 ![](https://i.imgur.com/tb7vKA2.png)
 
 ------------
-En caso de que ocurra algun fallo en la introducción de nuestras credenciales podremos ver que aparece una pantalla de error que nos volverá a redirigir a nuestra pantalla inicial.
+En caso de que ocurra algún fallo en la introducción de nuestras credenciales podremos ver que aparece una pantalla de error que nos volverá a redirigir a nuestra pantalla inicial.
 
 ![](https://i.imgur.com/UC7Qnap.png)
 
 ------------
-Posteriormente en el caso que entremos como profesor se nos mostrará una pantalla con la imagen correspondiente, el nombre, dni y asignaturas impartidas. 
+Posteriormente en el caso que entremos como profesor se nos mostrará una pantalla con la imagen correspondiente, el nombre, DNI y asignaturas impartidas. 
 ![](https://i.imgur.com/XgWK2AI.png)
 
 ------------
 
-Para entrar a calificar alumnos de estas asignaturas haremos click en alguna de ellas y se nos abrirán una serie de opciones y parametros a considerar, tales como nombre de los alumnos, la media de estos, los aprobados y suspensos etc.
+Para entrar a calificar alumnos de estas asignaturas haremos click en alguna de ellas y se nos abrirán una serie de opciones y parámetros a considerar, tales como nombre de los alumnos, la media de estos, los aprobados y suspensos etc.
 
 ![](https://i.imgur.com/6uFk3CL.png)
 
 ------------
 
-Si hacemos click en el botón de calificar nos aparecerá un menu contextual con información más detallada del alumno, ahora aparece su imagen también. Para calificar basta con introducir una nota valida y pulsar calificar. Podremos también desplazarnos entre alumnos con los botones de siguiente y anterior, evitando así salir del menú contextual.
+Si hacemos click en el botón de calificar nos aparecerá un menú contextual con información más detallada del alumno, ahora aparece su imagen también. Para calificar basta con introducir una nota valida y pulsar calificar. Podremos también desplazarnos entre alumnos con los botones de siguiente y anterior, evitando así salir del menú contextual.
 
 ![](https://i.imgur.com/vyYKuwe.png)
 
 ------------
 
-Una vez califiquemos a algun alumno comenzarán a aparecer estadisticas en las casillas superiores de la tabla.
+Una vez califiquemos a algún alumno comenzarán a aparecer estadísticas en las casillas superiores de la tabla.
 
 ![](https://i.imgur.com/xnUQI5q.png)
 
@@ -84,7 +84,7 @@ También se podrá acceder como alumno, en esta vista encontraremos como element
 
 ------------
 
-Además si hacemos click sobre cualquier enlace relacionado al "acronimo" de las asignaturas del alumno se generará una tarjeta personalizada con la información detallada así como un texto de descripción de la asignatura. Cuanod entremos a este modo de visor de detalles de asignatura, se deshabilitará la opción de generar el documento imprimible.
+Además si hacemos click sobre cualquier enlace relacionado al "acrónimo" de las asignaturas del alumno se generará una tarjeta personalizada con la información detallada así como un texto de descripción de la asignatura. Cuando entremos a este modo de visor de detalles de asignatura, se deshabilitará la opción de generar el documento imprimible.
 
 ![](https://i.imgur.com/jOyipOQ.png)
 
@@ -98,7 +98,7 @@ Finalmente si pulsamos en el logo de NOTAS ONLINE, volveremos a la vista web ant
 ------------
 
 
-Aquí observamos la vista preliminar de nuestro documento, adaptandose a la perfección a un folio DIN A4.
+Aquí observamos la vista preliminar de nuestro documento, adaptándose a la perfección a un folio DIN A4.
 ![](https://i.imgur.com/HW4b9UH.png)
 
 ------------
@@ -110,9 +110,9 @@ En este apartado describiremos los componentes involucrados en el inicio de sesi
 
 - **Descripción del documento index.html.**
 
-Como en todos los ficheros con esta extensión, hemos optado por dotarlo con una apariencia lo más consistente posible con Bootstrap, pero como este ambito queda fuera de la funcionalidad y operatividad del login no lo trataremos.
+Como en todos los ficheros con esta extensión, hemos optado por dotarlo con una apariencia lo más consistente posible con Bootstrap, pero como este ámbito queda fuera de la funcionalidad y operatividad del login no lo trataremos.
 ![](https://i.imgur.com/tb7vKA2.png)
-Como se ha descrito anteriormente contamos con una página centrada en un formulario principal donde introduciremos los datos con los que nos queremos identificar, aqui podemos observar el codigo que consigue esta apariencia.
+Como se ha descrito anteriormente contamos con una página centrada en un formulario principal donde introduciremos los datos con los que nos queremos identificar, aquí podemos observar el código que consigue esta apariencia.
 ```html
  <form method="post" action="j_security_check">
 
@@ -137,13 +137,13 @@ Como se ha descrito anteriormente contamos con una página centrada en un formul
 ```
 En este fragmento del código nos topamos con 3 elementos a destacar.
 
-**1.** El propio **formulario** que enviará los datos introducidos, que realizará la acción establecida como j_security_check tras ser enviado. Esta accion viene predeterminada por el tipo de autenticación FORM que estamos utilizando en la aplicacion y que es visible en el documento web.xml.
+**1.** El propio **formulario** que enviará los datos introducidos, que realizará la acción establecida como j_security_check tras ser enviado. Esta acción viene predeterminada por el tipo de autenticación FORM que estamos utilizando en la aplicación y que es visible en el documento web.xml.
 
-**2.** Los **campos del formulario** que recogen datos, tambien deben tener sus propios atributos "name" estandarizados por el metodo de autenticación, estos parametros son: **j_username** para el nombre de usuario y **j_password** para la contraseña.
+**2.** Los **campos del formulario** que recogen datos, también deben tener sus propios atributos "name" estandarizados por el método de autenticación, estos parámetros son: **j_username** para el nombre de usuario y **j_password** para la contraseña.
 
 **3.** Finalmente el botón que acciona el **envío del formulario** que aparece con el tipo **"submit"** para hacer efectiva dicha acción.
 
-Si todo ocurre con éxito, entraremos a la aplicación, en caso contrario y como se describe en el apartado 3, entraremos a una pagina de error (**error.html**) que nos volvera a redireccionar a nuestro login. Esta página como elemento más destacable incluye una funcion javascript que permite la redirección tras 5000ms (5s).
+Si todo ocurre con éxito, entraremos a la aplicación, en caso contrario y como se describe en el apartado 3, entraremos a una página de error (**error.html**) que nos volverá a redireccionar a nuestro login. Esta página como elemento más destacable incluye una función javascript que permite la redirección tras 5000ms (5s).
 ```javascript
 $(document).ready(function () {
     window.setTimeout(function () {
@@ -154,7 +154,7 @@ $(document).ready(function () {
 
 -  **Contextualización: clase User**.
 
-Para hacer efectiva la separación entre el nivel de datos y la lógica de nuestra aplicación hemos optado por crear una clase asociada a los usuarios de la aplicación, esta clase es muy sencilla ya que unicamente contara con dos atributos: dni y password y dos metodos "get" para obtener los mencionados atributos.
+Para hacer efectiva la separación entre el nivel de datos y la lógica de nuestra aplicación hemos optado por crear una clase asociada a los usuarios de la aplicación, esta clase es muy sencilla ya que únicamente contara con dos atributos: dni y password y dos métodos "get" para obtener los mencionados atributos.
 
 ```java
 package main;
@@ -203,7 +203,7 @@ Además de este filtro también hemos realizado otro previamente llamado Session
   </filter-mapping>
 ```
 
-Ahora entrando en aspectos más profundos de nuestro código, debemos prestar especial atención en lo que ocurre en la funcion **init** y en los **atributos globales** que se definen dentro de nuestro filtro.
+Ahora entrando en aspectos más profundos de nuestro código, debemos prestar especial atención en lo que ocurre en la función **init** y en los **atributos globales** que se definen dentro de nuestro filtro.
 
 En primer lugar comenzando con los atributos globales crearemos 2: un archivo logFile, del que se hablará después y una Tabla Hash que contiene pares de valores String y Usuario.
 
@@ -211,9 +211,9 @@ En primer lugar comenzando con los atributos globales crearemos 2: un archivo lo
 	File logFile;
 	HashMap<String, User> usuarios = null;
 ```
-En cuanto al método init, en el es donde precisamente reside nuestra separación logica-datos.
+En cuanto al método init, en él es donde precisamente reside nuestra separación lógica-datos.
 Como se muestra en el código hemos instanciado la Tabla Hash y le hemos comenzado a asignar valores para introducir a los usuarios que participaran en la aplicación. Ahora podremos acceder a nuestra aplicación utilizando el nickname que le asignamos en la Tabla Hash.
-Tambien se realiza la creación del fichero dedicado al log de la aplicación, cuyo contenido será explicado posteriormente.
+También se realiza la creación del fichero dedicado al log de la aplicación, cuyo contenido será explicado posteriormente.
 
 ```java
 public void init(FilterConfig fConfig) throws ServletException {
@@ -244,7 +244,7 @@ usuarios = new HashMap<String, User>();
 	
 ```
 
-En segundo lugar procedemos a crear la funcionalidad de logger tal y como se trato en la primera sesión de este proyecto. Crearemos un objeto **PrintWriter** que nos permita escribir en un fichero (logFile) que se encuentra inicialmente creado en el método init() como se menciona anteriormente.
+En segundo lugar procedemos a crear la funcionalidad de logger tal y como se trató en la primera sesión de este proyecto. Crearemos un objeto **PrintWriter** que nos permita escribir en un fichero (logFile) que se encuentra inicialmente creado en el método init() como se menciona anteriormente.
 
 ```java
 /*Logger de peticiones*/
@@ -256,7 +256,7 @@ En segundo lugar procedemos a crear la funcionalidad de logger tal y como se tra
 		
 ```
 
-En tercer lugar se crea una sesión y se comprueba si existe el identificador de la sesión(key). Si no se ha iniciado sesión entonces se obtiene el nombre de usuario mediante el método **getRemoteUser() **y la posterior operacion consultora de la TablaHash construida anteriormente y lo mismo ocurre con la contraseña. Ahora el nexo de la clase User con el filtro, se hace efectivo.
+En tercer lugar se crea una sesión y se comprueba si existe el identificador de la sesión(key). Si no se ha iniciado sesión entonces se obtiene el nombre de usuario mediante el método **getRemoteUser() **y la posterior operación consultora de la TablaHash construida anteriormente y lo mismo ocurre con la contraseña. Ahora el nexo de la clase User con el filtro, se hace efectivo.
 ```java
 	HttpServletResponse res = (HttpServletResponse) response;
         HttpSession session = req.getSession(true);
@@ -334,7 +334,7 @@ También comprobamos si el usuario que se ha autenticado es un alumno o es un pr
 	}
 ```
 
-Por ultimo trabajamos ciertos aspectos de seguridad en cierto punto, o más bien de pequeñas fallas o bugs en nuestra aplicación. El siguiente fragmento con el que concluye nuestro filtro de identificación LoginControl realiza comprobaciones relativas a las URL.
+Por último trabajamos ciertos aspectos de seguridad en cierto punto, o más bien de pequeñas fallas o bugs en nuestra aplicación. El siguiente fragmento con el que concluye nuestro filtro de identificación LoginControl realiza comprobaciones relativas a las URL.
 
 Ya que por ejemplo se podría introducir la URL del alumno (/alumnoPrincipal.html), estando en la pantalla del profesor y viceversa, realizando así un acceso incoherente a una página que nos generará numerosos errores, por no estar identificados como tal. 
 
@@ -382,7 +382,7 @@ En segundo lugar, vamos a comprobar de que el alumno que hace la petición tiene
 4)	Los detalles de cada asignatura 
 5)	El profesor que imparte dicha asignatura
 
-En tercer lugar, cada una de estas cinco peticiones tiene su propia estructura y devuelve la información exacta que necesitamos. Cuando el parametro es avatar tiene una implementación mas detallada que se explica en el punto 4.2.2. También, cabe mencionar que no son peticiones secuenciales ya que se crean según el uso que el alumno este haciendo de la página web por lo que debemos separarlas respectivamente de la siguiente forma:
+En tercer lugar, cada una de estas cinco peticiones tiene su propia estructura y devuelve la información exacta que necesitamos. Cuando el parámetro es avatar tiene una implementación más detallada que se explica en el punto 4.2.2. También, cabe mencionar que no son peticiones secuenciales ya que se crean según el uso que el alumno este haciendo de la página web por lo que debemos separarlas respectivamente de la siguiente forma:
 ```java
 String nombreMaquina = "masanru6";
 if(param.equals("asignaturas")) {
@@ -418,12 +418,12 @@ if(param.equals("asignaturas")) {
 
 }
 ```
-En cuarto lugar, dependiendo de la petición que estemos haciendo en ese momento nuestro servlet comprobará si tenemos acceso a esos datos o no. Si no tenemos acceso, nos devolverá un error 401 – No tienes permitido realizar esta acción!. Esta comprobación la hemos implementado para evitar que un alumno pueda obtener los datos de otro alumno creando de forma manual la petición.
+En cuarto lugar, dependiendo de la petición que estemos haciendo en ese momento nuestro servlet comprobará si tenemos acceso a esos datos o no. Si no tenemos acceso, nos devolverá un error 401 – No tienes permitido realizar esta acción! Esta comprobación la hemos implementado para evitar que un alumno pueda obtener los datos de otro alumno creando de forma manual la petición.
  
 Por último, si todo ha concluido con éxito y la petición ha obtenido un código 200 tendremos los datos que necesitamos en local ya que CentroEducativo nos los habría proporcionado. Con esto podremos empezar a crear la página web del alumno con toda su respectiva información.
 
-### 4.2.2 Explicacion servlet profesorApi.java
-A continuación, se procede a explicar el funcionamiento del servlet encargado de intermediar con CentroEducativo cuando iniciemos sesión como profesor. Este servlet admite peticiones tanto por GET como por POST (ya que POST llama a GET), en las líneas de código mostradas a continuación podemos observar el inicio del metodo GET. En el declaramos un string *"nombreMaquina"* que utilizaremos para poder cambiar con facilidad la maquina en la que vamos a ejecutar la aplicación, ahorrándonos así tener que buscar en distintas líneas de código. Posteriormente, obtendrá los datos del profesor que lo llamó con el fin de ir construyendo la petición a CentroEducativo. Para ello se utilizara la sesión obtenida con el comando *request.getSession(False)* extrayendo de ella los atributos *dni* y *key* asi como la cookie.
+### 4.2.2 Explicación servlet profesorApi.java
+A continuación, se procede a explicar el funcionamiento del servlet encargado de intermediar con CentroEducativo cuando iniciemos sesión como profesor. Este servlet admite peticiones tanto por GET como por POST (ya que POST llama a GET), en las líneas de código mostradas a continuación podemos observar el inicio del método GET. En el declaramos un string *"nombreMaquina"* que utilizaremos para poder cambiar con facilidad la maquina en la que vamos a ejecutar la aplicación, ahorrándonos así tener que buscar en distintas líneas de código. Posteriormente, obtendrá los datos del profesor que lo llamó con el fin de ir construyendo la petición a CentroEducativo. Para ello se utilizará la sesión obtenida con el comando *request.getSession(False)* extrayendo de ella los atributos *dni* y *key* asi como la cookie.
 
 ```Java
 protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -447,12 +447,12 @@ protected void doGet(HttpServletRequest request, HttpServletResponse response) t
 
 De la misma manera que en el servlet del alumno una vez obtenido los datos del usuario, comprobaremos que realmente tiene permisos para realizar las peticiones correspondientes, esto se realizará con la siguiente línea:
 ```java
-/* Solo aquellos con rolpro pueden realizar esta operacion
+/* Solo aquellos con rolpro pueden realizar esta operación
     	 * */
     	if(request.isUserInRole("rolpro")) {
 ```
 
-Si el usuario no es del rol correspondiente se devolverá un error 401 y se mostrara el mensaje que se ve en el siguiente fragmento de código
+Si el usuario no es del rol correspondiente se devolverá un error 401 y se mostrará el mensaje que se ve en el siguiente fragmento de código
 ```java
 }else {
     		response.setStatus(401);
@@ -462,7 +462,7 @@ Si el usuario no es del rol correspondiente se devolverá un error 401 y se most
     	
 ```
 
-Una vez nos aseguramos que el usuario es del rol correspondiente comenzamos a realizar las distintas peticiones a CentroEducativo. Como podemos observar en el siguiente fragmento de código lo haremos mediante el uso del parámetro*"opcion"* que obtendremos por POST, dependiendo de qué valor le asignemos a este parámetro, profesorApi sabrá que petición exacta debe realizar.
+Una vez nos aseguramos de que el usuario es del rol correspondiente comenzamos a realizar las distintas peticiones a CentroEducativo. Como podemos observar en el siguiente fragmento de código lo haremos mediante el uso del parámetro*"opcion"* que obtendremos por POST, dependiendo de qué valor le asignemos a este parámetro, profesorApi sabrá que petición exacta debe realizar.
 Dependiendo del valor de dicho parámetro podemos observar la petición para obtener el dni del profesor, las asignaturas, los alumnos de estas entre otras. Veremos otras peticiones que merecen una mención especial más adelante.
 ```java
 String param = request.getParameter("opcion");
@@ -538,7 +538,7 @@ else if(param.equals("setnota")) {
     		}
 ```
 
-Para finalizar este subapartado, procedemos a ejecutar la petición, sin olvidarnos de añadir las cookies. Una vez la petición se realice y CentroEducativo nos responda correctamente deberemos colocar su respuesta como el cuerpo de respuesta de profesorApi y ya habremos terminado. Esto se hara como se muestra en el siguiente fragmento de código.
+Para finalizar este subapartado, procedemos a ejecutar la petición, sin olvidarnos de añadir las cookies. Una vez la petición se realice y CentroEducativo nos responda correctamente deberemos colocar su respuesta como el cuerpo de respuesta de profesorApi y ya habremos terminado. Esto se hará como se muestra en el siguiente fragmento de código.
 ```java
 if(httpGet != null) {
 	    	httpGet.setHeader(HttpHeaders.CONTENT_TYPE, "application/json");
@@ -566,7 +566,7 @@ if(httpGet != null) {
 
 #### 4.3.1 Explicación de alumnoPrincipal.html 
 
-Ahora vamos a explicar en que consiste la página en la que accede el alumno una vez ha iniciado sesión.
+Ahora vamos a explicar en qué consiste la página en la que accede el alumno una vez ha iniciado sesión.
 Esta página, al igual que las demás, está maquetada con Bootstrap; y los elementos como la barra de navegación superior (navBarAlum)
 
 ```<nav class="navbar navbar-expand-lg navbar-dark bg-dark" id="navBarAlum">```
@@ -585,7 +585,7 @@ var dni = "";
 var modoDocumento = false;
 ```
 
-Además, tenemos una serie de constantes al inicio de la ejecución de esta función que permite almacenar la URL y separar sus parametros. Esto nos servirá para más adelante.
+Además, tenemos una serie de constantes al inicio de la ejecución de esta función que permite almacenar la URL y separar sus parámetros. Esto nos servirá para más adelante.
 
 ```js
 $(document).ready(function(){
@@ -595,8 +595,8 @@ $(document).ready(function(){
 		// Peticiones AJAX
 
 ```
-Básicamente existen 3 elementos centrales: la tarjeta del alumno, en la que se muestra el nombre, el avatar y el DNI; la tabla de asignaturas, en la que se muestran los nombres, los creditos y el cuatrimestre de cada asignatura que tiene el alumno; y los detalles de cada asignatura, cuya información está dentro de una ventana que se obtiene al hacer click dentro del nombre de una asignatura de la tabla.
-Para obtener estos datos, la página efectua sendas peticiones AJAX, que procederemos a explicar a continuación.
+Básicamente existen 3 elementos centrales: la tarjeta del alumno, en la que se muestra el nombre, el avatar y el DNI; la tabla de asignaturas, en la que se muestran los nombres, los créditos y el cuatrimestre de cada asignatura que tiene el alumno; y los detalles de cada asignatura, cuya información está dentro de una ventana que se obtiene al hacer click dentro del nombre de una asignatura de la tabla.
+Para obtener estos datos, la página efectúa sendas peticiones AJAX, que procederemos a explicar a continuación.
 
 ###### Peticiones AJAX para la tarjeta del alumno
 
@@ -635,7 +635,7 @@ $.getJSON("/dew-NOL-2021/alumnoApi?opcion=avatar")
 			});
 ```
 
-Esta petición se encarga de, siempre que tenga éxito, obtener el JSON de la imágen del avatar en formato base64. Se usa la petición getJSON, pidiendo la imágen y, al recibir el JSON, extrayendo el string del apartado data e introduciendolo en una etiqueta llamada «#aquí». El navegador interpreta automáticamente esta cadena como una imágen, de forma que ya no hacen falta tratamientos posteriores. En caso de error, saltará un cuadro de alerta que comunicará el error.
+Esta petición se encarga de, siempre que tenga éxito, obtener el JSON de la imagen del avatar en formato base64. Se usa la petición getJSON, pidiendo la imagen y, al recibir el JSON, extrayendo el string del apartado data e introduciéndolo en una etiqueta llamada «#aquí». El navegador interpreta automáticamente esta cadena como una imagen, de forma que ya no hacen falta tratamientos posteriores. En caso de error, saltará un cuadro de alerta que comunicará el error.
 
 ###### Petición AJAX de la tabla de asignaturas
 
@@ -706,7 +706,7 @@ if(param == null){
 Esta petición AJAX hace uso de las constantes de la URL que hay al principio de la función «$(document).ready». En el caso de que la URL no contenga ningún parámetro, es decir, que los parámetros sean «null», significará que la tabla debe aparecer. Lo primero que se ejecuta es un trozo de código que oculta los detalles de la asignatura, en caso de que estuvieran presentes o no. 
 
 Luego se ejecuta la petición AJAX como tal, que en esencia, construirá la tabla de las asignaturas del alumno, con sus datos básicos y la nota del alumno.
-Concretamente lo que hace es pedir un dato JSON a «alumnoApi», pasandole la opción asignaturas. Si tiene éxito, recorrerá cada uno de los datos del JSON (índice y valor), y a partir de estos datos irá maquetando la tabla, creando cada una de las etiquetas e introduciendo los datos donde debe.
+Concretamente lo que hace es pedir un dato JSON a «alumnoApi», pasando la opción asignaturas. Si tiene éxito, recorrerá cada uno de los datos del JSON (índice y valor), y a partir de estos datos irá maquetando la tabla, creando cada una de las etiquetas e introduciendo los datos donde debe.
 
 Esta petición AJAX es particular, ya que tiene otra petición AJAX dentro de sí, la cual extraerá los datos de las asignaturas de manera similar a los demás JSON; salvo por el hecho de que en lugar de pasar una sola opción al servlet, pasa tanto la opción de asignaturas, como un dato acron que contiene el nombre de la asignatura con el objetivo de extraer sus datos concretos. Si tiene éxito se introducirán en el HTML los datos concretos de la asignatura, así como se acabará de maquetar la tabla y se introducirá un enlace en cada uno de los nombres para poder acceder a los detalles.
 
@@ -779,11 +779,11 @@ else {
 			}
 			});	
 ```
-Esta petición en esencia, trata de construir el cuadro de los detalles de las asignaturas, con su nota, curso, profesor, cuatrimestre, créditos y descripción.
+Esta petición en esencia trata de construir el cuadro de los detalles de las asignaturas, con su nota, curso, profesor, cuatrimestre, créditos y descripción.
 En el caso que se haya pinchado en un nombre de asignatura, se introducirán parámetros a la URL, de forma que se ejecutará este trozo de código, ocultando a la tabla de las asignaturas y creando este cuadro de información.
 
 En la petición AJAX pedirá al servlet el json de las asignaturas, y si tiene éxito, recorrerá los datos de este JSON, comprobando si la asignatura del JSON coincide con la asignatura que se requieren los datos, y en caso afirmativo se introducirá la nota y se hará otra petición AJAX. Esta segunda petición enviará un segundo dato tipo acron con el nombre de «val.asignatura», para extraer los demás datos de la asignatura: cuatrimestre, curso, etc. Por último se anida una tercera petición AJAX que pide el JSON de los profesores, y recorre el JSON para extraer el dato de los profesores e introducirlo dentro del cuadro de la información detallada. 
-Como siempre, en caso de fallo, salta una mensaje de error en la petición.
+Como siempre, en caso de fallo, salta un mensaje de error en la petición.
 
 ###### Generación de documento imprimible.
 
@@ -808,10 +808,10 @@ function generarDocumento(){
 Esta función estructura la página de forma que este en un formato apto para la impresión o para guardarlo como documento más comodamente. Justo al acceder, salta un cuadro emergente para avisar de que se puede acceder de vuelta a la página pulsando el logo.
 
 
-### 4.3.2 Explicacion de profesorPrincipal.html
+### 4.3.2 Explicación de profesorPrincipal.html
  Pasaremos a explicar la construcción de la página a la cual accederá el profesor correspondiente cuando este inicie sesión.
 
-En la generación de la misma podemos hacer dos distinciones: la generación base de la web (tablas, información del profesor, alumnos correspondientes a asignaturas impartidas etc...) y la preparación para la parte interactiva de la función calificar.
+En la generación de la misma podemos hacer dos distinciones: la generación base de la web (tablas, información del profesor, alumnos correspondientes a asignaturas impartidas etc.…) y la preparación para la parte interactiva de la función calificar.
 
 Nos encontramos en primer lugar una seria de variables globales, estas nos permitirás más adelante saber en todo momento con que alumno estamos trabajando, el profesor logrado y algun dato de interés como aquellos alumnos que no han sido calificados.
  ```javascript
@@ -825,7 +825,7 @@ var  jsonGlobal  =  new  Array();
  ```
  Por separar las dos partes principales , empezaremos detallando la generación de la web (aunque con la misma se recogen datos para posteriormente utilizarlos en la parte interactiva de la aplicación).
 
-La generación de la página se deberá hacer en la carga de la misma, por lo tanto, todo aquello que se necesite de primeras deberá estar en el document ready.
+La generación de la página se deberá hacer en la carga de esta, por lo tanto, todo aquello que se necesite de primeras deberá estar en el document ready.
 
 Empezaremos con una llamada Ajax al servlet profesorApi para poder obtener todas las asignaturas las cuales el profesor imparte. La respuesta a esta petición es un array de JSON que deberemos tratar y recorrer para empezar a construir la página.
 
@@ -917,7 +917,7 @@ A partir de este punto , se destaca ya la generación de la estructura que se le
 				'<tbody>'
 				]
 ```
-Empezaremos a recorrer cada alumno con un bucle, conforme se vayan recorriendo, se generará su estructura correspondiente además de completar las variables anteriormente mencionadas con el fin de dar mayor información al profesor sobre sus alumnos en dicha asignatura.
+Empezaremos a recorrer cada alumno con un bucle, conforme se vayan recorriendo, se generará su estructura correspondiente además de completar las variables anteriormente mencionadas con el fin de dar más información al profesor sobre sus alumnos en dicha asignatura.
 ```javascript
 		$.each(data1, function (index1, val1) {
 			alumnosMatriculados++
@@ -944,7 +944,7 @@ Empezaremos a recorrer cada alumno con un bucle, conforme se vayan recorriendo, 
 
 			structureAlumTable = $.merge(structureAlumTable, alumStruct)
 ```
-Del código mostrado , podemos destacar la creación de un método onClick y la asociación de la misma a un botón , este botón es independiente de cada alumno y la acción de clicar implicará la acción de calificar o modificar la nota de un alumno , esto conllevará el despliegue de la aplicación interactiva que más tarde se explicará con detalle. 
+Del código mostrado , podemos destacar la creación de un método onClick y la asociación de este a un botón , este botón es independiente de cada alumno y la acción de clicar implicará la acción de calificar o modificar la nota de un alumno , esto conllevará el despliegue de la aplicación interactiva que más tarde se explicará con detalle. 
 ```javascript
 var onClickFunction = "showPopUp('"+val1.alumno+"','"+ a + "','"+ val.acronimo +"')"
 <button id="'+val1.alumno+""+val.acronimo+'" class="btn btn-sm btn-outline-success py-0" onclick="'+onClickFunction+'" data-target="#cambiarNota" data-toggle="modal">'+ButtonNameNota+'</button>
@@ -1078,9 +1078,9 @@ Ya generada la parte de los alumnos y añadida la misma a la página html, pasar
 
 })
 ```
-Ya hemos generada la página principal del profesor, ahora deberemos hacer  que la parte interactiva de calificar notas funcione correctamente , como hemos preparado la parte generada para poder aceptar la parte ágil (id individuales a cada campo, botones para desplegar la misma, creación de un objeto JSON con todos los datos necesarios...), solo deberemos desplegar un modal dinámicamente.
+Ya hemos generada la página principal del profesor, ahora deberemos hacer que la parte interactiva de calificar notas funcione correctamente , como hemos preparado la parte generada para poder aceptar la parte ágil (id individuales a cada campo, botones para desplegar la misma, creación de un objeto JSON con todos los datos necesarios...), solo deberemos desplegar un modal dinámicamente.
 
-Empezaremos detallando el metodo que hará que se despliegue la parte interactiva, en primer lugar , una vez se accione el botón que activa este método se deberá saber en que posición del array JSON se encuentra el alumno en cuestión y de que asignatura se trata, así pues, actualizaremos las variables globales al alumno que estamos visualizando, la asignatura que estamos visualizando y al indice del array JSON donde se ubica el alumno en cuestión. Una vez hecho esto, actualizaremos contenido y mostraremos el modal al usuario.
+Empezaremos detallando el método que hará que se despliegue la parte interactiva, en primer lugar , una vez se accione el botón que activa este método se deberá saber en que posición del array JSON se encuentra el alumno en cuestión y de que asignatura se trata, así pues, actualizaremos las variables globales al alumno que estamos visualizando, la asignatura que estamos visualizando y al índice del array JSON donde se ubica el alumno en cuestión. Una vez hecho esto, actualizaremos contenido y mostraremos el modal al usuario.
 
 ```javascript
 function showPopUp(dni, nombre, acron){
@@ -1102,7 +1102,7 @@ actualizaContenido()
 $('#cambiarNota').modal('toggle')
 }
 ```
-La función actualizaContenido simplemente mostrará los datos correspondientes al alumno indicado en el modal , actualizando el contenido del mismo utilizando las variables globales y el arrayJSON.
+La función actualizaContenido simplemente mostrará los datos correspondientes al alumno indicado en el modal , actualizando el contenido de este utilizando las variables globales y el arrayJSON.
 
 ```javascript
 function actualizaContenido(){
@@ -1287,14 +1287,14 @@ Otro escenario posible es el uso simultáneo de la aplicación por parte de dos 
 
 ## 6. Gestión e introducción de nuevos usuarios.
 
-Como se explica anteriormente en el apartado vinculado al filtro LoginControl, trabajamos con una tabla Hash que almacena los usuarios disponibles para iniciar sesión, cuya correspondencia debe existir tambien en tomcat-users.xml.
-En el caso que quisieramos introducir las credenciales para podernos identificar con otro usuario existente en otra versión de CentroEducativo, tendríamos que tener en cuenta 3 factores importantes.
+Como se explica anteriormente en el apartado vinculado al filtro LoginControl, trabajamos con una tabla Hash que almacena los usuarios disponibles para iniciar sesión, cuya correspondencia debe existir también en tomcat-users.xml.
+En el caso que quisiéramos introducir las credenciales para podernos identificar con otro usuario existente en otra versión de CentroEducativo, tendríamos que tener en cuenta 3 factores importantes.
 
 1. La existencia de estos usuarios en la tabla hash del Filtro Login Control.
 2. También la respectiva aparición de este usuario en **tomcat-users.xml**.
 3. Conocer las credenciales que utiliza para iniciar sesión y que exista en CentroEducativo.
 
-En el caso de que necesitasemos introducir un usuario (alumno) de nick **alferpe**, con dni **12345677X** y con contraseña **123456789**. Deberíamos añadir los siguientes fragmentos a nuestro código.
+En el caso de que necesitásemos introducir un usuario (alumno) de nick **alferpe**, con dni **12345677X** y con contraseña **123456789**. Deberíamos añadir los siguientes fragmentos a nuestro código.
 ##### Filtro Login Control : Añadimos a tabla Hash.
 ```java
 public void init(FilterConfig fConfig) throws ServletException {
@@ -1326,16 +1326,16 @@ usuarios = new HashMap<String, User>();
 	
 ```
 ##### Tomcat-Users.xml : Añadimos el usuario.
-A lo que ya tenemos en tomcat-users.xml añadiriamos la siguiente linea:
+A lo que ya tenemos en tomcat-users.xml añadiríamos la siguiente línea:
 ```xml
 	<user username="alferpe" password="123456789" roles="rolalu"/>
 ```
-Con esta configuración ya tendriamos un nuevo usuario para iniciar sesión.
+Con esta configuración ya tendríamos un nuevo usuario para iniciar sesión.
 
 ------------
 
-Por otro lado si queremos dar soporte de ejecución a nuestra aplicación en otro lugar distinto a la maquina de portal-ng lo que deberiamos cambiar sería todas las URL asociadas a peticiones HTTP de nuestros servlets AlumnoApi y ProfesorApi y estaría solucionado ese aspecto.
-Por ejemplo: Supongamos que nuestra aplicación se comienza a ejecutar en una maquina llamada (ejemplo-dsic.cloud) y en el puerto 8000. Hariamos las siguientes sustituciones: 
+Por otro lado si queremos dar soporte de ejecución a nuestra aplicación en otro lugar distinto a la máquina de portal-ng lo que deberíamos cambiar sería todas las URL asociadas a peticiones HTTP de nuestros servlets AlumnoApi y ProfesorApi y estaría solucionado ese aspecto.
+Por ejemplo: Supongamos que nuestra aplicación se comienza a ejecutar en una maquina llamada (ejemplo-dsic.cloud) y en el puerto 8000. Haríamos las siguientes sustituciones: 
 ```java 
 httpGet = new HttpGet("http://dew-"+nombreMaquina+"-2021.dsic.cloud:9090/CentroEducativo/profesores/"+dni+"/asignaturas?key="+key);
 ```
@@ -1343,14 +1343,14 @@ Cambiaría a ser...
 ```java 
 httpGet = new HttpGet("http://ejemplo-dsic.cloud:8000/CentroEducativo/profesores/"+dni+"/asignaturas?key="+key);
 ```
-Y así hariamos este proceso en todas las peticiones para tener dicho soporte en otra máquina.
+Y así haríamos este proceso en todas las peticiones para tener dicho soporte en otra máquina.
 
 ## 7. Seguridad en la aplicación
 
 Por último trataremos el tema de la seguridad en la aplicación y como esta se ha resuelto en Notas Online.
-Notas Online permite la calificación y visualizado de notas de alumnos, sin embargo, no todos los usuarios disponen de todas las funciones disponibles, por ejemplo: Un profesor solo debe poder visualizar y calificar a aquellos alumnos que pertenezcan a algunas de sus asignaturas impartidas y un alumno solo puede visionar su nota y detalles de aquellas asiganturas que le pertenezcan.
+Notas Online permite la calificación y visualización de notas de alumnos, sin embargo, no todos los usuarios disponen de todas las funciones disponibles, por ejemplo: Un profesor solo debe poder visualizar y calificar a aquellos alumnos que pertenezcan a algunas de sus asignaturas impartidas y un alumno solo puede visionar su nota y detalles de aquellas asignaturas que le pertenezcan.
 
-Para la solución de estos casos hemos optado por la gestión por parte del servidor sobre que asignaturas son impartidas por que profesor y que alumno está matriculado en qué asignatura, todo esto con HashMaps que almacenan todos una estructura similar <DNI,Asignatura/Alumnos Pertenecientes>
+Para la solución de estos casos hemos optado por la gestión por parte del servidor sobre que asignaturas son impartidas por que profesor y que alumno está matriculado en qué asignatura, todo esto con HashMaps que almacenan toda una estructura similar <DNI,Asignatura/Alumnos Pertenecientes>
 ```java
 private HashMap<String, String>  asignaturasProfe = new HashMap<String,String>();
 private HashMap<String, HashMap<String,String>> alumnosProfe = new HashMap<String, HashMap<String,String>>();
@@ -1359,7 +1359,7 @@ Estos HashMaps se rellenarán a la hora de que se haga la petición principal, l
 
 Con esto ya claro, solo debemos comprobar cada vez que se pidan datos críticos al servidor si el usuario tiene permitido tal petición con esos datos.
 
-En este caso, si el profesor pide al servidor el avatar de un alumno, este alumno debe estar matriculado en una adignatura impartida por el profesor y para ello debe estar dentro del HashMap propio del profesor, accesible por su dni.
+En este caso, si el profesor pide al servidor el avatar de un alumno, este alumno debe estar matriculado en una asignatura impartida por el profesor y para ello debe estar dentro del HashMap propio del profesor, accesible por su dni.
 ```java
 } else if(param.equals("avatar")) {
 		String dniparam = request.getParameter("dniavatar");
@@ -1373,7 +1373,7 @@ En este caso, si el profesor pide al servidor el avatar de un alumno, este alumn
 }
 ```
 
-El lado del alumno sigue el mismo mecanismo que el lado del profesor, este solo podrá ver y obtener detalles de aquellas asignaturas en las que esté matriculado, para esto también existirá un hashmap.
+El lado del alumno sigue el mismo mecanismo que el lado del profesor, este solo podrá ver y obtener detalles de aquellas asignaturas en las que esté matriculado, para esto también existirá un HashMap.
 ```java
 	private HashMap<String, String> asignaturasAlumno = new HashMap<String, String>();
 ```
@@ -1391,7 +1391,7 @@ if(this.asignaturasAlumno.get(dni).contains(acronimo)) {
 ## 8. Actas de reuniones y funcionamiento general del grupo.
 
 En este apartado vamos a realizar una recopilación de las reuniones hasta la fecha y como se ha ido abordando el trabajo en todas ellas.
-Describiremos las reuniones normalmente agrupandolas en sucesivos dias en los que se realizase la misma actividad o el mismo avance en el desarrollo.
+Describiremos las reuniones normalmente agrupándolas en sucesivos días en los que se realizase la misma actividad o el mismo avance en el desarrollo.
 # Acta de las reuniones 1 y 2 del grupo de DEW 3TI11
 Asistentes: Mario, Joel, Josep, Vicente y Sergio
 
@@ -1410,7 +1410,7 @@ Se trataron los principales conflictos en los equipos, como juzgar a los demás,
 
 Además se recalcó la importancia que tiene la libertad de expresión y el respeto mutuo por parte de todos los miembros. Por otro lado, los objetivos se establecieron claramente, de manera precisa y atendiendo a las capacidades de cada uno. En cuanto a la resolución de problemas se eligió como favorito el método SWOT.
 
-Por último tratamos el brainstorming, que sera utilizado cuando sea necesario afrontar un problema que tenga diferentes soluciones y todas sean válidas.
+Por último tratamos el brainstorming, que será utilizado cuando sea necesario afrontar un problema que tenga diferentes soluciones y todas sean válidas.
 
 En general, los comentarios al respecto fueron de aprobación y no hubo disconformidades en general. Se advirtió la importancia de la puntualidad y se acordó un horario flexible para poder trabajar entre todos.
 
@@ -1457,9 +1457,9 @@ En la actividad 3 se procede de la misma manera generando un plan compartido a t
 #### 2. Trabajo realizado.
 Se termina en su totalidad la actividad número 2 y se comienza con los primeros detalles de la actividad 3.
 En primer lugar se realizó el consenso para la elección de bibliotecas. Nos decantamos por utilizar HttpComponents y JSON-Java. 
-Tras mirar documentación de todas las librerias propuestas nos quedamos con estas dos puesto que la forma en la que se desarrolla el código con ellas nos parece la más intuitiva y cómoda para nuestra forma de ver tanto las estructuras de las peticiones y respuestas HTTP, como, la estructura de los objetos JSON y su manipulación. Además hacer hincapié en que JSON-Java nos ofrece infinidad de formatos y constructores para la definición y control de estos objetos JSON.
-Una vez descargadas e incorporadas al proyecto las librerías,  se procede con la actividad de inicio TheCatApi completando con éxito la operación GET y mostrandose correctamente las imágenes en la web.
-Después se comenzó a indagar en los pasos 2 y 3 de nuestro plan que incluyen, la creación de roles en tomcat-users.xml, la modificación del web.xml para la incorporación de las auth-contraint y se desarrolló el filtro SessionControl siguiendo el seudocódigo ofrecido en el manual *(Trabajo en grupo NOL)*, que nos indica como transitar y comunicar la capa lógica con la capa de datos mediante el uso de una sesión, un objeto json con las variables a utilizar en la operación de login, y la propia petición POST de login a CentroEducativo.
+Tras mirar documentación de todas las librerías propuestas nos quedamos con estas dos puesto que la forma en la que se desarrolla el código con ellas nos parece la más intuitiva y cómoda para nuestra forma de ver tanto las estructuras de las peticiones y respuestas HTTP, como, la estructura de los objetos JSON y su manipulación. Además hacer hincapié en que JSON-Java nos ofrece infinidad de formatos y constructores para la definición y control de estos objetos JSON.
+Una vez descargadas e incorporadas al proyecto las librerías,  se procede con la actividad de inicio TheCatApi completando con éxito la operación GET y mostrándose correctamente las imágenes en la web.
+Después se comenzó a indagar en los pasos 2 y 3 de nuestro plan que incluyen, la creación de roles en tomcat-users.xml, la modificación del web.xml para la incorporación de las auth-constraint y se desarrolló el filtro SessionControl siguiendo el seudocódigo ofrecido en el manual *(Trabajo en grupo NOL)*, que nos indica como transitar y comunicar la capa lógica con la capa de datos mediante el uso de una sesión, un objeto json con las variables a utilizar en la operación de login, y la propia petición POST de login a CentroEducativo.
 
 Tras, ello se crea un formulario base (login3.html) para comenzar con la autenticación de los usuarios y también se crea un nuevo filtro LoginControl que selecciona los datos dni y pass de manera diferente al anterior Servlet "SessionControl". Se modifica también el Servlet HolaMundo para poder obtener la respuesta en formato JSON a una posible consulta a CentroEducativo.
 > NOTA: La actividad de testeo se realizó desde la máquina de porta-ng de Vicente:
@@ -1502,10 +1502,10 @@ Observamos compromiso por parte de Josep, se verá su evolución y se comentará
 Se detalla un nuevo plan de trabajo para completar las funcionalidades que faltaban por implementar. Procedemos a separar e identificar diferentes partes de la aplicación a implementar. Separamos el trabajo y trabajamos en las dudas generales del grupo.
 
 #### 2. Trabajo realizado.
-Se comienza a realizar el aspecto más definitivo en cuanto al estilo de Bootstrap de la aplicación. Se intenta consensuar un diseño uniforme, y se realiza con exito. Definimos unas plantillas uniformes para las paginas de alumno y profesor en local y posteriormente las implementamos dentro de la maquina virtual de linux.
-Se sigue trabajando con AJAX y jQuery para seguir desarrollando las peticiones necesarias a los servlets, en este caso comenzamos a profundizar en mas detalles con la decodificación de las imagenes en base64 y se comienza tambien a realizar la implementación de la evaluación del profesor a los diferentes alumnos con la interfaz agil AJAX y la creacion de un "json Global" para acceder a los datos localmente como se indica en la documentación.
+Se comienza a realizar el aspecto más definitivo en cuanto al estilo de Bootstrap de la aplicación. Se intenta consensuar un diseño uniforme, y se realiza con éxito. Definimos unas plantillas uniformes para las páginas de alumno y profesor en local y posteriormente las implementamos dentro de la máquina virtual de linux.
+Se sigue trabajando con AJAX y jQuery para seguir desarrollando las peticiones necesarias a los servlets, en este caso comenzamos a profundizar en más detalles con la decodificación de las imágenes en base64 y se comienza también a realizar la implementación de la evaluación del profesor a los diferentes alumnos con la interfaz ágil AJAX y la creación de un "json Global" para acceder a los datos localmente como se indica en la documentación.
 #### 3. Problemas acontecidos y soluciones propuestas
-Algun problema de concepto entre los miembros del grupo debido a la novedad de los contenidos, se soluciona con busqueda e investigación en páginas oficiales.
+Algún problema de concepto entre los miembros del grupo debido a la novedad de los contenidos, se soluciona con búsqueda e investigación en páginas oficiales.
 Tras la solución de dichos problemas de concepto y la explicación a los miembros del grupo, las reuniones avanzan a un buen ritmo.
 
 # Acta de la reunión 12, 13 y 14 del grupo DEW 3TI11-02.
@@ -1515,31 +1515,31 @@ Tras la solución de dichos problemas de concepto y la explicación a los miembr
 ###### Esta acta contiene las reuniones 6,7 y 8: la del 24 de mayo, 26 de mayo y 29 de mayo.
 
 #### 1. Dinámica de trabajo.
-Se prosigue con el plan de trabajo y se comienzan a perfilar los ultimos flecos de la aplicación.
+Se prosigue con el plan de trabajo y se comienzan a perfilar los últimos flecos de la aplicación.
 
 #### 2. Trabajo realizado.
-Se termina el aspecto del diseño con Bootstrap. Se realiza la implementación del diseño CSS para el documento imprimible, tras ciertas dudas sobre como abordarlo y la consulta al profesor, se realizan funciones que modifican la pagina del alumno para obtener dicho imprimible.
+Se termina el aspecto del diseño con Bootstrap. Se realiza la implementación del diseño CSS para el documento imprimible, tras ciertas dudas sobre cómo abordarlo y la consulta al profesor, se realizan funciones que modifican la página del alumno para obtener dicho imprimible.
 
-Se termina tambien la implementación de la funcionalidad de calificacion de profesor y se crea una nueva estructura dentro de las pestañas de las asignaturas de los profesores. Esta medida es consensuada por los miembros del grupo ya que estos parametros adicionales de media de los alumnos, aprobados, suspensos etc... dotan a la aplicación de una mayor completitud en su contenido.
+Se termina también la implementación de la funcionalidad de calificación de profesor y se crea una nueva estructura dentro de las pestañas de las asignaturas de los profesores. Esta medida es consensuada por los miembros del grupo ya que estos parámetros adicionales de media de los alumnos, aprobados, suspensos etc... dotan a la aplicación de una mayor completitud en su contenido.
 
-Se realiza una reunion especial el dia 26 para acordar el miembro que se presentara al examen y en la reunion del dia 29 se cohesiona toda la información relativa a nuestro proyecto mediante una exposicion "estilo clase magistral" de los contenidos realizados en el proyecto para evitar dudas futuras.
+Se realiza una reunión especial el día 26 para acordar el miembro que se presentara al examen y en la reunión del día 29 se cohesiona toda la información relativa a nuestro proyecto mediante una exposición "estilo clase magistral" de los contenidos realizados en el proyecto para evitar dudas futuras.
 
-Se tratan también aspectos de cara a la entrega final que deberiamos incluir en las actas y se comienza a distribuir el trabajo.
+Se tratan también aspectos de cara a la entrega final que deberíamos incluir en las actas y se comienza a distribuir el trabajo.
 #### 3. Problemas acontecidos y soluciones propuestas
-De nuevo durante las reuniones ocurre algun problema de concepto por parte de algunos componentes que son rapidamente solucionados mediante la explicación de fragmentos de codigo de nuestro proyecto.
+De nuevo durante las reuniones ocurre algún problema de concepto por parte de algunos componentes que son rápidamente solucionados mediante la explicación de fragmentos de código de nuestro proyecto.
 El resto avanza adecuadamente.
 # Acta de la reunión 15 del grupo DEW 3TI11-02.
 
 > #### Asistentes: Vicente, Joel, Mario, Sergio, Krasimir y Josep.
 
-###### Esta acta contiene la reunión del dia: 4 de junio.
+###### Esta acta contiene la reunión del día: 4 de junio.
 #### 1. Dinámica de trabajo.
-Se expone a los miembros del grupo soluciones ante posibles problemas tras la correccion del hito dos.
+Se expone a los miembros del grupo soluciones ante posibles problemas tras la corrección del hito dos.
 
 #### 2. Trabajo realizado.
 
-Se solucionan los aspectos relacionados a la correccion del hito y se implementa una nueva página relacionada a detalles de la asignatura.
-Se comenta tambien la necesidad de incluir algun apartado extra en las actas finales, como podria ser un apartado de pruebas de seguridad y un apartado que explique el posible acceso de un alumno con credenciales diferentes y que habria que hacer para lograrlo.
+Se solucionan los aspectos relacionados a la corrección del hito y se implementa una nueva página relacionada a detalles de la asignatura.
+Se comenta también la necesidad de incluir algún apartado extra en las actas finales, como podría ser un apartado de pruebas de seguridad y un apartado que explique el posible acceso de un alumno con credenciales diferentes y que habría que hacer para lograrlo.
 
 #### 3. Problemas acontecidos y soluciones propuestas
-No hay problemas evidentes puesto que estamos en la etapa de casi finalizacion del proyecto. Los miembros tienen los conceptos claros.
+No hay problemas evidentes puesto que estamos en la etapa de casi finalización del proyecto. Los miembros tienen los conceptos claros.
